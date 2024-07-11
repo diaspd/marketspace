@@ -15,6 +15,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
+        
         {isFontsLoaded ? <Text>Loaded</Text> : <Loading />}
     </NativeBaseProvider>
   );
