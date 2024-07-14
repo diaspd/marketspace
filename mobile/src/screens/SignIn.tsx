@@ -1,6 +1,7 @@
 import { Center, Heading, ScrollView, Text } from "native-base";
 
 import LogoSvg from '@assets/logo.svg'
+import { Input } from "@components/Input";
 
 export function SignIn() {
   return (
@@ -10,8 +11,15 @@ export function SignIn() {
 
         <Heading mt="4" fontSize="2xl">marketspace</Heading>
         <Text color="gray.300" fontFamily="thin" fontSize="sm">Seu espaço de compra e venda</Text>
+      </Center>
 
-        <Text color="gray.200" mt="24" fontSize="sm">Acesse sua conta</Text>
+      <Center mt="24" mx="12">
+        <Text color="gray.200"fontSize="sm" mb="4">Acesse sua conta</Text>
+        <Input placeholder="E-mail"/>
+        <Input 
+          placeholder="Senha" 
+          secureTextEntry
+        />
       </Center>
     </ScrollView>
   )
