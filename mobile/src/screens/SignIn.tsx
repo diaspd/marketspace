@@ -2,6 +2,7 @@ import { Center, Heading, ScrollView, Text } from "native-base";
 
 import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
+import { Button } from "@components/Button";
 
 export function SignIn() {
   return (
@@ -15,11 +16,18 @@ export function SignIn() {
 
       <Center mt="24" mx="12">
         <Text color="gray.200"fontSize="sm" mb="4">Acesse sua conta</Text>
-        <Input placeholder="E-mail"/>
+        
+        <Input 
+          placeholder="E-mail" 
+          keyboardType="email-address"
+        />
+
         <Input 
           placeholder="Senha" 
           secureTextEntry
         />
+
+        <Button title="Entrar" mt="4"/>
       </Center>
     </ScrollView>
   )
