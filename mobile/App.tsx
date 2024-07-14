@@ -1,4 +1,4 @@
-import {  Text, StatusBar } from 'react-native';
+import { StatusBar, Text } from 'react-native';
 import { useFonts, Karla_400Regular, Karla_700Bold } from '@expo-google-fonts/karla';
 
 import { NativeBaseProvider } from 'native-base';

@@ -1,7 +1,11 @@
-import { Text } from "native-base";
+import { ScrollView, Text } from "native-base";
+
+import LogoSvg from '@assets/logo.svg'
 
 export function SignIn() {
   return (
-    <Text>SignIn</Text>
+    <ScrollView>
+      <LogoSvg />
+    </ScrollView>
   )
 }
