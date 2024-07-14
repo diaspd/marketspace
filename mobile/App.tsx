@@ -18,7 +18,7 @@ export default function App() {
           translucent
         />
         
-        { isFontsLoaded ? <Text>Loaded</Text> : <Loading />}
+        {isFontsLoaded ? <Text>Loaded</Text> : <Loading />}
     </NativeBaseProvider>
   );
 }
