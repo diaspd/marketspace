@@ -27,7 +27,10 @@ export function SignIn() {
           secureTextEntry
         />
 
-        <Button title="Entrar" mt="4"/>
+        <Button title="Entrar" mt="4 "/>
+
+        <Text color="gray.300" mt="32" fontSize="sm">Ainda não tem acesso?</Text>
+        <Button title="Criar uma conta" mt="3" variant="secondary"/>
       </Center>
     </ScrollView>
   )
