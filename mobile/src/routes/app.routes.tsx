@@ -4,11 +4,14 @@ import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-naviga
 import { Home } from '@screens/Home';
 
 import HomeSvg from '@assets/icons/home.svg';
+import TagSvg from '@assets/icons/tag.svg';
 
 import { useTheme } from 'native-base';
+import { MyAdd } from '@screens/MyAdd';
 
 type AppRoutes = {
   home: undefined;
+  myadd: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -41,6 +44,20 @@ export function AppRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <HomeSvg 
+              fill={color} 
+              width={iconSize} 
+              height={iconSize}
+            />
+          )
+        }}
+      />
+
+      <Screen 
+        name='myadd'
+        component={MyAdd}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TagSvg 
               fill={color} 
               width={iconSize} 
               height={iconSize}
