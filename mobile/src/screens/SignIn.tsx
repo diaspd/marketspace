@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useNavigation } from "@react-navigation/native";
+
 import { Center, Heading, ScrollView, Text, useTheme } from "native-base";
 import { Entypo } from '@expo/vector-icons';
 
@@ -8,9 +10,18 @@ import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
+import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+
 export function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
+  
   const theme = useTheme();
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+
+
+  function handleGoToSignUp() {
+    navigation.navigate('signUp')
+  }
 
   return (
     <ScrollView flex={1}>
@@ -59,7 +70,12 @@ export function SignIn() {
         <Button title="Entrar" mt="4 "/>
 
         <Text color="gray.300" mt="32" fontSize="sm">Ainda não tem acesso?</Text>
-        <Button title="Criar uma conta" mt="3" variant="secondary"/>
+        <Button 
+          title="Criar uma conta" 
+          variant="secondary"
+          mt="3" 
+          onPress={handleGoToSignUp}
+        />
       </Center>
     </ScrollView>
   )
