@@ -11,6 +11,7 @@ export function Input({ errorMessage = null, isInvalid, ...rest }: Props) {
     <FormControl isInvalid={invalid} mb={4}>
       <NativeBaseInput 
         bg="gray.700"
+        borderRadius="md"
         px={4}
         borderWidth={1}
         borderColor="gray.700"

@@ -1,10 +1,17 @@
-import { Center, Heading, ScrollView, Text } from "native-base";
+import { useState } from "react";
+
+import { Center, Heading, ScrollView, Text, useTheme } from "native-base";
+import { Entypo } from '@expo/vector-icons';
 
 import LogoSvg from '@assets/logo.svg'
+
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
 export function SignIn() {
+  const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme();
+
   return (
     <ScrollView flex={1}>
       <Center mt="24">
@@ -24,7 +31,29 @@ export function SignIn() {
 
         <Input 
           placeholder="Senha" 
-          secureTextEntry
+          type={showPassword ? "text" : "password"}
+          InputRightElement={
+            showPassword ? (
+              <Center mr="2">
+                <Entypo 
+                  name="eye" 
+                  size={24} 
+                  color={theme.colors.gray[300]}
+                  onPress={() => setShowPassword(false)}
+                />
+              </Center>
+              ) : (
+              <Center mr="2">
+                <Entypo 
+                  name="eye-with-line" 
+                  size={24} 
+                  color={theme.colors.gray[300]}
+                  onPress={() => setShowPassword(true)}
+                  mr="2"
+                />
+              </Center>
+            )
+          }
         />
 
         <Button title="Entrar" mt="4 "/>

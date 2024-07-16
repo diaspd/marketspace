@@ -12,7 +12,7 @@ export function Button({title, variant = "primary", ...rest}: ButtonProps) {
       bg={variant === "primary" ? "blue.700" : variant === "secondary" ? "gray.500" : "gray.100"}
       borderWidth={1}
       borderColor="transparent"
-      rounded="sm"
+      rounded="md"
       _pressed={{ 
         bg: variant === "primary" ? "blue.500" : variant === "secondary" ? "warmGray.200" : "gray.200"
       }}
