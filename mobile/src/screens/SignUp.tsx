@@ -9,6 +9,7 @@ import LogoSvg from '@assets/logo.svg'
 
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
+import { Avatar } from "@components/Avatar";
 
 import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
@@ -26,16 +27,17 @@ export function SignUp() {
 
   return (
     <ScrollView flex={1}>
-      <Center mt="24">
+      <Center mt="16">
         <LogoSvg width={60} height={40}/>
 
         <Heading mt="4" fontSize="lg">Boas vindas!</Heading>
         <Text color="gray.300" fontFamily="thin" fontSize="sm" mt="2" textAlign="center" width="72">
           Crie sua conta e use o espaço para comprar itens variados e vender seus produtos
         </Text>
-      </Center>
+      </Center> 
+      <Center mt="8" mx="12">
+        <Avatar alt="" size={88} mb="4" />
 
-      <Center mt="24" mx="12">
         <Input placeholder="Nome" />
         
         <Input 
