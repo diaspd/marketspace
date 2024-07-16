@@ -5,6 +5,7 @@ import { Home } from '@screens/Home';
 
 import HomeSvg from '@assets/icons/home.svg';
 import TagSvg from '@assets/icons/tag.svg';
+import LogoutSvg from '@assets/icons/logout.svg';
 
 import { useTheme } from 'native-base';
 import { MyAdd } from '@screens/MyAdd';
@@ -12,6 +13,7 @@ import { MyAdd } from '@screens/MyAdd';
 type AppRoutes = {
   home: undefined;
   myadd: undefined;
+  logout: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -22,6 +24,8 @@ export function AppRoutes() {
   const { sizes, colors } = useTheme();
 
   const iconSize = sizes[6] 
+
+  const LogoutComponent = () => { return null }
 
   return (
     <Navigator screenOptions={{ 
@@ -59,6 +63,19 @@ export function AppRoutes() {
           tabBarIcon: ({ color }) => (
             <TagSvg 
               fill={color} 
+              width={iconSize} 
+              height={iconSize}
+            />
+          )
+        }}
+      />
+
+      <Screen 
+        name='logout'
+        component={LogoutComponent}
+        options={{
+          tabBarIcon: () => (
+            <LogoutSvg 
               width={iconSize} 
               height={iconSize}
             />
