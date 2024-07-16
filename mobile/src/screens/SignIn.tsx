@@ -67,7 +67,7 @@ export function SignIn() {
           }
         />
 
-        <Button title="Entrar" mt="4 "/>
+        <Button title="Entrar" mt="4" />
 
         <Text color="gray.300" mt="32" fontSize="sm">Ainda não tem acesso?</Text>
         <Button 

@@ -37,7 +37,7 @@ export function SignUp() {
           Crie sua conta e use o espaço para comprar itens variados e vender seus produtos
         </Text>
       </Center> 
-      <Center mt="12" mx="12">
+      <Center mt="12" mx="12" mb="12">
         <Center mb="4">
           <Avatar 
             size={88} 

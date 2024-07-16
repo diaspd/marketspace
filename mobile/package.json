@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/karla": "^0.2.3",
+    "@react-navigation/bottom-tabs": "^6.6.0",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
     "expo": "~51.0.18",
