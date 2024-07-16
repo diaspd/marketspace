@@ -2,10 +2,12 @@ import { useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 
-import { Center, Heading, ScrollView, Text, useTheme } from "native-base";
+import { Center, Heading, ScrollView, Text, useTheme, Image } from "native-base";
 import { Entypo } from '@expo/vector-icons';
 
 import LogoSvg from '@assets/logo.svg'
+import defaultUserAvatarImg from '@assets/avatar-fallback.png'; 
+import avatarButtonImg from '@assets/avatar-button.png'; 
 
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
@@ -35,8 +37,16 @@ export function SignUp() {
           Crie sua conta e use o espaço para comprar itens variados e vender seus produtos
         </Text>
       </Center> 
-      <Center mt="8" mx="12">
-        <Avatar alt="" size={88} mb="4" />
+      <Center mt="12" mx="12">
+        <Center mb="4">
+          <Avatar 
+            size={88} 
+            source={defaultUserAvatarImg} 
+            borderWidthsize={3} 
+            alt="Foto do usuário" 
+          />
+          <Image source={avatarButtonImg} mt="-8" mr="-12" alt="" />
+        </Center>
 
         <Input placeholder="Nome" />
         
