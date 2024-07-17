@@ -1,7 +1,9 @@
+import { Text, Box, Heading, VStack, HStack, Icon } from "native-base";
+
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
 
-import { Text, Box, Heading, VStack, HStack } from "native-base";
+import { AntDesign } from '@expo/vector-icons';
 
 export function HomeHeader() {
   return (
@@ -14,13 +16,15 @@ export function HomeHeader() {
         <Heading fontSize="sm">Pedro!</Heading>
       </VStack>
 
-      <Box ml="auto">
-        <Button 
-          title="Criar anúncio" 
-          variant="terciary"
-          size="140"
-        />
-      </Box>
+      <Button 
+        title="Criar anúncio" 
+        variant="terciary"
+        size="140"
+        ml="auto"
+        leftIcon={
+          <AntDesign name="plus" size={16} color="white" />
+        }
+      />
     </HStack>
   </Box>
   )
