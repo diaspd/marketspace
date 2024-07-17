@@ -3,12 +3,13 @@ import { Button as NativeBaseButton, IButtonProps, Text } from 'native-base'
 type ButtonProps = IButtonProps & {
   title: string;
   variant?: "primary" | "secondary" | "terciary"
+  size?: string;
 }
 
-export function Button({title, variant = "primary", ...rest}: ButtonProps) {
+export function Button({title, size = "full", variant = "primary", ...rest}: ButtonProps) {
   return (
     <NativeBaseButton 
-      w="full"
+      width={size}
       bg={variant === "primary" ? "blue.700" : variant === "secondary" ? "gray.500" : "gray.100"}
       borderWidth={1}
       borderColor="transparent"
