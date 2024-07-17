@@ -13,7 +13,7 @@ export function HomeHeader() {
 
       <VStack ml="2" mt="0.5">
         <Text fontSize="sm">Boas vindas,</Text>
-        <Heading fontSize="sm">Pedro!</Heading>
+        <Heading fontSize="sm" maxW={150} numberOfLines={1}>Pedro Dias!</Heading>
       </VStack>
 
       <Button 
