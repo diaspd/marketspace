@@ -13,6 +13,7 @@ export function Input({ errorMessage = null, isInvalid, ...rest }: Props) {
         bg="gray.700"
         borderRadius="md"
         px={4}
+        py={3}
         borderWidth={1}
         borderColor="gray.700"
         fontSize="md"

@@ -1,23 +1,33 @@
-import { Box, Heading, HStack, Link, ScrollView, Text, useTheme, VStack } from "native-base";
+import { TouchableOpacity } from "react-native";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
 
 import TagSvg from '@assets/icons/tag.svg';
 
-import { HomeHeader } from "@components/HomeHeader";
-import { TouchableOpacity } from "react-native";
-
 import { AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+
+import { HomeHeader } from "@components/HomeHeader";
+import { Input } from "@components/Input";
 
 export function Home() {
-  const { colors, opacity } = useTheme();
+  const { colors } = useTheme();
 
   return (
     <ScrollView flex={1}>
        <HomeHeader />
 
-      <Box mx="6" mt="8">
-       <Text color="gray.300">Seus produtos anunciados para venda</Text>
+        <Box mx="6" mt="8">
+        <Text color="gray.300">Seus produtos anunciados para venda</Text>
 
-       <HStack mt="2" justifyContent="space-between" bg="rgba(100, 122, 199, 0.1)" rounded="md" py={3} px={5} alignItems="center">
+          <HStack 
+            mt="2" 
+            justifyContent="space-between" 
+            bg="rgba(100, 122, 199, 0.1)" 
+            rounded="md" 
+            py={3} 
+            px={5} 
+            alignItems="center"
+          >
           <HStack alignItems="center">
             <TagSvg fill={colors.blue[500]} width={24} height={24} />
 
@@ -33,11 +43,31 @@ export function Home() {
                 Meus anúncios
               </Text>
 
-              <AntDesign name="arrowright" size={16} color={colors.blue[500]} mt="1"/>  
+              <AntDesign name="arrowright" size={16} color={colors.blue[500]} mt="1" />  
             </HStack>
           </TouchableOpacity>
-       </HStack>
-      </Box>
+          </HStack>
+          
+          <Text color="gray.300" mt="8">Compre produtos variados</Text>
+
+          <Input 
+            placeholder="Buscar anúncio" 
+            mt="3" 
+            rightElement={
+            <HStack justifyContent="space-between" alignItems="center" mr="4" w={"16"}>
+              <TouchableOpacity>
+                <Feather name="search" size={20} color={colors.gray[200]} />
+              </TouchableOpacity>
+
+              <Box h="4" bg="gray.400" w="0.5"/>
+
+              <TouchableOpacity>
+                <Feather name="sliders" size={20} color={colors.gray[200]} />
+              </TouchableOpacity>
+            </HStack>
+            }  
+          />
+        </Box>
     </ScrollView>
   )
 }
