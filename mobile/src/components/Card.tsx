@@ -17,7 +17,13 @@ export function Card() {
         />
 
         <HStack alignItems="flex-start" justifyContent="space-between" px="1" mt="1">
-          <Avatar size={8} alt ="" borderWidthsize={2} source={{ uri: 'https://github.com/diaspd.png' }}/>
+          <Avatar 
+            source={{ uri: 'https://github.com/diaspd.png' }}
+            size={8} 
+            borderWidthsize={2} 
+            borderColor="gray.700"
+            alt ="" 
+          />
 
           <Box bg="gray.200" rounded="full" px="2" py="0.5" alignItems="center">
             <Text color="gray.600" fontFamily="heading" fontSize="sm">USADO</Text>
@@ -32,7 +38,6 @@ export function Card() {
           {' '}59,90
         </Heading>
       </Text> 
-     
     </VStack>
   )
 }
