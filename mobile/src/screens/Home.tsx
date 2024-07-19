@@ -8,6 +8,7 @@ import { Feather } from '@expo/vector-icons';
 
 import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
+import { Card } from "@components/Card";
 
 export function Home() {
   const { colors } = useTheme();
@@ -67,6 +68,12 @@ export function Home() {
             </HStack>
             }  
           />
+
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+            {Array.from({ length: 4}).map((_, i) => {
+              return ( <Card key={i}/>)
+            })}
+          </Box>
         </Box>
     </ScrollView>
   )
