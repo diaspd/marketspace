@@ -21,7 +21,7 @@ export function Home() {
         <Text color="gray.300">Seus produtos anunciados para venda</Text>
 
           <HStack 
-            mt="2" 
+            mt="3" 
             justifyContent="space-between" 
             bg="rgba(100, 122, 199, 0.1)" 
             rounded="md" 
@@ -53,7 +53,7 @@ export function Home() {
 
           <Input 
             placeholder="Buscar anúncio" 
-            mt="3" 
+            mt="12" 
             rightElement={
             <HStack justifyContent="space-between" alignItems="center" mr="4" w={"16"}>
               <TouchableOpacity>
@@ -69,9 +69,9 @@ export function Home() {
             }  
           />
 
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mt="2 ">
             {Array.from({ length: 4}).map((_, i) => {
-              return ( <Card key={i}/>)
+              return ( <Card key={i} />)
             })}
           </Box>
         </Box>

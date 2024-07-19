@@ -6,7 +6,7 @@ import ShoesImg from '@assets/shoes.png'
 export function Card() {
   return (
     <VStack mb="6">
-      <Box w='40' h="24">
+      <Box w={170} h="24">
         <Image 
           source={ShoesImg}
           alt=""
@@ -31,8 +31,8 @@ export function Card() {
         </HStack>
       </Box>
 
-      <Text mt="2" color="gray.200">Tênis vermelho</Text>
-      <Text fontSize="sm" mt="0.5" color="gray.100">
+      <Text mt="2" color="gray.200" maxW={166} noOfLines={1}>Tênis vermelho</Text>
+      <Text fontSize="sm" mt="0.5" color="gray.100" maxW={166} noOfLines={1}>
         R$
         <Heading fontSize="lg">
           {' '}59,90
