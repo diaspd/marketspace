@@ -6,7 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 
 import { Card } from "@components/Card";
 
-export function MyAdd() {
+export function MyAds() {
   const { colors } = useTheme();
 
   return (

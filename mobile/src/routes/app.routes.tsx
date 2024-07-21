@@ -8,11 +8,11 @@ import TagSvg from '@assets/icons/tag.svg';
 import LogoutSvg from '@assets/icons/logout.svg';
 
 import { useTheme } from 'native-base';
-import { MyAdd } from '@screens/MyAdd';
+import { MyAds } from '@screens/MyAds';
 
 type AppRoutes = {
   home: undefined;
-  myadd: undefined;
+  myads: undefined;
   logout: undefined;
 }
 
@@ -57,8 +57,8 @@ export function AppRoutes() {
       />
 
       <Screen 
-        name='myadd'
-        component={MyAdd}
+        name='myads'
+        component={MyAds}
         options={{
           tabBarIcon: ({ color }) => (
             <TagSvg 
