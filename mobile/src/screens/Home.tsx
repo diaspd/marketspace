@@ -1,5 +1,5 @@
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose } from "native-base";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -85,7 +85,7 @@ export function Home() {
 
               <Actionsheet isOpen={isOpen} onClose={onClose}>
                 <Actionsheet.Content _dragIndicator={{ backgroundColor: 'gray.500' }} px="6" pb="8">
-                  <Box w="100%" my="7" justifyContent="space-between" alignItems="center" display="flex" flexDir="row">
+                  <HStack w="100%" my="7" justifyContent="space-between" alignItems="center">
                     <Heading fontSize="lg" color="gray.100">
                       Filtrar anúncios
                     </Heading>
@@ -93,13 +93,48 @@ export function Home() {
                     <TouchableOpacity onPress={onClose}>
                       <Feather name="x" size={20} color={colors.gray[400]} />
                     </TouchableOpacity>  
-                  </Box>
+                  </HStack>
 
-                  <Actionsheet.Item>Delete</Actionsheet.Item>
-                  <Actionsheet.Item isDisabled>Share</Actionsheet.Item>
-                  <Actionsheet.Item>Play</Actionsheet.Item>
-                  <Actionsheet.Item>Favourite</Actionsheet.Item>
-                  <Actionsheet.Item>Cancel</Actionsheet.Item>
+                  <VStack alignItems="start" w="full">
+                    <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
+
+                    <VStack space="2">
+                      <Checkbox 
+                        value="Boleto" 
+                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+                        _text={{ color: 'gray.200'}}
+                      >Boleto
+                      </Checkbox>
+                      
+                      <Checkbox 
+                        value="Pix" 
+                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+                        _text={{ color: 'gray.200'}}
+                      >Pix
+                      </Checkbox>
+
+                      <Checkbox 
+                        value="Dinheiro" 
+                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+                        _text={{ color: 'gray.200'}}
+                      >Dinheiro
+                      </Checkbox>
+
+                      <Checkbox 
+                        value="Cartão de Crédito" 
+                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+                        _text={{ color: 'gray.200'}}
+                      >Cartão de Crédito
+                      </Checkbox>
+                      
+                      <Checkbox 
+                        value="Depósito Bancário" 
+                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+                        _text={{ color: 'gray.200'}}
+                      >Depósito Bancário
+                      </Checkbox>
+                    </VStack>    
+                  </VStack>
 
                   <HStack justifyContent="space-between" w="full" mt="16" space={3}>
                     <Button title="Resetar filtros" variant="secondary" size="176" />
