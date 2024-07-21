@@ -1,6 +1,9 @@
 import { TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
 
+import { useNavigation } from "@react-navigation/native";
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
 import TagSvg from '@assets/icons/tag.svg';
 
 import { AntDesign } from '@expo/vector-icons';
@@ -12,6 +15,12 @@ import { Card } from "@components/Card";
 
 export function Home() {
   const { colors } = useTheme();
+
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleGoToMyAds() {
+    navigation.navigate('myads')
+  }
 
   return (
     <ScrollView flex={1}>
@@ -38,7 +47,7 @@ export function Home() {
             </VStack> 
           </HStack>
 
-          <TouchableOpacity> 
+          <TouchableOpacity onPress={handleGoToMyAds}> 
             <HStack alignItems="center">
               <Text color={colors.blue[500]} mr="2" fontFamily="heading">
                 Meus anúncios
@@ -71,7 +80,7 @@ export function Home() {
 
           <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mt="2 ">
             {Array.from({ length: 4}).map((_, i) => {
-              return ( <Card key={i} />)
+              return ( <Card key={i} hasAvatar />)
             })}
           </Box>
         </Box>

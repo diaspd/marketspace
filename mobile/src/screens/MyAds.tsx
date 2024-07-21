@@ -5,8 +5,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
 import { Card } from "@components/Card";
+import { useState } from "react";
 
 export function MyAds() {
+  const [selectText ,setSelectText] = useState('Todos')
+  const [isDropdownOpen ,setIsDropdownOpen] = useState(false)
   const { colors } = useTheme();
 
   return (
@@ -30,22 +33,28 @@ export function MyAds() {
               placement="bottom right" 
               shouldOverlapWithTrigger={false}
               mt="8"
+              onOpen={() => setIsDropdownOpen(true)}
+              onClose={() => setIsDropdownOpen(false)}
               trigger={triggerProps => {
                 return (
-                  <HStack w="32" borderWidth={2} rounded="md" borderColor={colors.gray[500]}>
+                  <HStack w="32" borderWidth={2} rounded="md" borderColor={colors.gray[500]} >
                     <TouchableOpacity accessibilityLabel="More options menu" {...triggerProps}>
                       <HStack display="flex" justifyContent="space-between" w="full" px="3" py="2">
-                        <Text>Todos</Text>
-                        <Entypo name="chevron-small-down" size={24} color="black" /> 
+                        <Text>{selectText}</Text>
+                        {isDropdownOpen ? (
+                          <Entypo name="chevron-small-down" style={{ transform: [{ rotate: '180deg'}]}} size={24} color={colors.gray[300]} /> 
+                        ): (
+                          <Entypo name="chevron-small-down" size={24} color={colors.gray[300]} /> 
+                        )}
                       </HStack>
                     </TouchableOpacity>
                   </HStack>
-                )
+                ) 
               }}
             >
-              <Menu.Item><Text>Todos</Text></Menu.Item>
-              <Menu.Item><Text>Ativos</Text></Menu.Item>
-              <Menu.Item><Text>Inativos</Text></Menu.Item>
+              <Menu.Item onPress={() => setSelectText('Todos')}><Text>Todos</Text></Menu.Item>
+              <Menu.Item onPress={() => setSelectText('Ativos')}><Text>Ativos</Text></Menu.Item>
+              <Menu.Item onPress={() => setSelectText('Inativos')}><Text>Inativos</Text></Menu.Item>
             </Menu>
 
           </Box>
