@@ -13,6 +13,7 @@ import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
 import { useState } from "react";
+import { Button } from "@components/Button";
 
 export function Home() {
   const { colors } = useTheme();
@@ -83,8 +84,8 @@ export function Home() {
               </TouchableOpacity>
 
               <Actionsheet isOpen={isOpen} onClose={onClose}>
-                <Actionsheet.Content _dragIndicator={{ backgroundColor: 'gray.500' }}>
-                  <Box w="100%" my="7" px={4} justifyContent="space-between" alignItems="center" display="flex" flexDir="row">
+                <Actionsheet.Content _dragIndicator={{ backgroundColor: 'gray.500' }} px="6" pb="8">
+                  <Box w="100%" my="7" justifyContent="space-between" alignItems="center" display="flex" flexDir="row">
                     <Heading fontSize="lg" color="gray.100">
                       Filtrar anúncios
                     </Heading>
@@ -93,12 +94,17 @@ export function Home() {
                       <Feather name="x" size={20} color={colors.gray[400]} />
                     </TouchableOpacity>  
                   </Box>
-                  
+
                   <Actionsheet.Item>Delete</Actionsheet.Item>
                   <Actionsheet.Item isDisabled>Share</Actionsheet.Item>
                   <Actionsheet.Item>Play</Actionsheet.Item>
                   <Actionsheet.Item>Favourite</Actionsheet.Item>
                   <Actionsheet.Item>Cancel</Actionsheet.Item>
+
+                  <HStack justifyContent="space-between" w="full" mt="16" space={3}>
+                    <Button title="Resetar filtros" variant="secondary" size="176" />
+                    <Button title="Aplicar filtros" variant="terciary" size="176" />
+                  </HStack>
                 </Actionsheet.Content>
               </Actionsheet>
             </HStack>
