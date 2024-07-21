@@ -1,5 +1,5 @@
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -12,9 +12,16 @@ import { Feather } from '@expo/vector-icons';
 import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
+import { useState } from "react";
 
 export function Home() {
   const { colors } = useTheme();
+
+  const {
+    isOpen,
+    onOpen,
+    onClose
+  } = useDisclose();
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -70,10 +77,30 @@ export function Home() {
               </TouchableOpacity>
 
               <Box h="4" bg="gray.400" w="0.5"/>
-
-              <TouchableOpacity>
+              
+              <TouchableOpacity onPress={onOpen}>
                 <Feather name="sliders" size={20} color={colors.gray[200]} />
               </TouchableOpacity>
+
+              <Actionsheet isOpen={isOpen} onClose={onClose}>
+                <Actionsheet.Content _dragIndicator={{ backgroundColor: 'gray.500' }}>
+                  <Box w="100%" my="7" px={4} justifyContent="space-between" alignItems="center" display="flex" flexDir="row">
+                    <Heading fontSize="lg" color="gray.100">
+                      Filtrar anúncios
+                    </Heading>
+
+                    <TouchableOpacity onPress={onClose}>
+                      <Feather name="x" size={20} color={colors.gray[400]} />
+                    </TouchableOpacity>  
+                  </Box>
+                  
+                  <Actionsheet.Item>Delete</Actionsheet.Item>
+                  <Actionsheet.Item isDisabled>Share</Actionsheet.Item>
+                  <Actionsheet.Item>Play</Actionsheet.Item>
+                  <Actionsheet.Item>Favourite</Actionsheet.Item>
+                  <Actionsheet.Item>Cancel</Actionsheet.Item>
+                </Actionsheet.Content>
+              </Actionsheet>
             </HStack>
             }  
           />
