@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox } from "native-base";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, Pressable } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -12,22 +13,26 @@ import { Feather } from '@expo/vector-icons';
 import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
-import { useState } from "react";
 import { Button } from "@components/Button";
 
 export function Home() {
-  const { colors } = useTheme();
+  const [isSwitchActive, setIsSwitchActive] = useState(false)
 
   const {
     isOpen,
     onOpen,
     onClose
   } = useDisclose();
-
+  
+  const { colors } = useTheme();
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   function handleGoToMyAds() {
     navigation.navigate('myads')
+  }
+
+  function handleChangeSwitch() {
+    setIsSwitchActive(prevState => !prevState)
   }
 
   return (
@@ -94,6 +99,20 @@ export function Home() {
                       <Feather name="x" size={20} color={colors.gray[400]} />
                     </TouchableOpacity>  
                   </HStack>
+
+                  <VStack alignItems="start" w="full" mb="3">
+                    <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
+
+                    <Box bg={isSwitchActive ? "blue.700" : "gray.500"} w="42" h="22" mt="3" rounded="full" alignItems="center" justifyContent="center">
+                      <Switch 
+                        isChecked={isSwitchActive}
+                        ml="-1"
+                        mr="auto"
+                        offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" offThumbColor="gray.700"
+                        onToggle={handleChangeSwitch}
+                      />
+                    </Box>
+                  </VStack>
 
                   <VStack alignItems="start" w="full">
                     <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
