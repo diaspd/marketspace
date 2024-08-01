@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, Pressable } from "native-base";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, Radio } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -9,6 +9,7 @@ import TagSvg from '@assets/icons/tag.svg';
 
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import Octicons from '@expo/vector-icons/Octicons';
 
 import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
@@ -17,12 +18,14 @@ import { Button } from "@components/Button";
 
 export function Home() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
-
+  
   const {
     isOpen,
     onOpen,
     onClose
   } = useDisclose();
+  
+  const isSelected = true 
   
   const { colors } = useTheme();
   const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -57,7 +60,7 @@ export function Home() {
             <VStack ml="4">
               <Heading color="gray.200">4</Heading>
               <Text color="gray.200" fontSize="sm">anúncios ativos</Text>
-            </VStack> 
+            </VStack>       
           </HStack>
 
           <TouchableOpacity onPress={handleGoToMyAds}> 
@@ -99,6 +102,32 @@ export function Home() {
                       <Feather name="x" size={20} color={colors.gray[400]} />
                     </TouchableOpacity>  
                   </HStack>
+
+                  <VStack alignItems="start" w="full" mb="3">
+                    <Text fontWeight="bold" color="gray.200" mb="3">Condição</Text>
+                
+                    <HStack mr="auto">
+                      <Box flexDir="row" bg={isSelected ? "blue.700" : "gray.500"} rounded="full" px="2" py="0.5" alignItems="center" ml="auto" mr="2">
+                        <Text color={isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
+                          NOVO
+                        </Text>
+
+                        {isSelected && (
+                          <Octicons name="x-circle-fill" size={14} color="white" />
+                        )}
+                      </Box>
+
+                      <Box flexDir="row" bg={!isSelected ? "blue.700" : "gray.500"} rounded="full" px="1.5" py="2" alignItems="center" ml="auto">
+                        <Text color={!isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
+                          USADO
+                        </Text>
+
+                        {!isSelected && (
+                          <Octicons name="x-circle-fill" size={14} color="white" />
+                        )}
+                      </Box>
+                    </HStack>
+                  </VStack>
 
                   <VStack alignItems="start" w="full" mb="3">
                     <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
