@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, Radio } from "native-base";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -18,6 +18,7 @@ import { Button } from "@components/Button";
 
 export function Home() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
+  const [product, setProduct] = useState<string[]>(['hhh', 'pppp', 'gggg', 'HHUH', 'JJJJ', 'jij', 'ppppkujhuj', 'uhuh']);
   
   const {
     isOpen,
@@ -39,10 +40,10 @@ export function Home() {
   }
 
   return (
-    <ScrollView flex={1}>
+    <VStack  flex={1}>
        <HomeHeader />
 
-        <Box mx="6" mt="8">
+        <Box mx="6" mt="8" flex={1}>
         <Text color="gray.300">Seus produtos anunciados para venda</Text>
 
           <HStack 
@@ -194,12 +195,19 @@ export function Home() {
             }  
           />
 
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mt="2 ">
-            {Array.from({ length: 4}).map((_, i) => {
-              return ( <Card key={i} hasAvatar />)
-            })}
-          </Box>
+         <FlatList 
+            data={product}
+            keyExtractor={item => item}
+            columnWrapperStyle={{ flex: 1, justifyContent: 'space-between'}}
+            renderItem={({item}) => (
+              <Box>
+                <Card name={item} hasAvatar />
+              </Box>
+            )}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+         />
         </Box>
-    </ScrollView>
+    </VStack>
   )
 }

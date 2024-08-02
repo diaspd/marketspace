@@ -59,7 +59,7 @@ export function MyAds() {
 
           </Box>
 
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mt="2 ">
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mt="2">
             {Array.from({ length: 5}).map((_, i) => {
               return ( <Card key={i} />)
             })}

@@ -3,11 +3,12 @@ import { Avatar } from "@components/Avatar";
 
 import ShoesImg from '@assets/shoes.png'
 
-export function Card({hasAvatar = false}) {
+export function Card({name = 'string', hasAvatar = false}) {
   const isNew = false 
   const isAdDisabled = false
 
   return (
+    <>
     <VStack mb="6">
       <Box w={170} h="24" opacity={isAdDisabled ? '75' : '100'}>
         <Image 
@@ -48,9 +49,10 @@ export function Card({hasAvatar = false}) {
       <Text fontSize="sm" mt="0.5" color={isAdDisabled ? "gray.400" : "gray.100"} maxW={166} noOfLines={1}>
         R$
         <Heading fontSize="lg" color={isAdDisabled ? "gray.400" : "gray.100"}>
-          {' '}59,90
+          {' '}59,90 
         </Heading>
       </Text> 
     </VStack>
+    </>
   )
 }
