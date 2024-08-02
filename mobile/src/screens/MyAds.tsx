@@ -1,5 +1,5 @@
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, ScrollView, Text, useTheme, Menu, VStack } from "native-base";
+import { Box, Heading, HStack, FlatList, Text, useTheme, Menu, VStack } from "native-base";
 
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -8,13 +8,15 @@ import { Card } from "@components/Card";
 import { useState } from "react";
 
 export function MyAds() {
+  const [myProduct, setMyProduct] = useState<string[]>(['Product1', 'Product2', 'Product3', 'Product4', 'Product5', 'Product6', 'Product7', 'Product8', 'Product9']);
   const [selectText ,setSelectText] = useState('Todos')
   const [isDropdownOpen ,setIsDropdownOpen] = useState(false)
+
   const { colors } = useTheme();
 
   return (
-    <ScrollView flex={1}>
-        <Box mx="6" mt="16">
+    <VStack flex={1}>
+        <Box mx="6" mt="16" flex={1}>
           <HStack alignItems="center" mb="10">
             <Heading color="gray.100" fontSize="lg" ml="auto">Meus anúncios</Heading>
 
@@ -59,12 +61,17 @@ export function MyAds() {
 
           </Box>
 
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between" mt="2">
-            {Array.from({ length: 5}).map((_, i) => {
-              return ( <Card key={i} />)
-            })}
-          </Box>
+          <FlatList 
+            data={myProduct}
+            keyExtractor={item => item}
+            columnWrapperStyle={{ flex: 1, justifyContent: 'space-between'}}
+            renderItem={({item}) => (
+              <Card data={item} />
+            )}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+         />
         </Box>
-    </ScrollView>
+    </VStack>
   )
 }

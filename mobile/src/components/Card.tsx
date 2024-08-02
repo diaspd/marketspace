@@ -3,7 +3,7 @@ import { Avatar } from "@components/Avatar";
 
 import ShoesImg from '@assets/shoes.png'
 
-export function Card({name = 'string', hasAvatar = false}) {
+export function Card({data = 'string', hasAvatar = false}) {
   const isNew = false 
   const isAdDisabled = false
 
@@ -45,7 +45,7 @@ export function Card({name = 'string', hasAvatar = false}) {
         )}
       </Box>
 
-      <Text mt="2" maxW={166} noOfLines={1} color={isAdDisabled ? "gray.400" : "gray.200"}>Tênis vermelho</Text>
+      <Text mt="2" maxW={166} noOfLines={1} color={isAdDisabled ? "gray.400" : "gray.200"}>{data}</Text>
       <Text fontSize="sm" mt="0.5" color={isAdDisabled ? "gray.400" : "gray.100"} maxW={166} noOfLines={1}>
         R$
         <Heading fontSize="lg" color={isAdDisabled ? "gray.400" : "gray.100"}>
