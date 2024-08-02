@@ -18,7 +18,7 @@ import { Button } from "@components/Button";
 
 export function Home() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
-  const [product, setProduct] = useState<string[]>(['hhh', 'pppp', 'gggg', 'HHUH', 'JJJJ', 'jij', 'ppppkujhuj', 'uhuh']);
+  const [product, setProduct] = useState<string[]>(['Product1', 'Product2', 'Product3', 'Product4', 'Product5', 'Product6', 'Product6', 'Product7']);
   
   const {
     isOpen,
