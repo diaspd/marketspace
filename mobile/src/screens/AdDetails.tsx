@@ -1,7 +1,9 @@
-import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, Text, VStack } from "native-base";
+import { TouchableOpacity, Dimensions } from "react-native";
+import { Box, Heading, HStack, Text, VStack, Image } from "native-base";
 
 import { AntDesign } from '@expo/vector-icons';
+
+import { CarouselComponent }  from '@components/Carousel'
 
 export function AdDetails() {
   return (
@@ -13,9 +15,9 @@ export function AdDetails() {
             </TouchableOpacity>
           </HStack>
 
+          <CarouselComponent />
+
           <VStack>
-
-
           </VStack>
         </Box>
     </VStack>
