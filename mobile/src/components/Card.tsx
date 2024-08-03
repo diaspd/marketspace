@@ -1,15 +1,24 @@
-import { Box, HStack, Image, VStack, Text, Heading } from "native-base";
+import { Box, HStack, Image, VStack, Text, Heading, Pressable } from "native-base";
 import { Avatar } from "@components/Avatar";
 
 import ShoesImg from '@assets/shoes.png'
+import { useNavigation } from "@react-navigation/native";
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { TouchableOpacity } from "react-native";
 
 export function Card({data = 'string', hasAvatar = false}) {
   const isNew = false 
   const isAdDisabled = false
 
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleGoToAdDetails() {
+    navigation.navigate('addetails')
+  }
+
   return (
     <>
-    <VStack mb="6">
+    <Pressable mb="6" onPress={handleGoToAdDetails}> 
       <Box w={170} h="24" opacity={isAdDisabled ? '75' : '100'}>
         <Image 
           source={ShoesImg}
@@ -52,7 +61,7 @@ export function Card({data = 'string', hasAvatar = false}) {
           {' '}59,90 
         </Heading>
       </Text> 
-    </VStack>
+    </Pressable>
     </>
   )
 }
