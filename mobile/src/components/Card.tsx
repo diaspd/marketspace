@@ -1,10 +1,9 @@
-import { Box, HStack, Image, VStack, Text, Heading, Pressable } from "native-base";
+import { Box, HStack, Image, Text, Heading, Pressable } from "native-base";
 import { Avatar } from "@components/Avatar";
 
 import ShoesImg from '@assets/shoes.png'
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
-import { TouchableOpacity } from "react-native";
 
 export function Card({data = 'string', hasAvatar = false}) {
   const isNew = false 
@@ -37,7 +36,7 @@ export function Card({data = 'string', hasAvatar = false}) {
               size={8} 
               borderWidthsize={2} 
               borderColor="gray.700"
-              alt ="" 
+              alt="" 
             />
           )}
 
