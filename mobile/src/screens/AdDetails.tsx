@@ -38,6 +38,23 @@ export function AdDetails() {
             {isNew ? "NOVO" : "USADO"}
           </Text> 
         </Box>
+
+        <HStack w="full" mt="3">
+          <Heading numberOfLines={1} maxW={240} fontSize="lg" color="gray.100">Luminária pendente</Heading>
+
+          <Box ml="auto">
+            <Heading fontSize="lg" color="blue.700">
+              <Text fontSize="sm">
+                R${' '}
+              </Text>
+              45,00
+            </Heading>
+          </Box>
+        </HStack>
+
+        <Text fontSize="sm" color="gray.200" mt="2" numberOfLines={4}>
+          Cras congue cursus in tortor sagittis placerat nunc, tellus arcu. Vitae ante leo eget maecenas urna mattis cursus. 
+        </Text>
       </VStack>
     </VStack>
   )
