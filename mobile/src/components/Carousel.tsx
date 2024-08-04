@@ -24,7 +24,7 @@ export function CarouselComponent() {
   };
 
   return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ marginBottom: 24 }}>
         <VStack>
           <Carousel
             vertical={false}
