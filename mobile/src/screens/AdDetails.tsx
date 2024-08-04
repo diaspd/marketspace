@@ -8,8 +8,8 @@ import { CarouselComponent }  from '@components/Carousel'
 export function AdDetails() {
   return (
     <VStack flex={1}>
-        <Box mx="6" mt="16" flex={1}>
-          <HStack justifyContent="start" alignItems="center" mb="10">
+        <Box flex={1}>
+          <HStack mx="6" mt="16" justifyContent="start" alignItems="center" mb="10">
             <TouchableOpacity>
               <AntDesign name="arrowleft" size={24} color="black" />
             </TouchableOpacity>

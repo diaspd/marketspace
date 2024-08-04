@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { View } from "react-native";
 
-import { Text } from "native-base";
+import { Image } from "native-base";
 
 import type { ICarouselInstance } from "react-native-reanimated-carousel";
 import Carousel from "react-native-reanimated-carousel"
@@ -16,8 +16,8 @@ export function CarouselComponent() {
     <View style={{ flex: 1 }}>
       <Carousel
         vertical={false}
-        width={100}
-        height={100}
+        width={412}
+        height={290}
         loop={false}
         ref={ref}
         style={{ width: "100%" }}
@@ -26,15 +26,20 @@ export function CarouselComponent() {
         onSnapToItem={index => console.log("current index:", index)}
         renderItem={({ index }) => (
           <>
-          <View style={{ flex: 1, marginLeft: "2.5%" }}>
-            <Text key={index} flex="1">{index}</Text>
+          <View style={{ flex: 1}}>
+            <Image 
+              w="full" 
+              h="full"
+              source={{ uri: 'https://github.com/diaspd.png'}}
+              alt=""
+            />
           </View>
 
             <Button
               title="index"
-                onPress={() => {
-                  ref.current?.scrollTo({ index: index, animated: true });
-                }}
+              onPress={() => {
+                ref.current?.scrollTo({ index: index, animated: true });
+              }}
             />
           </>
         )}
