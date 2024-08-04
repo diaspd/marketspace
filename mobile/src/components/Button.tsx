@@ -2,7 +2,7 @@ import { Button as NativeBaseButton, IButtonProps, Text } from 'native-base'
 
 type ButtonProps = IButtonProps & {
   title: string;
-  variant?: "primary" | "secondary" | "terciary"
+  variant?: "primary" | "secondary" | "terciary";
   size?: string;
 }
 
