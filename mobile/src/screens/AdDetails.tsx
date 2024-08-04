@@ -1,13 +1,14 @@
-import { TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
-import { AntDesign } from '@expo/vector-icons';
+import { ArrowLeft, PencilLine } from 'phosphor-react-native';
 
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
+import { useNavigation } from "@react-navigation/native";
 
 export function AdDetails() {
   const isNew = false 
@@ -15,13 +16,23 @@ export function AdDetails() {
 
   const { colors } = useTheme();
 
+  const navigation = useNavigation();
+
+  function handleGoToEditAd() {
+    console.log('go to edit')
+  }
+
   return (
     <VStack flex={1}>
-      <Box mx="6" mt="16" mb="4">
-        <TouchableOpacity>
-          <AntDesign name="arrowleft" size={24} color="black" />
+      <HStack mx="6" mt="16" mb="4" justifyContent="space-between">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <ArrowLeft size={24} color={colors.gray[100]} />
         </TouchableOpacity>
-      </Box>
+
+        <TouchableOpacity onPress={handleGoToEditAd}>
+          <PencilLine size={24} color={colors.gray[100]} />
+        </TouchableOpacity>
+      </HStack>
 
       <CarouselComponent />
 
