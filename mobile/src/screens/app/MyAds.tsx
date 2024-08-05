@@ -6,6 +6,8 @@ import { Entypo } from '@expo/vector-icons';
 
 import { Card } from "@components/Card";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 export function MyAds() {
   const [myProduct, setMyProduct] = useState<string[]>(['Product1', 'Product2', 'Product3', 'Product4', 'Product5', 'Product6', 'Product7', 'Product8', 'Product9']);
@@ -14,6 +16,12 @@ export function MyAds() {
 
   const { colors } = useTheme();
 
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleGoToCreateAd() {
+    navigation.navigate('createad')
+  }
+
   return (
     <VStack flex={1}>
         <Box mx="6" mt="16" flex={1}>
@@ -21,7 +29,7 @@ export function MyAds() {
             <Heading color="gray.100" fontSize="lg" ml="auto">Meus anúncios</Heading>
 
             <Box ml="auto">
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleGoToCreateAd}>
                 <AntDesign name="plus" size={24} color="black" />
               </TouchableOpacity>
             </Box>

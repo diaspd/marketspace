@@ -4,8 +4,16 @@ import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
 
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 export function HomeHeader() {
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleGoToCreateAd() {
+    navigation.navigate('createad')
+  }
+
   return (
     <Box px="6" mt="16">
     <HStack>
@@ -24,6 +32,7 @@ export function HomeHeader() {
         leftIcon={
           <AntDesign name="plus" size={16} color="white" />
         }
+        onPress={handleGoToCreateAd}
       />
     </HStack>
   </Box>

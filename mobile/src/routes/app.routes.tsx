@@ -10,12 +10,14 @@ import LogoutSvg from '@assets/icons/logout.svg';
 import { useTheme } from 'native-base';
 import { MyAds } from '@screens/app/MyAds';
 import { AdDetails } from '@screens/app/AdDetails';
+import { CreateAd } from '@screens/app/CreateAd';
 
 type AppRoutes = {
   home: undefined;
   myads: undefined;
   logout: undefined;
   addetails: undefined;
+  createad: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -88,6 +90,12 @@ export function AppRoutes() {
       <Screen 
         name='addetails'
         component={AdDetails}
+        options={{ tabBarButton: () => null}}
+      />
+
+      <Screen 
+        name='createad'
+        component={CreateAd}
         options={{ tabBarButton: () => null}}
       />
     </Navigator>
