@@ -1,15 +1,15 @@
 import { Platform } from 'react-native';
 import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Home } from '@screens/Home';
+import { Home } from '@screens/app/Home';
 
 import HomeSvg from '@assets/icons/home.svg';
 import TagSvg from '@assets/icons/tag.svg';
 import LogoutSvg from '@assets/icons/logout.svg';
 
 import { useTheme } from 'native-base';
-import { MyAds } from '@screens/MyAds';
-import { AdDetails } from '@screens/AdDetails';
+import { MyAds } from '@screens/app/MyAds';
+import { AdDetails } from '@screens/app/AdDetails';
 
 type AppRoutes = {
   home: undefined;

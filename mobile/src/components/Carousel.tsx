@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { View } from "react-native";
 
 import { Text, Image, useTheme, VStack, Box } from "native-base";
 
@@ -53,8 +52,8 @@ export function CarouselComponent({isAdDisabled}: Carousel) {
                 />
 
                 {isAdDisabled &&  <Text mt="-150" color="gray.700" textAlign="center" fontSize="sm" fontFamily="heading">ANÚNCIO DESATIVADO</Text>}
-            </Box>
-              )}
+              </Box>
+             )}
           />
 
           <Pagination.Basic
