@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { TouchableOpacity } from "react-native";
+
 import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
@@ -8,11 +11,10 @@ import { ArrowLeft, PencilLine } from 'phosphor-react-native';
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
-import { useNavigation } from "@react-navigation/native";
 
 export function AdDetails() {
   const isNew = false 
-  const isAdDisabled = false
+  const [isAdDisabled, setIsAdDisabled] = useState(false)
 
   const { colors } = useTheme();
 
@@ -20,6 +22,14 @@ export function AdDetails() {
 
   function handleGoToEditAd() {
     console.log('go to edit')
+  }
+
+  function handleSwitchAdAvailabilityToAvailable() {
+    setIsAdDisabled(false)
+  }
+
+  function handleSwitchAdAvailabilityToDisabled() {
+    setIsAdDisabled(true)
   }
 
   return (
@@ -34,7 +44,7 @@ export function AdDetails() {
         </TouchableOpacity>
       </HStack>
 
-      <CarouselComponent />
+      <CarouselComponent isAdDisabled={isAdDisabled} />
 
       <ScrollView>
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
@@ -106,7 +116,22 @@ export function AdDetails() {
             </HStack>
           </VStack>
 
-          <Button title="Desativar anúncio" variant="terciary" leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}/>
+          {isAdDisabled ? (
+            <Button 
+              title="Reativar anúncio" 
+              variant="primary" 
+              leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
+              onPress={handleSwitchAdAvailabilityToAvailable} 
+            />
+          ) : (
+            <Button 
+              title="Desativar anúncio" 
+              variant="terciary" 
+              leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
+              onPress={handleSwitchAdAvailabilityToDisabled}  
+            />
+          )}
+
           <Button title="Excluir anúncio" variant="secondary" mt="2" leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}/>
       </VStack>
       </ScrollView>

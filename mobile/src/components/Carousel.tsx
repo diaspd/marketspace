@@ -1,14 +1,18 @@
 import { useRef, useState } from "react";
 import { View } from "react-native";
 
-import { Box, Image, useTheme, VStack } from "native-base";
+import { Text, Image, useTheme, VStack, Box } from "native-base";
 
 import type { ICarouselInstance } from "react-native-reanimated-carousel";
 import Carousel, { Pagination } from "react-native-reanimated-carousel"
 import { useSharedValue } from "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
  
-export function CarouselComponent() {
+type Carousel = {
+  isAdDisabled: boolean
+}
+
+export function CarouselComponent({isAdDisabled}: Carousel) {
   const [data, setData] = useState([...new Array(3).keys()]);
   const ref = useRef<ICarouselInstance>(null);
 
@@ -37,15 +41,20 @@ export function CarouselComponent() {
             onProgressChange={progress}
             pagingEnabled
             renderItem={({ index }) => (
-              <View style={{ flex: 1}}>
+              <Box flex={1}>
                 <Image 
                   w="full" 
                   h="full"
                   source={{ uri: 'https://github.com/diaspd.png'}}
                   alt=""
+                  opacity={isAdDisabled ? '95' : '100'}
+                  blurRadius={isAdDisabled ? 2 : 0}
+                  bgColor="black"
                 />
-              </View>
-            )}
+
+                {isAdDisabled &&  <Text mt="-150" color="gray.700" textAlign="center" fontSize="sm" fontFamily="heading">ANÚNCIO DESATIVADO</Text>}
+            </Box>
+              )}
           />
 
           <Pagination.Basic
