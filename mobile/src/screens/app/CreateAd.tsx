@@ -54,7 +54,7 @@ export function CreateAd() {
         </Button>
       </HStack>
 
-      <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
+      <Heading fontSize="md" color="gray.200">Sobre o produto.</Heading>
 
       <Input mt="4" placeholder="Título do anúncio"/>
 
