@@ -1,5 +1,5 @@
 import { TouchableOpacity } from "react-native";
-import { Image, Heading, HStack, Text, VStack, Button, useTheme, TextArea } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button, useTheme, TextArea, Radio } from "native-base";
 
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
@@ -54,7 +54,7 @@ export function CreateAd() {
         </Button>
       </HStack>
 
-      <Heading fontSize="md" color="gray.200">Sobre o produto.</Heading>
+      <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
 
       <Input mt="4" placeholder="Título do anúncio"/>
 
@@ -70,6 +70,18 @@ export function CreateAd() {
         _focus={{ borderColor: 'gray.100'}}
         backgroundColor={colors.gray[700]}
       />
+
+          <Radio.Group name="myRadioGroup" accessibilityLabel="Selecione o estado do seu produto">
+            <HStack mt="4">
+              <Radio value="new" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
+                Produto novo
+              </Radio>
+              <Radio value="used" ml="5" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
+                Produto usado
+              </Radio>
+            </HStack>
+          </Radio.Group>
+     
     </VStack> 
   )
 }
