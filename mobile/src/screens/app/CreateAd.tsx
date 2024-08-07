@@ -15,6 +15,10 @@ export function CreateAd() {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
 
+  function handleGoToPreview() {
+    navigation.navigate('adpreview')
+  }
+
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
@@ -147,7 +151,7 @@ export function CreateAd() {
 
       <HStack flex={1} mb="8" mt="12">
         <Button title="Cancelar" variant="secondary" w="175"/>
-        <Button title="Avançar" variant="terciary" w="175" ml="3"/>
+        <Button title="Avançar" variant="terciary" w="175" ml="3" onPress={handleGoToPreview}/>
       </HStack>
     </ScrollView> 
   )

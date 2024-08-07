@@ -12,6 +12,7 @@ import { MyAds } from '@screens/app/MyAds';
 import { AdDetails } from '@screens/app/AdDetails';
 import { CreateAd } from '@screens/app/CreateAd';
 import { EditAd } from '@screens/app/EditAd';
+import { AdPreview } from '@screens/app/AdPreview';
 
 type AppRoutes = {
   home: undefined;
@@ -20,6 +21,7 @@ type AppRoutes = {
   addetails: undefined;
   createad: undefined;
   editad: undefined;
+  adpreview: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -104,6 +106,12 @@ export function AppRoutes() {
       <Screen 
         name='editad'
         component={EditAd}
+        options={{ tabBarButton: () => null}}
+      />
+
+      <Screen 
+        name='adpreview'
+        component={AdPreview}
         options={{ tabBarButton: () => null}}
       />
     </Navigator>
