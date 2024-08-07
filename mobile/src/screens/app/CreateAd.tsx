@@ -1,5 +1,5 @@
 import { TouchableOpacity } from "react-native";
-import { Image, Heading, HStack, Text, VStack, Button, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
 
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
@@ -7,6 +7,7 @@ import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 import { Plus } from "phosphor-react-native";
 import { Input } from "@components/Input";
 import { useState } from "react";
+import { Button } from "@components/Button";
 
 export function CreateAd() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
@@ -40,7 +41,7 @@ export function CreateAd() {
           borderRadius={8}
         />
 
-        <Button
+        <NativeBaseButton
           bg="gray.500"
           w={88}
           h={88}
@@ -54,7 +55,7 @@ export function CreateAd() {
           onPress={() => console.log('foto adicionada')}
         >
           <Plus color={colors.gray[400]} />
-        </Button>
+        </NativeBaseButton>
       </HStack>
 
       <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
@@ -103,7 +104,7 @@ export function CreateAd() {
         </Box>
       </VStack>
 
-      <VStack alignItems="start" w="full" mb="8" mt="4">
+      <VStack alignItems="start" w="full" mt="4">
         <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
 
         <VStack space="2">
@@ -144,6 +145,10 @@ export function CreateAd() {
         </VStack>    
       </VStack>
 
+      <HStack flex={1} mb="8" mt="12">
+        <Button title="Cancelar" variant="secondary" w="175"/>
+        <Button title="Avançar" variant="terciary" w="175" ml="3"/>
+      </HStack>
     </ScrollView> 
   )
 }
