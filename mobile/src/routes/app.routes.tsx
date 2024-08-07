@@ -11,6 +11,7 @@ import { useTheme } from 'native-base';
 import { MyAds } from '@screens/app/MyAds';
 import { AdDetails } from '@screens/app/AdDetails';
 import { CreateAd } from '@screens/app/CreateAd';
+import { EditAd } from '@screens/app/EditAd';
 
 type AppRoutes = {
   home: undefined;
@@ -18,6 +19,7 @@ type AppRoutes = {
   logout: undefined;
   addetails: undefined;
   createad: undefined;
+  editad: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -96,6 +98,12 @@ export function AppRoutes() {
       <Screen 
         name='createad'
         component={CreateAd}
+        options={{ tabBarButton: () => null}}
+      />
+
+      <Screen 
+        name='editad'
+        component={EditAd}
         options={{ tabBarButton: () => null}}
       />
     </Navigator>

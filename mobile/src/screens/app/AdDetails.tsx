@@ -11,6 +11,7 @@ import { ArrowLeft, PencilLine } from 'phosphor-react-native';
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 export function AdDetails() {
   const isNew = false 
@@ -18,10 +19,10 @@ export function AdDetails() {
 
   const { colors } = useTheme();
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
 
   function handleGoToEditAd() {
-    console.log('go to edit')
+    navigation.navigate('editad')
   }
 
   function handleSwitchAdAvailabilityToAvailable() {

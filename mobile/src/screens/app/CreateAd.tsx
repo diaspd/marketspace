@@ -139,7 +139,7 @@ export function CreateAd() {
           <Checkbox 
             value="Depósito Bancário" 
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
-            _text={{ color: 'gray.200'}}
+            _text={{ color: 'gray.200'}} 
           >Depósito Bancário
           </Checkbox>
         </VStack>    
