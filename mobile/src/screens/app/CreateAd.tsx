@@ -1,18 +1,21 @@
 import { TouchableOpacity } from "react-native";
-import { Image, Heading, HStack, Text, VStack, Button, useTheme, TextArea, Radio } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
 
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 import { Plus } from "phosphor-react-native";
 import { Input } from "@components/Input";
+import { useState } from "react";
 
 export function CreateAd() {
+  const [isSwitchActive, setIsSwitchActive] = useState(false)
+
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
 
   return (
-    <VStack flex={1}  mx="6" mt="16">
+    <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color="black" />
@@ -71,17 +74,76 @@ export function CreateAd() {
         backgroundColor={colors.gray[700]}
       />
 
-          <Radio.Group name="myRadioGroup" accessibilityLabel="Selecione o estado do seu produto">
-            <HStack mt="4">
-              <Radio value="new" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
-                Produto novo
-              </Radio>
-              <Radio value="used" ml="5" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
-                Produto usado
-              </Radio>
-            </HStack>
-          </Radio.Group>
+      <Radio.Group name="myRadioGroup" accessibilityLabel="Selecione o estado do seu produto">
+        <HStack mt="4">
+          <Radio value="new" size="sm" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
+            Produto novo
+          </Radio>
+          <Radio value="used" ml="5" size="sm" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
+            Produto usado
+          </Radio>
+        </HStack>
+      </Radio.Group>
+
+      <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
+
+      <Input mt="4" placeholder="Valor do produto" InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}/>
      
-    </VStack> 
+      <VStack alignItems="start" w="full" mb="3">
+        <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
+
+        <Box bg={isSwitchActive ? "blue.700" : "gray.500"} w="42" h="22" mt="3" rounded="full" alignItems="center" justifyContent="center">
+          <Switch 
+            isChecked={isSwitchActive}
+            ml="-1"
+            mr="auto"
+            offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" offThumbColor="gray.700"
+            onToggle={() => setIsSwitchActive(prevState => !prevState)}
+          />
+        </Box>
+      </VStack>
+
+      <VStack alignItems="start" w="full" mb="8" mt="4">
+        <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
+
+        <VStack space="2">
+          <Checkbox 
+            value="Boleto" 
+            _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+            _text={{ color: 'gray.200'}}
+          >Boleto
+          </Checkbox>
+          
+          <Checkbox 
+            value="Pix" 
+            _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+            _text={{ color: 'gray.200'}}
+          >Pix
+          </Checkbox>
+
+          <Checkbox 
+            value="Dinheiro" 
+            _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+            _text={{ color: 'gray.200'}}
+          >Dinheiro
+          </Checkbox>
+
+          <Checkbox 
+            value="Cartão de Crédito" 
+            _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+            _text={{ color: 'gray.200'}}
+          >Cartão de Crédito
+          </Checkbox>
+          
+          <Checkbox 
+            value="Depósito Bancário" 
+            _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
+            _text={{ color: 'gray.200'}}
+          >Depósito Bancário
+          </Checkbox>
+        </VStack>    
+      </VStack>
+
+    </ScrollView> 
   )
 }
