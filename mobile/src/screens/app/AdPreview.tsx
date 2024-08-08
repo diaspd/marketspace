@@ -25,19 +25,11 @@ export function AdPreview() {
     navigation.navigate('editad')
   }
 
-  function handleSwitchAdAvailabilityToAvailable() {
-    setIsAdDisabled(false)
-  }
-
-  function handleSwitchAdAvailabilityToDisabled() {
-    setIsAdDisabled(true)
-  }
-
   return (
     <VStack flex={1}>
       <VStack bg="blue.700" justifyContent="center" alignItems="center" h="32">
-        <Text mt="8">Pré visualização do anúncio</Text>
-        <Text mt="1">É assim que seu produto vai aparecer!</Text>
+        <Text mt="8" fontSize="md" fontFamily="heading" color="gray.700">Pré visualização do anúncio</Text>
+        <Text mt="1" fontSize="sm" color="gray.700">É assim que seu produto vai aparecer!</Text>
       </VStack>
 
       <CarouselComponent isAdDisabled={isAdDisabled} />
