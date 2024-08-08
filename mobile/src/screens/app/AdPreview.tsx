@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
-import { ArrowLeft, PencilLine } from 'phosphor-react-native';
+import { ArrowLeft, PencilLine, Tag } from 'phosphor-react-native';
 
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
@@ -23,6 +23,10 @@ export function AdPreview() {
 
   function handleGoToEditAd() {
     navigation.navigate('editad')
+  }
+
+  function handleGoToMyAds() {
+    navigation.navigate('myads')
   }
 
   return (
@@ -79,7 +83,7 @@ export function AdPreview() {
             </Text>
           </HStack>
 
-          <VStack w="full" mt="4" mb="8">
+          <VStack w="full" mt="4">
             <Heading fontSize="sm" color="gray.200">Meios de pagamento:</Heading>
 
             <HStack alignItems="center" mt="2">
@@ -104,6 +108,10 @@ export function AdPreview() {
             </HStack>
           </VStack>
 
+          <HStack mt="10" mb="4">
+            <Button title="Voltar e editar" variant="secondary" w="175" onPress={handleGoToEditAd} leftIcon={<ArrowLeft size={16} color={colors.gray[100]} />} />
+            <Button title="Publicar" variant="primary" w="175" ml="3" onPress={handleGoToMyAds} leftIcon={<Tag size={16} color={colors.gray[600]} />}/>
+          </HStack>
       </VStack>
       </ScrollView>
     </VStack>
