@@ -9,11 +9,15 @@ import { Input } from "@components/Input";
 import { useState } from "react";
 import { Button } from "@components/Button";
 
+import { usePriceFormatter } from '@hooks/usePriceFormatter'
+
 export function EditAd() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
+
+  const { price, handlePriceChange } = usePriceFormatter();
 
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
@@ -88,7 +92,14 @@ export function EditAd() {
 
       <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
 
-      <Input mt="4" placeholder="Valor do produto" InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}/>
+      <Input 
+        placeholder="Valor do produto" 
+        InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
+        mt="4" 
+        keyboardType="numeric"
+        value={price}
+        onChangeText={handlePriceChange}
+      />
      
       <VStack alignItems="start" w="full" mb="3">
         <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
