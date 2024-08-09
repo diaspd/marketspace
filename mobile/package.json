@@ -13,6 +13,7 @@
     "@react-navigation/bottom-tabs": "^6.6.0",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.10.0",
+    "axios": "^1.7.3",
     "expo": "^51.0.24",
     "expo-font": "~12.0.7",
     "expo-status-bar": "~1.12.1",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList } from "native-base";
 
@@ -15,6 +15,7 @@ import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
 import { Button } from "@components/Button";
+import { api } from "@services/api";
 
 export function Home() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
@@ -25,6 +26,15 @@ export function Home() {
     onOpen,
     onClose
   } = useDisclose();
+
+  async function handleSignUp() {
+    const response = await api.get('/users');
+    console.log(response)
+  }
+
+  useEffect(() => {
+    handleSignUp()
+  }, [])
   
   const isSelected = true 
   
