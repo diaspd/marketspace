@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
-import { ArrowLeft, PencilLine } from 'phosphor-react-native';
+import { ArrowLeft, PencilLine, WhatsappLogo } from 'phosphor-react-native';
 
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
@@ -16,6 +16,8 @@ import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 export function AdDetails() {
   const isNew = false 
   const [isAdDisabled, setIsAdDisabled] = useState(false)
+
+  const isAdMine = false
 
   const { colors } = useTheme();
 
@@ -40,9 +42,11 @@ export function AdDetails() {
           <ArrowLeft size={24} color={colors.gray[100]} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleGoToEditAd}>
+        {isAdMine && (
+         <TouchableOpacity onPress={handleGoToEditAd}>
           <PencilLine size={24} color={colors.gray[100]} />
-        </TouchableOpacity>
+         </TouchableOpacity>
+        )}
       </HStack>
 
       <CarouselComponent isAdDisabled={isAdDisabled} />
@@ -117,23 +121,44 @@ export function AdDetails() {
             </HStack>
           </VStack>
 
-          {isAdDisabled ? (
-            <Button 
-              title="Reativar anúncio" 
-              variant="primary" 
-              leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
-              onPress={handleSwitchAdAvailabilityToAvailable} 
-            />
-          ) : (
-            <Button 
-              title="Desativar anúncio" 
-              variant="terciary" 
-              leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
-              onPress={handleSwitchAdAvailabilityToDisabled}  
-            />
+          {isAdMine ? (
+            <>
+              {isAdDisabled ? (
+                <Button 
+                  title="Reativar anúncio" 
+                  variant="primary" 
+                  leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
+                  onPress={handleSwitchAdAvailabilityToAvailable} 
+                />
+              ) : (
+                <Button 
+                  title="Desativar anúncio" 
+                  variant="terciary" 
+                  leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
+                  onPress={handleSwitchAdAvailabilityToDisabled}  
+                />
+              )}
+    
+              <Button title="Excluir anúncio" variant="secondary" mt="2" leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}/>
+            </>
+          ): (
+              <HStack alignItems="center" justifyContent="space-between" w="full">
+                <Box>
+                  <Heading fontSize="lg" color="blue.700">
+                    <Text fontSize="sm">
+                      R${' '}
+                    </Text>
+                    120,00
+                  </Heading>
+                </Box>
+
+                <Box>
+                  <Button title="Entrar em contato" variant="primary" w="170" leftIcon={<WhatsappLogo size={16} color={colors.gray[700]} weight="fill"/>}/>
+                </Box>
+              </HStack>
           )}
 
-          <Button title="Excluir anúncio" variant="secondary" mt="2" leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}/>
+  
       </VStack>
       </ScrollView>
     </VStack>

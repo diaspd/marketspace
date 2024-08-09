@@ -5,7 +5,7 @@ import ShoesImg from '@assets/shoes.png'
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
-export function Card({data = 'string', hasAvatar = false}) {
+export function Card({data = 'string', isAdMine = false}) {
   const isNew = false 
   const isAdDisabled = false
 
@@ -30,7 +30,7 @@ export function Card({data = 'string', hasAvatar = false}) {
         />
 
         <HStack alignItems="flex-start" justifyContent="space-between" px="1" mt="1">
-          {hasAvatar && (
+          {!isAdMine && (
             <Avatar 
               source={{ uri: 'https://github.com/diaspd.png' }}
               size={8} 

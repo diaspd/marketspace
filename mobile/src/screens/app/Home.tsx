@@ -200,7 +200,7 @@ export function Home() {
             keyExtractor={item => item}
             columnWrapperStyle={{ flex: 1, justifyContent: 'space-between'}}
             renderItem={({item}) => (
-              <Card data={item} hasAvatar />
+              <Card data={item} />
             )}
             numColumns={2}
             mt="5"

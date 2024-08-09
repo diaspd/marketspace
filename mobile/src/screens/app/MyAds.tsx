@@ -74,7 +74,7 @@ export function MyAds() {
             keyExtractor={item => item}
             columnWrapperStyle={{ flex: 1, justifyContent: 'space-between'}}
             renderItem={({item}) => (
-              <Card data={item} />
+              <Card data={item} isAdMine />
             )}
             numColumns={2}
             showsVerticalScrollIndicator={false}
