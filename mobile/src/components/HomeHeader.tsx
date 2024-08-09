@@ -1,4 +1,4 @@
-import { Text, Box, Heading, VStack, HStack, Icon } from "native-base";
+import { Text, Box, Heading, VStack, HStack } from "native-base";
 
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";

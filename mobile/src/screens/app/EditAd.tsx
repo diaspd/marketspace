@@ -157,8 +157,8 @@ export function EditAd() {
       </VStack>
 
       <HStack flex={1} mb="8" mt="12">
-        <Button title="Cancelar" variant="secondary" w="175"/>
-        <Button title="Avançar" variant="terciary" w="175" ml="3"/>
+        <Button title="Cancelar" variant="secondary" w="175" onPress={() => navigation.goBack()}/>
+        <Button title="Avançar" variant="terciary" w="175" ml="3" onPress={() => navigation.navigate('myads')}/>
       </HStack>
     </ScrollView> 
   )

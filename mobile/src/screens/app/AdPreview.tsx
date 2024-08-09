@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { SafeAreaView, TouchableOpacity } from "react-native";
 
 import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import Feather from '@expo/vector-icons/Feather';
-import { ArrowLeft, PencilLine, Tag } from 'phosphor-react-native';
+import { ArrowLeft, Tag } from 'phosphor-react-native';
 
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
@@ -21,8 +19,8 @@ export function AdPreview() {
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
-  function handleGoToEditAd() {
-    navigation.navigate('editad')
+  function handleGoToCreateAd() {
+    navigation.navigate('createad')
   }
 
   function handleGoToMyAds() {
@@ -109,7 +107,7 @@ export function AdPreview() {
           </VStack>
 
           <HStack mt="10" mb="4">
-            <Button title="Voltar e editar" variant="secondary" w="175" onPress={handleGoToEditAd} leftIcon={<ArrowLeft size={16} color={colors.gray[100]} />} />
+            <Button title="Voltar e editar" variant="secondary" w="175" onPress={handleGoToCreateAd} leftIcon={<ArrowLeft size={16} color={colors.gray[100]} />} />
             <Button title="Publicar" variant="primary" w="175" ml="3" onPress={handleGoToMyAds} leftIcon={<Tag size={16} color={colors.gray[600]} />}/>
           </HStack>
       </VStack>
