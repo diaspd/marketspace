@@ -58,6 +58,8 @@ export function SignIn() {
         placement: 'top',
         bgColor: 'red.500'
       });
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -88,7 +90,6 @@ export function SignIn() {
           )}
         />
 
-        
         <Controller 
           control={control}
           name='password'
