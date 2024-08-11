@@ -1,11 +1,8 @@
 import { useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as y from 'yup'
 
-import { Center, Heading, ScrollView, Text, useTheme, Image, useToast } from "native-base";
+import { Center, Heading, ScrollView, Text, useTheme, Image } from "native-base";
 import { Entypo } from '@expo/vector-icons';
 
 import LogoSvg from '@assets/logo.svg'
@@ -18,57 +15,16 @@ import { Avatar } from "@components/Avatar";
 
 import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-
-type FormDataProps = {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  password: string;
-  password_confirm: string;
-}
-
-const signUpSchema = y.object({
-  name: y.string().required('Informe o nome.'),
-  email: y.string().required('Informe o e-mail.').email('E-mail inválido.'),
-  phoneNumber: y.string().required().matches(phoneRegExp, 'Número de telefone inválido.'),
-  password: y.string().required('Informe a senha.').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
-  password_confirm: y.string().required('Confirme a senha.').oneOf([y.ref('password')], 'A confirmação da senha não confere.')
-})
-
 export function SignUp() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   
   const theme = useTheme();
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
-  const toast = useToast();
 
-  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
-    resolver: yupResolver(signUpSchema)
-  });
 
   function handleGoToSignIn() {
     navigation.navigate('signIn')
-  }
-
-  async function handleSignUp({ name, email, password, phoneNumber }: FormDataProps) {
-    try {
-      setIsLoading(true)
-      
-      console.log({ name, email, password, phoneNumber});
-    } catch (error) {
-      setIsLoading(false)
-
-      toast.show({
-        title: 'Não foi possível criar a conta. Tente novamente mais tarde.',
-        placement: 'top',
-        bgColor: 'red.500'
-      })
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   return (
@@ -92,128 +48,76 @@ export function SignUp() {
           <Image source={avatarButtonImg} mt="-8" mr="-12" alt="" />
         </Center>
 
-        <Controller 
-          control={control}
-          name='name'
-          render={({ field: { onChange, value }}) => (
-           <Input 
-             placeholder='Nome'
-             onChangeText={onChange}
-             value={value}
-             errorMessage={errors.name?.message}
-           />
-          )}
+        <Input placeholder="Nome" />
+        
+        <Input 
+          placeholder="E-mail" 
+          keyboardType="email-address"
         />
 
-        <Controller 
-          control={control}
-          name='email'
-          render={({ field: { onChange, value }}) => (
-            <Input 
-              placeholder='E-mail'
-              keyboardType='email-address'
-              autoCapitalize='none'
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.email?.message}
-            />
-          )}
+        <Input 
+          placeholder="Telefone" 
+          keyboardType="number-pad"
         />
 
-        <Controller 
-          control={control}
-          name='phoneNumber'
-          render={({ field: { onChange, value }}) => (
-           <Input 
-            placeholder="Telefone" 
-            keyboardType="number-pad"
-            onChangeText={onChange}
-            value={value}
-            errorMessage={errors.phoneNumber?.message}
-          />
-          )}
+        <Input 
+          placeholder="Senha" 
+          type={showPassword ? "text" : "password"}
+          InputRightElement={
+            showPassword ? (
+              <Center mr="2">
+                <Entypo 
+                  name="eye" 
+                  size={24} 
+                  color={theme.colors.gray[300]}
+                  onPress={() => setShowPassword(false)}
+                />
+              </Center>
+              ) : (
+              <Center mr="2">
+                <Entypo 
+                  name="eye-with-line" 
+                  size={24} 
+                  color={theme.colors.gray[300]}
+                  onPress={() => setShowPassword(true)}
+                  mr="2"
+                />
+              </Center>
+            )
+          }
         />
 
-        <Controller 
-          control={control}
-          name='password'
-          render={({ field: { onChange, value }}) => (
-            <Input 
-              placeholder='Senha'
-              type={showPassword ? "text" : "password"}
-              onChangeText={onChange}
-              value={value}
-              errorMessage={errors.password?.message}
-              InputRightElement={
-                showPassword ? (
-                  <Center mr="2">
-                    <Entypo 
-                      name="eye" 
-                      size={24} 
-                      color={theme.colors.gray[300]}
-                      onPress={() => setShowPassword(false)}
-                    />
-                  </Center>
-                  ) : (
-                  <Center mr="2">
-                    <Entypo 
-                      name="eye-with-line" 
-                      size={24} 
-                      color={theme.colors.gray[300]}
-                      onPress={() => setShowPassword(true)}
-                      mr="2"
-                    />
-                  </Center>
-                )
-              }
-            />
-          )}
-        />
-
-        <Controller 
-          control={control}
-          name='password_confirm'
-          render={({ field: { onChange, value }}) => (
-            <Input 
-              placeholder='Confirmar a senha'
-              type={showConfirmPassword ? "text" : "password"}
-              onChangeText={onChange}
-              value={value}
-              onSubmitEditing={handleSubmit(handleSignUp)}
-              returnKeyType='send'
-              errorMessage={errors.password_confirm?.message}
-              InputRightElement={
-                showConfirmPassword ? (
-                  <Center mr="2">
-                    <Entypo 
-                      name="eye" 
-                      size={24} 
-                      color={theme.colors.gray[300]}
-                      onPress={() => setShowConfirmPassword(false)}
-                    />
-                  </Center>
-                  ) : (
-                  <Center mr="2">
-                    <Entypo 
-                      name="eye-with-line" 
-                      size={24} 
-                      color={theme.colors.gray[300]}
-                      onPress={() => setShowConfirmPassword(true)}
-                      mr="2"
-                    />
-                  </Center>
-                )
-              }
-            />
-          )}
+        <Input 
+          placeholder="Confirmar senha" 
+          type={showConfirmPassword ? "text" : "password"}
+          InputRightElement={
+            showConfirmPassword ? (
+              <Center mr="2">
+                <Entypo 
+                  name="eye" 
+                  size={24} 
+                  color={theme.colors.gray[300]}
+                  onPress={() => setShowConfirmPassword(false)}
+                />
+              </Center>
+              ) : (
+              <Center mr="2">
+                <Entypo 
+                  name="eye-with-line" 
+                  size={24} 
+                  color={theme.colors.gray[300]}
+                  onPress={() => setShowConfirmPassword(true)}
+                  mr="2"
+                />
+              </Center>
+            )
+          }
         />
 
         <Button 
           title="Criar" 
           mt="4" 
           variant="terciary" 
-          onPress={handleSubmit(handleSignUp)}  
-          disabled={isLoading}
         />
 
         <Text color="gray.300" mt="12" fontSize="sm">Já tem uma conta?</Text>
