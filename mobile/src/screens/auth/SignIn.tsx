@@ -35,7 +35,7 @@ export function SignIn() {
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
-  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema)
   });
 
@@ -48,6 +48,7 @@ export function SignIn() {
       setIsLoading(true)
 
       console.log(email, password);
+      reset()
     } catch (error) {
       console.log(error)
       
