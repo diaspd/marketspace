@@ -17,13 +17,14 @@ import { Button } from "@components/Button";
 import { Avatar } from "@components/Avatar";
 
 import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { api } from "@services/api";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 type FormDataProps = {
   name: string;
   email: string;
-  phoneNumber: string;
+  tel: string;
   password: string;
   password_confirm: string;
 }
@@ -31,7 +32,7 @@ type FormDataProps = {
 const signUpSchema = y.object({
   name: y.string().required('Informe o nome.'),
   email: y.string().required('Informe o e-mail.').email('E-mail inválido.'),
-  phoneNumber: y.string().required().matches(phoneRegExp, 'Número de telefone inválido.'),
+  tel: y.string().required().matches(phoneRegExp, 'Número de telefone inválido.'),
   password: y.string().required('Informe a senha.').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
   password_confirm: y.string().required('Confirme a senha.').oneOf([y.ref('password')], 'A confirmação da senha não confere.')
 })
@@ -55,11 +56,13 @@ export function SignUp() {
     navigation.navigate('signIn')
   }
 
-  async function handleSignUp({ name, email, password, phoneNumber }: FormDataProps) {
+  async function handleSignUp({ name, email, password, tel }: FormDataProps) {
     try {
       setIsLoading(true)
 
-      console.log({ name, email, password, phoneNumber});
+      const response = await api.post('/users', { name, email, password, tel});
+
+      console.log(response.data)
     } catch (error) {
       setIsLoading(false)
 
@@ -125,14 +128,14 @@ export function SignUp() {
 
         <Controller 
           control={control}
-          name='phoneNumber'
+          name='tel'
           render={({ field: { onChange, value }}) => (
            <Input 
             placeholder="Telefone" 
             keyboardType="number-pad"
             onChangeText={onChange}
             value={value}
-            errorMessage={errors.phoneNumber?.message}
+            errorMessage={errors.tel?.message}
           />
           )}
         />
