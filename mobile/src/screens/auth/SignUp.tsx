@@ -8,6 +8,9 @@ import * as y from 'yup'
 import { Center, Heading, ScrollView, Text, useTheme, Image, useToast } from "native-base";
 import { Entypo } from '@expo/vector-icons';
 
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
 import LogoSvg from '@assets/logo.svg'
 import defaultUserAvatarImg from '@assets/avatar-fallback.png'; 
 import avatarButtonImg from '@assets/avatar-button.png'; 
@@ -18,6 +21,7 @@ import { Avatar } from "@components/Avatar";
 
 import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { api } from "@services/api";
+import { TouchableOpacity } from "react-native";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -40,8 +44,9 @@ const signUpSchema = y.object({
 export function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [userPhoto, setUserPhoto] = useState('')
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+
   const theme = useTheme();
   const toast = useToast();
 
@@ -76,6 +81,49 @@ export function SignUp() {
     }
   }
 
+  async function handleUserPhotoSelected(){
+    setIsLoading(true);
+
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true
+      });
+  
+      if (photoSelected.canceled) {
+        return;
+      }
+  
+      if (photoSelected.assets[0].uri) {
+        const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
+        
+        if(photoInfo.exists && (photoInfo.size  / 1024 / 1024 ) > 5){
+          return toast.show({
+            title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
+            placement: 'top',
+            bgColor: 'red.500',
+            mt: 4
+          })
+        }
+
+        setUserPhoto(photoSelected.assets[0].uri)
+
+        return toast.show({
+          title: 'Imagem atualizada com sucesso.',
+          placement: 'top',
+          bgColor: 'green.500',
+          mt: 4
+        })
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <ScrollView flex={1}>
       <Center mt="16">
@@ -89,12 +137,19 @@ export function SignUp() {
 
       <Center mt="12" mx="12" mb="12">
         <Center mb="4">
-          <Avatar 
-            size={88} 
-            source={defaultUserAvatarImg} 
-            borderWidthsize={3} 
-            alt="Foto do usuário" 
-          />
+          <TouchableOpacity onPress={handleUserPhotoSelected}>
+            <Avatar 
+              source={
+                userPhoto  
+                ? { uri: userPhoto } 
+                : defaultUserAvatarImg
+              }
+              borderWidthsize={3} 
+              alt="Foto do usuário"
+              size={88}
+            />    
+          </TouchableOpacity>
+  
           <Image source={avatarButtonImg} mt="-8" mr="-12" alt="" />
         </Center>
 
