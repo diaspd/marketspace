@@ -22,6 +22,7 @@ import { Avatar } from "@components/Avatar";
 import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { api } from "@services/api";
 import { TouchableOpacity } from "react-native";
+import { AppError } from "@utils/AppError";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -43,8 +44,8 @@ const signUpSchema = y.object({
 
 export function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [userPhoto, setUserPhoto] = useState('')
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const theme = useTheme();
@@ -65,14 +66,16 @@ export function SignUp() {
     try {
       setIsLoading(true)
 
-      const response = await api.post('/users', { name, email, password, tel});
+      const response = await api.post('/users', { name, email, password, tel, userPhoto});
 
       console.log(response.data)
     } catch (error) {
-      setIsLoading(false)
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
 
       toast.show({
-        title: 'Não foi possível criar a conta. Tente novamente mais tarde.',
+        title: title,
         placement: 'top',
         bgColor: 'red.500'
       })
