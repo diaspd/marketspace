@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { Entypo } from '@expo/vector-icons';
 
 import { useNavigation } from "@react-navigation/native";
+import { Center, Heading, ScrollView, Text, useTheme, useToast } from "native-base";
 
 import * as y from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Controller, useForm } from 'react-hook-form'
 
-import { Center, Heading, ScrollView, Text, useTheme, useToast } from "native-base";
-import { Entypo } from '@expo/vector-icons';
+import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { useAuth } from "@hooks/useAuth";
 
 import LogoSvg from '@assets/logo.svg'
 
@@ -24,9 +26,9 @@ const signInSchema = y.object({
   password: y.string().required('Informe a senha.').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
 })
 
-import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
-
 export function SignIn() {
+  const { signIn } = useAuth()
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
   
@@ -35,7 +37,7 @@ export function SignIn() {
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormDataProps>({
+  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema)
   });
 
@@ -47,8 +49,7 @@ export function SignIn() {
     try {
       setIsLoading(true)
 
-      console.log(email, password);
-      reset()
+      await signIn(email, password);
     } catch (error) {
       console.log(error)
       
@@ -59,8 +60,6 @@ export function SignIn() {
         placement: 'top',
         bgColor: 'red.500'
       });
-    } finally {
-      setIsLoading(false)
     }
   }
 
