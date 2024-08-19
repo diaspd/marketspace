@@ -29,7 +29,7 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 type FormDataProps = {
   name: string;
   email: string;
-  tel: string;
+  telephone: string;
   password: string;
   password_confirm: string;
 }
@@ -37,7 +37,7 @@ type FormDataProps = {
 const signUpSchema = y.object({
   name: y.string().required('Informe o nome.'),
   email: y.string().required('Informe o e-mail.').email('E-mail inválido.'),
-  tel: y.string().required().matches(phoneRegExp, 'Número de telefone inválido.'),
+  telephone: y.string().required().matches(phoneRegExp, 'Número de telefone inválido.'),
   password: y.string().required('Informe a senha.').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
   password_confirm: y.string().required('Confirme a senha.').oneOf([y.ref('password')], 'A confirmação da senha não confere.')
 })
@@ -54,78 +54,124 @@ export function SignUp() {
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signUpSchema)
   });
-
+  
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
-
 
   function handleGoToSignIn() {
     navigation.navigate('signIn')
   }
 
-  async function handleSignUp({ name, email, password, tel }: FormDataProps) {
+  async function handleSignUp({ name, email, password, telephone }: FormDataProps) {
+    setIsLoading(true);
+    
     try {
-      setIsLoading(true)
+      if (userPhoto === '') {
+        return toast.show({
+          title: "Por favor, selecione uma imagem!",
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+  
+      const userForm = new FormData();
+  
+      const fileName = userPhoto.split('/').pop();
+      const fileExtension = fileName?.split('.').pop();
 
-      const response = await api.post('/users', { name, email, password, tel, userPhoto});
-
-      console.log(response.data)
+      const photoFile = {
+        name: fileName,
+        uri: userPhoto,
+        type: `image/${fileExtension?.toLowerCase()}`
+      } as any;
+  
+      userForm.append("avatar", photoFile);
+      userForm.append("name", name);
+      userForm.append("email", email);
+      userForm.append("tel", telephone);
+      userForm.append("password", password);
+  
+      await api.post("/users", userForm, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      toast.show({
+        title: "Conta criada com sucesso!",
+        placement: "top",
+        bgColor: "green.500",
+      });
     } catch (error) {
       const isAppError = error instanceof AppError;
-
+  
       const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde';
-
+  
       toast.show({
         title: title,
         placement: 'top',
         bgColor: 'red.500'
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function handleUserPhotoSelected(){
-    setIsLoading(true);
-
     try {
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
         aspect: [4, 4],
-        allowsEditing: true
+        allowsEditing: true,
       });
-  
+
       if (photoSelected.canceled) {
         return;
       }
-  
+
       if (photoSelected.assets[0].uri) {
-        const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri)
-        
-        if(photoInfo.exists && (photoInfo.size  / 1024 / 1024 ) > 5){
-          return toast.show({
-            title: 'Essa imagem é muito grande. Escolha uma de até 5MB.',
-            placement: 'top',
-            bgColor: 'red.500',
-            mt: 4
-          })
-        }
+        const photoInfo = await FileSystem.getInfoAsync(
+          photoSelected.assets[0].uri
+        );
 
-        setUserPhoto(photoSelected.assets[0].uri)
-
+      if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
         return toast.show({
-          title: 'Imagem atualizada com sucesso.',
-          placement: 'top',
-          bgColor: 'green.500',
-          mt: 4
-        })
+          title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
+          placement: "top",
+          bgColor: "red.500",
+        });
       }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setIsLoading(false)
+
+      const fileExtension = photoSelected.assets[0].uri.split('.').pop();
+
+      const photoFile = {
+        name: `${photoSelected.assets[0].uri}.${fileExtension}`.toLowerCase(),
+        uri: photoSelected.assets[0].uri,
+        type: `${photoSelected.assets[0].type}/${fileExtension}`
+      } as any;
+
+      const userPhotoUploadForm = new FormData();
+
+      userPhotoUploadForm.append('avatar', photoFile);
+
+      setUserPhoto(photoSelected.assets[0].uri)
+      
+      toast.show({
+        title: "Imagem selecionada com sucesso.",
+        placement: "top",
+        bgColor: "green.500",
+      });
     }
+  } catch (error) {
+    toast.show({
+      title: "Erro! Tente novamente mais tarde!",
+      placement: "top",
+      bgColor: "red.500",
+    });
+  } finally {
+    setIsLoading(false);
   }
+};
 
   return (
     <ScrollView flex={1}>
@@ -186,14 +232,14 @@ export function SignUp() {
 
         <Controller 
           control={control}
-          name='tel'
+          name='telephone'
           render={({ field: { onChange, value }}) => (
            <Input 
             placeholder="Telefone" 
             keyboardType="number-pad"
             onChangeText={onChange}
             value={value}
-            errorMessage={errors.tel?.message}
+            errorMessage={errors.telephone?.message}
           />
           )}
         />
@@ -273,10 +319,11 @@ export function SignUp() {
         />
 
         <Button 
-          title="Criar" 
+          title="Criar"
           mt="4" 
           variant="terciary" 
           onPress={handleSubmit(handleSignUp)}  
+          style={isLoading && {opacity: 0.7}}
           disabled={isLoading}
         />
 
