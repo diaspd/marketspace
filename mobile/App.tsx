@@ -7,6 +7,7 @@ import { THEME } from './src/theme';
 
 import { Loading } from '@components/Loading';
 import { Routes } from '@routes/index';
+import { AuthContextProvider } from '@contexts/AuthContext';
 
 export default function App() {
   const [isFontsLoaded] = useFonts({Karla_300Light, Karla_400Regular, Karla_700Bold})
@@ -18,8 +19,9 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        
-        {isFontsLoaded ? <Routes /> : <Loading />}
+        <AuthContextProvider>
+          {isFontsLoaded ? <Routes /> : <Loading />}
+        </AuthContextProvider>
     </NativeBaseProvider>
   );
 }
