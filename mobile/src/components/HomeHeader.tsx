@@ -1,14 +1,19 @@
 import { Text, Box, Heading, VStack, HStack } from "native-base";
 
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { useAuth } from "@hooks/useAuth";
+
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
 
-import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
-
 export function HomeHeader() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  const { user } = useAuth()
 
   function handleGoToCreateAd() {
     navigation.navigate('createad')
@@ -21,7 +26,7 @@ export function HomeHeader() {
 
       <VStack ml="2" mt="0.5">
         <Text fontSize="sm">Boas vindas,</Text>
-        <Heading fontSize="sm" maxW={150} numberOfLines={1}>Pedro Dias!</Heading>
+        <Heading fontSize="sm" maxW={150} numberOfLines={1}>{user.name}!</Heading>
       </VStack>
 
       <Button 
