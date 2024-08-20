@@ -23,6 +23,7 @@ import type { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { api } from "@services/api";
 import { TouchableOpacity } from "react-native";
 import { AppError } from "@utils/AppError";
+import { useAuth } from "@hooks/useAuth";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -47,6 +48,8 @@ export function SignUp() {
   const [userPhoto, setUserPhoto] = useState('')
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { signIn } = useAuth()
 
   const theme = useTheme();
   const toast = useToast();
@@ -101,6 +104,8 @@ export function SignUp() {
         placement: "top",
         bgColor: "green.500",
       });
+
+      await signIn(email, password)
     } catch (error) {
       const isAppError = error instanceof AppError;
   
@@ -111,6 +116,8 @@ export function SignUp() {
         placement: 'top',
         bgColor: 'red.500'
       });
+
+
     } finally {
       setIsLoading(false);
     }
@@ -161,6 +168,8 @@ export function SignUp() {
         placement: "top",
         bgColor: "green.500",
       });
+
+
     }
   } catch (error) {
     toast.show({
