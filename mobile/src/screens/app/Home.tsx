@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList } from "native-base";
+import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -11,6 +11,10 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import Octicons from '@expo/vector-icons/Octicons';
 
+import { api } from "@services/api";
+
+import { AppError } from "@utils/AppError";
+
 import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
@@ -18,7 +22,7 @@ import { Button } from "@components/Button";
 
 export function Home() {
   const [isSwitchActive, setIsSwitchActive] = useState(false)
-  const [product, setProduct] = useState<string[]>(['Product1', 'Product2', 'Product3', 'Product4', 'Product5', 'Product6', 'Product6', 'Product7']);
+  const [product, setProduct] = useState<string[]>([]);
   
   const {
     isOpen,
@@ -29,7 +33,26 @@ export function Home() {
   const isSelected = true 
   
   const { colors } = useTheme();
+  const toast = useToast();
+  
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  async function fetchProducts() {
+    try {
+      const response = await api.get('/products/')
+
+      setProduct(response.data)
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Não foi possível carregar os grupos musculares.'
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500'
+      })
+    }
+  }
 
   function handleGoToMyAds() {
     navigation.navigate('myads')
@@ -38,6 +61,10 @@ export function Home() {
   function handleChangeSwitch() {
     setIsSwitchActive(prevState => !prevState)
   }
+
+  useEffect(() => {
+    fetchProducts();
+  }, [])
 
   return (
     <VStack  flex={1}>
@@ -110,7 +137,7 @@ export function Home() {
                     <HStack mr="auto">
                       <Box flexDir="row" bg={isSelected ? "blue.700" : "gray.500"} rounded="full" px="2" py="0.5" alignItems="center" ml="auto" mr="2">
                         <Text color={isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
-                          NOVO
+                          NOVO 
                         </Text>
 
                         {isSelected && (
