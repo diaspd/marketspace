@@ -323,8 +323,7 @@ export function SignUp() {
           mt="4" 
           variant="terciary" 
           onPress={handleSubmit(handleSignUp)}  
-          style={isLoading && {opacity: 0.7}}
-          disabled={isLoading}
+          isLoading={isLoading}
         />
 
         <Text color="gray.300" mt="12" fontSize="sm">Já tem uma conta?</Text>
