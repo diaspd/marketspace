@@ -13,6 +13,8 @@ import { AdDetails } from '@screens/app/AdDetails';
 import { CreateAd } from '@screens/app/CreateAd';
 import { EditAd } from '@screens/app/EditAd';
 import { AdPreview } from '@screens/app/AdPreview';
+import { useAuth } from '@hooks/useAuth';
+import { SignIn } from '@screens/auth/SignIn';
 
 type AppRoutes = {
   home: undefined;
@@ -30,10 +32,9 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
   const { sizes, colors } = useTheme();
+  const { signOut } = useAuth()
 
   const iconSize = sizes[6] 
-
-  const LogoutComponent = () => { return null }
 
   return (
     <Navigator screenOptions={{ 
@@ -80,12 +81,13 @@ export function AppRoutes() {
 
       <Screen 
         name='logout'
-        component={LogoutComponent}
+        component={SignIn}
         options={{
           tabBarIcon: () => (
             <LogoutSvg 
               width={iconSize} 
               height={iconSize}
+              onPress={signOut}
             />
           )
         }}
