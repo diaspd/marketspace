@@ -1,22 +1,63 @@
+import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
 
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { AntDesign } from '@expo/vector-icons';
 import { Plus } from "phosphor-react-native";
+
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
 import { Input } from "@components/Input";
-import { useState } from "react";
 import { Button } from "@components/Button";
 
+import * as y from 'yup'
+
+type FormDataProps = {
+  title: string;
+  description: string;
+  isNew: boolean;
+  price: number;
+  isExchangeable: boolean;
+}
+
+const signInSchema = y.object({
+  title: y.string().required('Informe o título do anúncio.'),
+  description: y.string().required('Informe o descrição do anúncio.'),
+  isNew: y.boolean().required(''),
+  price: y.number().required(''),
+  isExchangeable: y.boolean().required(''),
+})
+
 export function CreateAd() {
-  const [isSwitchActive, setIsSwitchActive] = useState(false)
+  const [isSwitchActive, setIsSwitchActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
 
   function handleGoToPreview() {
     navigation.navigate('adpreview')
+  }
+
+  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
+    resolver: yupResolver(signInSchema)
+  });
+
+  async function handleCreateAd({ title, description, isNew, price, isExchangeable }: FormDataProps){
+    try {
+      setIsLoading(true)
+
+      console.log(title, description, isNew, price, isExchangeable)
+    } catch (error) {
+      console.log(error)
+      
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -64,7 +105,19 @@ export function CreateAd() {
 
       <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
 
-      <Input mt="4" placeholder="Título do anúncio"/>
+      <Controller 
+        control={control}
+        name='title'
+        render={({ field: { onChange, value }}) => (
+        <Input 
+          placeholder="Título do anúncio" 
+          mt="4" 
+          onChangeText={onChange}
+          value={value}
+          errorMessage={errors.title?.message}
+        />
+        )}
+      />
 
       <TextArea 
         placeholder="Descrição do produto" 
@@ -150,8 +203,14 @@ export function CreateAd() {
       </VStack>
 
       <HStack flex={1} mb="8" mt="12">
-        <Button title="Cancelar" variant="secondary" w="175"/>
-        <Button title="Avançar" variant="terciary" w="175" ml="3" onPress={handleGoToPreview}/>
+        <Button title="Cancelar" variant="secondary" w="175" onPress={() => navigation.goBack()}/>
+
+        <Button 
+          title="Avançar" 
+          variant="terciary" w="175" ml="3" 
+          onPress={handleSubmit(handleCreateAd)} 
+          isLoading={isLoading} 
+        />
       </HStack>
     </ScrollView> 
   )
