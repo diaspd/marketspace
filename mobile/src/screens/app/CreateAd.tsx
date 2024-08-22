@@ -20,17 +20,13 @@ import * as y from 'yup'
 type FormDataProps = {
   title: string;
   description: string;
-  isNew: boolean;
-  price: number;
-  isExchangeable: boolean;
+  isNew: string;
 }
 
 const signInSchema = y.object({
   title: y.string().required('Informe o título do anúncio.'),
   description: y.string().required('Informe o descrição do anúncio.'),
-  isNew: y.boolean().required(''),
-  price: y.number().required(''),
-  isExchangeable: y.boolean().required(''),
+  isNew: y.string().required(''),
 })
 
 export function CreateAd() {
@@ -45,14 +41,17 @@ export function CreateAd() {
   }
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
-    resolver: yupResolver(signInSchema)
+    resolver: yupResolver(signInSchema),
+    defaultValues: {
+      isNew: 'new',
+    }
   });
 
-  async function handleCreateAd({ title, description, isNew, price, isExchangeable }: FormDataProps){
+  async function handleCreateAd({ title, description, isNew }: FormDataProps){
     try {
       setIsLoading(true)
 
-      console.log(title, description, isNew, price, isExchangeable)
+      console.log(title, description, isNew)
     } catch (error) {
       console.log(error)
       
@@ -119,29 +118,70 @@ export function CreateAd() {
         )}
       />
 
-      <TextArea 
-        placeholder="Descrição do produto" 
-        autoCompleteType="none" 
-        fontSize="md" 
-        h="32"
-        color={colors.gray[200]}
-        variant="unstyled"
-        borderWidth={1}
-        borderColor={colors.gray[700]}
-        _focus={{ borderColor: 'gray.100'}}
-        backgroundColor={colors.gray[700]}
+      <Controller 
+        control={control}
+        name='description'
+        render={({ field: { onChange, value }}) => (
+        <>
+          <TextArea 
+            placeholder="Descrição do produto" 
+            autoCompleteType="none" 
+            fontSize="md" 
+            h="32"
+            mt="4" 
+            color={colors.gray[200]}
+            variant="unstyled"
+            borderWidth={1}
+            borderColor={colors.gray[700]}
+            _focus={{ borderColor: 'gray.100'}}
+            backgroundColor={colors.gray[700]}
+            onChangeText={onChange}
+            value={value}
+          />
+
+          <Text color={colors.red[400]} fontSize="xs">
+            {errors.description?.message}
+          </Text>
+        </>
+        )}
       />
 
-      <Radio.Group name="myRadioGroup" accessibilityLabel="Selecione o estado do seu produto">
-        <HStack mt="4">
-          <Radio value="new" size="sm" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
-            Produto novo
-          </Radio>
-          <Radio value="used" ml="5" size="sm" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}>
-            Produto usado
-          </Radio>
-        </HStack>
-      </Radio.Group>
+      <Controller
+        name="isNew"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <>
+          <Radio.Group
+            name="myRadioGroup"
+            accessibilityLabel="Selecione o estado do seu produto"
+            value={value || 'new'}  // Garantir que sempre tenha um valor
+            onChange={onChange}
+          >
+            <HStack mt="4">
+              <Radio
+                value="new"
+                size="sm"
+                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}
+              >
+                Produto novo
+              </Radio>
+              <Radio
+                value="used"
+                ml="5"
+                size="sm"
+                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}
+              >
+                Produto usado
+              </Radio>
+            </HStack>
+          </Radio.Group>
+
+          <Text color={colors.red[400]} fontSize="xs">
+            {errors.isNew?.message}
+          </Text>
+        </>
+        )}
+      />
 
       <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
 
@@ -209,7 +249,6 @@ export function CreateAd() {
           title="Avançar" 
           variant="terciary" w="175" ml="3" 
           onPress={handleSubmit(handleCreateAd)} 
-          isLoading={isLoading} 
         />
       </HStack>
     </ScrollView> 
