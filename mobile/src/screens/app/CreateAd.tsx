@@ -161,7 +161,8 @@ export function CreateAd() {
               <Radio
                 value="new"
                 size="sm"
-                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}
+                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
+                icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
               >
                 Produto novo
               </Radio>
@@ -169,7 +170,8 @@ export function CreateAd() {
                 value="used"
                 ml="5"
                 size="sm"
-                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }}
+                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
+                icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
               >
                 Produto usado
               </Radio>
@@ -249,6 +251,7 @@ export function CreateAd() {
           title="Avançar" 
           variant="terciary" w="175" ml="3" 
           onPress={handleSubmit(handleCreateAd)} 
+          isLoading={isLoading} 
         />
       </HStack>
     </ScrollView> 
