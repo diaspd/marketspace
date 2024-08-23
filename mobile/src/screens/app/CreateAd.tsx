@@ -21,12 +21,14 @@ type FormDataProps = {
   title: string;
   description: string;
   isNew: string;
+  acceptTrade: boolean;
 }
 
 const signInSchema = y.object({
   title: y.string().required('Informe o título do anúncio.'),
   description: y.string().required('Informe o descrição do anúncio.'),
   isNew: y.string().required(''),
+  acceptTrade: y.boolean().required('')
 })
 
 export function CreateAd() {
@@ -47,11 +49,11 @@ export function CreateAd() {
     }
   });
 
-  async function handleCreateAd({ title, description, isNew }: FormDataProps){
+  async function handleCreateAd({ title, description, isNew, acceptTrade }: FormDataProps){
     try {
       setIsLoading(true)
 
-      console.log(title, description, isNew)
+      console.log(title, description, isNew, acceptTrade)
     } catch (error) {
       console.log(error)
       
@@ -188,20 +190,37 @@ export function CreateAd() {
       <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
 
       <Input mt="4" placeholder="Valor do produto" InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}/>
-     
-      <VStack alignItems="start" w="full" mb="3">
-        <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
 
-        <Box bg={isSwitchActive ? "blue.700" : "gray.500"} w="42" h="22" mt="3" rounded="full" alignItems="center" justifyContent="center">
-          <Switch 
-            isChecked={isSwitchActive}
-            ml="-1"
-            mr="auto"
-            offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" offThumbColor="gray.700"
-            onToggle={() => setIsSwitchActive(prevState => !prevState)}
-          />
-        </Box>
-      </VStack>
+      <Controller
+        name="acceptTrade"
+        control={control}
+        render={({ field: { onChange, value } }) => (
+          <VStack alignItems="start" w="full" mb="3">
+            <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
+
+            <Box
+              bg={value ? "blue.700" : "gray.500"}
+              w="42"
+              h="22"
+              mt="3"
+              rounded="full"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Switch 
+                isChecked={value}
+                ml="-1"
+                mr="auto"
+                offTrackColor="transparent"
+                onTrackColor="transparent"
+                onThumbColor="gray.700"
+                offThumbColor="gray.700"
+                onToggle={onChange}  // Atualiza o valor no React Hook Form
+              />
+            </Box>
+          </VStack>
+        )}
+      />
 
       <VStack alignItems="start" w="full" mt="4">
         <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
