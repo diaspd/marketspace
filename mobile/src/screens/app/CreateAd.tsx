@@ -16,24 +16,28 @@ import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
 import * as y from 'yup'
+import { usePriceFormatter } from "@hooks/usePriceFormatter";
 
 type FormDataProps = {
   title: string;
   description: string;
   isNew: string;
   acceptTrade: boolean;
+  price: string;
 }
 
 const signInSchema = y.object({
   title: y.string().required('Informe o título do anúncio.'),
   description: y.string().required('Informe o descrição do anúncio.'),
   isNew: y.string().required(''),
-  acceptTrade: y.boolean().required('')
+  acceptTrade: y.boolean().required(''),
+  price: y.string().required('Informe o valor do produto.'),
 })
 
 export function CreateAd() {
-  const [isSwitchActive, setIsSwitchActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { formatPrice } = usePriceFormatter();
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
@@ -46,14 +50,15 @@ export function CreateAd() {
     resolver: yupResolver(signInSchema),
     defaultValues: {
       isNew: 'new',
+      acceptTrade: false, 
     }
   });
 
-  async function handleCreateAd({ title, description, isNew, acceptTrade }: FormDataProps){
+  async function handleCreateAd({ title, description, isNew, acceptTrade, price }: FormDataProps){
     try {
-      setIsLoading(true)
+   
 
-      console.log(title, description, isNew, acceptTrade)
+      console.log(title, description, isNew, acceptTrade, price)
     } catch (error) {
       console.log(error)
       
@@ -156,7 +161,7 @@ export function CreateAd() {
           <Radio.Group
             name="myRadioGroup"
             accessibilityLabel="Selecione o estado do seu produto"
-            value={value || 'new'}  // Garantir que sempre tenha um valor
+            value={value || 'new'}
             onChange={onChange}
           >
             <HStack mt="4">
@@ -189,7 +194,28 @@ export function CreateAd() {
 
       <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
 
-      <Input mt="4" placeholder="Valor do produto" InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}/>
+      <Controller 
+        control={control}
+        name="price"
+        render={({ field: { onChange, value } }) => {
+          const handleChange = (text: string) => {
+            const formattedValue = formatPrice(text);
+            onChange(formattedValue); 
+          };
+
+          return (
+            <Input 
+              placeholder="Valor do produto" 
+              keyboardType="numeric"
+              value={value} 
+              onChangeText={handleChange} 
+              mt="4"
+              errorMessage={errors.price?.message}
+              InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
+            />
+          );
+        }}
+      />
 
       <Controller
         name="acceptTrade"
@@ -215,7 +241,7 @@ export function CreateAd() {
                 onTrackColor="transparent"
                 onThumbColor="gray.700"
                 offThumbColor="gray.700"
-                onToggle={onChange}  // Atualiza o valor no React Hook Form
+                onToggle={onChange} 
               />
             </Box>
           </VStack>

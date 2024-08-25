@@ -17,7 +17,7 @@ export function EditAd() {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
 
-  const { price, handlePriceChange } = usePriceFormatter();
+  const { formatPrice } = usePriceFormatter();
 
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
@@ -94,13 +94,12 @@ export function EditAd() {
 
       <Input 
         placeholder="Valor do produto" 
-        InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
-        mt="4" 
         keyboardType="numeric"
-        value={price}
-        onChangeText={handlePriceChange}
+        mt="4"
+        InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
       />
-     
+      
+
       <VStack alignItems="start" w="full" mb="3">
         <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
 
