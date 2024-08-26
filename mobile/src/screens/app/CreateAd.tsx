@@ -36,15 +36,12 @@ const signInSchema = y.object({
 
 export function CreateAd() {
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<string[]>([]);
 
   const { formatPrice } = usePriceFormatter();
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
-
-  function handleGoToPreview() {
-    navigation.navigate('adpreview')
-  }
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema),
@@ -54,11 +51,17 @@ export function CreateAd() {
     }
   });
 
+  function toggleCheckbox (value: string) {
+    if (paymentMethod.includes(value)) {
+      setPaymentMethod(prev => prev.filter(item => item !== value));
+    } else {
+      setPaymentMethod(prev => [...prev, value]);
+    }
+  };
+
   async function handleCreateAd({ title, description, isNew, acceptTrade, price }: FormDataProps){
     try {
-   
-
-      console.log(title, description, isNew, acceptTrade, price)
+      console.log(title, description, isNew, acceptTrade, price, paymentMethod)
     } catch (error) {
       console.log(error)
       
@@ -251,42 +254,57 @@ export function CreateAd() {
       <VStack alignItems="start" w="full" mt="4">
         <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
 
-        <VStack space="2">
+        <VStack space={4}>
           <Checkbox 
-            value="Boleto" 
+            value="boleto" 
+            isChecked={paymentMethod.includes('boleto')}
+            onChange={() => toggleCheckbox('boleto')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Boleto
+          >
+            Boleto
           </Checkbox>
           
           <Checkbox 
-            value="Pix" 
+            value="pix" 
+            isChecked={paymentMethod.includes('pix')}
+            onChange={() => toggleCheckbox('pix')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Pix
+          >
+            Pix
           </Checkbox>
 
           <Checkbox 
-            value="Dinheiro" 
+            value="cash" 
+            isChecked={paymentMethod.includes('cash')}
+            onChange={() => toggleCheckbox('cash')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Dinheiro
+          >
+            Dinheiro
           </Checkbox>
 
           <Checkbox 
-            value="Cartão de Crédito" 
+            value="card" 
+            isChecked={paymentMethod.includes('card')}
+            onChange={() => toggleCheckbox('card')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Cartão de Crédito
+          >
+            Cartão de Crédito
           </Checkbox>
           
           <Checkbox 
-            value="Depósito Bancário" 
+            value="deposit" 
+            isChecked={paymentMethod.includes('deposit')}
+            onChange={() => toggleCheckbox('deposit')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}} 
-          >Depósito Bancário
+          >
+            Depósito Bancário
           </Checkbox>
-        </VStack>    
+        </VStack>
       </VStack>
 
       <HStack flex={1} mb="8" mt="12">
