@@ -76,6 +76,14 @@ export function CreateAd() {
         });
       }
 
+      if (images.length === 0) {
+        return toast.show({
+          title: "Selecione ao menos uma imagem!",
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+
       navigation.navigate("adpreview", {
         title,
         description,
