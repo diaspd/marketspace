@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox, useToast } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -41,6 +41,8 @@ export function CreateAd() {
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
+  
+  const toast = useToast();
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema),
@@ -58,7 +60,15 @@ export function CreateAd() {
   };
 
   async function handleGoToAdPreview({ title, description, acceptTrade, price }: FormDataProps){
-    try {
+    try {  
+      if (paymentMethod.length === 0) {
+        return toast.show({
+          title: "Selecione ao menos um meio de pagamento!",
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+
       console.log(title,
         description,
         price,
