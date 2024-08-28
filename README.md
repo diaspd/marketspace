@@ -69,8 +69,8 @@ This project was developed with the following technologies:
 <b>
 - React Native
 - Type Script
-- Expo
 - Native Base
+- Expo
 </b>
 
 </br>
@@ -81,7 +81,7 @@ This project was developed with the following technologies:
 <br></br>
 
 ## 🔖 Layout
-- [ - Figma]()
+- [Market Space - Figma]()
 
 <br></br>
 
