@@ -23,7 +23,14 @@ type AppRoutes = {
   addetails: undefined;
   createad: undefined;
   editad: undefined;
-  adpreview: undefined;
+  adpreview: {
+    title: string;
+    description: string;
+    price: string;
+    paymentMethod: string[];
+    isNew: boolean;
+    acceptTrade: boolean;
+  };
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;

@@ -21,7 +21,6 @@ import { usePriceFormatter } from "@hooks/usePriceFormatter";
 type FormDataProps = {
   title: string;
   description: string;
-  isNew: string;
   acceptTrade: boolean;
   price: string;
 }
@@ -29,7 +28,6 @@ type FormDataProps = {
 const signInSchema = y.object({
   title: y.string().required('Informe o título do anúncio.'),
   description: y.string().required('Informe o descrição do anúncio.'),
-  isNew: y.string().required(''),
   acceptTrade: y.boolean().required(''),
   price: y.string().required('Informe o valor do produto.'),
 })
@@ -37,6 +35,7 @@ const signInSchema = y.object({
 export function CreateAd() {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string[]>([]);
+  const [isNew, setIsNew] = useState(true);
 
   const { formatPrice } = usePriceFormatter();
 
@@ -46,7 +45,6 @@ export function CreateAd() {
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signInSchema),
     defaultValues: {
-      isNew: 'new',
       acceptTrade: false, 
     }
   });
@@ -59,9 +57,23 @@ export function CreateAd() {
     }
   };
 
-  async function handleCreateAd({ title, description, isNew, acceptTrade, price }: FormDataProps){
+  async function handleGoToAdPreview({ title, description, acceptTrade, price }: FormDataProps){
     try {
-      console.log(title, description, isNew, acceptTrade, price, paymentMethod)
+      console.log(title,
+        description,
+        price,
+        paymentMethod,
+        isNew,
+        acceptTrade,)
+
+      navigation.navigate("adpreview", {
+        title,
+        description,
+        price,
+        paymentMethod,
+        isNew,
+        acceptTrade,
+      });
     } catch (error) {
       console.log(error)
       
@@ -156,44 +168,34 @@ export function CreateAd() {
         )}
       />
 
-      <Controller
-        name="isNew"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <>
-          <Radio.Group
-            name="myRadioGroup"
-            accessibilityLabel="Selecione o estado do seu produto"
-            value={value || 'new'}
-            onChange={onChange}
-          >
-            <HStack mt="4">
-              <Radio
-                value="new"
-                size="sm"
-                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
-                icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
-              >
-                Produto novo
-              </Radio>
-              <Radio
-                value="used"
-                ml="5"
-                size="sm"
-                _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
-                icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
-              >
-                Produto usado
-              </Radio>
-            </HStack>
-          </Radio.Group>
-
-          <Text color={colors.red[400]} fontSize="xs">
-            {errors.isNew?.message}
-          </Text>
-        </>
-        )}
-      />
+        <Radio.Group
+          name="myRadioGroup"
+          accessibilityLabel="Selecione o estado do seu produto"
+          value={isNew ? "new" : "used"}
+          onChange={(nextValue) => {
+            setIsNew(nextValue === "new" ? true : false);
+          }}
+        >
+          <HStack mt="4">
+            <Radio
+              value="new"
+              size="sm"
+              _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
+              icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
+            >
+              Produto novo
+            </Radio>
+            <Radio
+              value="used"
+              ml="5"
+              size="sm"
+              _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
+              icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
+            >
+              Produto usado
+            </Radio>
+          </HStack>
+        </Radio.Group>
 
       <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
 
@@ -313,7 +315,7 @@ export function CreateAd() {
         <Button 
           title="Avançar" 
           variant="terciary" w="175" ml="3" 
-          onPress={handleSubmit(handleCreateAd)} 
+          onPress={handleSubmit(handleGoToAdPreview)} 
           isLoading={isLoading} 
         />
       </HStack>
