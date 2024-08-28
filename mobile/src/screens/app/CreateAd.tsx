@@ -4,19 +4,25 @@ import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTh
 
 import { useNavigation } from "@react-navigation/native";
 
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as y from 'yup'
+
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+
 import { AntDesign } from '@expo/vector-icons';
 import { Plus } from "phosphor-react-native";
 
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { AppError } from "@utils/AppError";
+import { usePriceFormatter } from "@hooks/usePriceFormatter";
 
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 
-import * as y from 'yup'
-import { usePriceFormatter } from "@hooks/usePriceFormatter";
 
 type FormDataProps = {
   title: string;
@@ -36,6 +42,7 @@ export function CreateAd() {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string[]>([]);
   const [isNew, setIsNew] = useState(true);
+  const [images, setImages] = useState<any[]>([]);
 
   const { formatPrice } = usePriceFormatter();
 
@@ -69,25 +76,85 @@ export function CreateAd() {
         });
       }
 
-      console.log(title,
-        description,
-        price,
-        paymentMethod,
-        isNew,
-        acceptTrade,)
-
       navigation.navigate("adpreview", {
         title,
         description,
         price,
         paymentMethod,
         isNew,
-        acceptTrade,
+        images,
+        acceptTrade
       });
     } catch (error) {
       console.log(error)
       
       setIsLoading(false)
+    }
+  }
+
+  const handleAdPhotoSelect = async () => {
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
+
+      if (photoSelected.canceled) {
+        return;
+      }
+
+      if (images.length > 2) {
+        throw new AppError("Só pode selecionar 3 fotos!");
+      }
+
+      if (photoSelected.assets[0].uri) {
+        const photoInfo = await FileSystem.getInfoAsync(
+          photoSelected.assets[0].uri
+        );
+
+        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+          return toast.show({
+            title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
+            placement: "top",
+            bgColor: "red.500",
+          });
+        }
+
+        const fileExtension = photoSelected.assets[0].uri.split(".").pop();
+
+        const photoFile = {
+          name: `${fileExtension}`.toLowerCase(),
+          uri: photoSelected.assets[0].uri,
+          type: `${photoSelected.assets[0].type}/${fileExtension}`,
+        } as any;
+
+        setImages((images) => {
+          return [...images, photoFile];
+        });
+
+        toast.show({
+          title: "Foto selecionada!",
+          placement: "top",
+          bgColor: "green.500",
+        });
+      }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível selecionar a imagem. Tente novamente!";
+
+      if (isAppError) {
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -105,33 +172,41 @@ export function CreateAd() {
       <Text mt="1" color="gray.300">Escolha até 3 imagens para mostrar o quando o seu produto é incrível!</Text>
 
       <HStack my={5}>
-        <Image
-          w={88}
-          h={88}
-          mr={2}
-          source={{
-            uri: 'https://github.com/diaspd.png',
-          }}
-          alt="Imagem do anúncio"
-          resizeMode="cover"
-          borderRadius={8}
-        />
+        {images.length > 0 &&
+          images
+          .slice() 
+          .reverse()
+          .map((imageData) => (
+            <Image
+              w={88}
+              h={88}
+              mr={2}
+              source={{
+                uri: imageData.uri,
+              }}
+              alt="Imagem do anúncio"
+              resizeMode="cover"
+              borderRadius={8}
+              key={imageData.uri}
+            />
+        ))}
 
-        <NativeBaseButton
-          bg="gray.500"
-          w={88}
-          h={88}
-          ml={2}
-          mb="6"
-          _pressed={{
-            borderWidth: 1,
-            bg: "gray.500",
-            borderColor: "gray.400",
-          }}
-          onPress={() => console.log('foto adicionada')}
-        >
-          <Plus color={colors.gray[400]} />
-        </NativeBaseButton>
+        {images.length < 3 && (
+          <NativeBaseButton
+            bg="gray.500"
+            w={88}
+            h={88}
+            ml={2}
+            _pressed={{
+              borderWidth: 1,
+              bg: "gray.500",
+              borderColor: "gray.400",
+            }}
+            onPress={handleAdPhotoSelect}
+          >
+            <Plus color={colors.gray[400]} />
+          </NativeBaseButton>
+        )}
       </HStack>
 
       <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
