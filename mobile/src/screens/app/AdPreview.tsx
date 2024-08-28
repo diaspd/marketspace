@@ -13,13 +13,14 @@ import { useAuth } from "@hooks/useAuth";
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
+import { paymentMethodFormatter } from "@utils/paymentMethodFormatter";
 
 type RouteParams = {
   title: string;
   description: string;
   price: string;
   images: any[];
-  paymentMethods: string[];
+  paymentMethod: string[];
   isNew: boolean;
   acceptTrade: boolean;
 };
@@ -38,7 +39,7 @@ export function AdPreview() {
     description,
     price,
     images,
-    paymentMethods,
+    paymentMethod,
     isNew,
     acceptTrade,
   } = route.params as RouteParams;
@@ -106,28 +107,9 @@ export function AdPreview() {
           </HStack>
 
           <VStack w="full" mt="4">
-            <Heading fontSize="sm" color="gray.200">Meios de pagamento:</Heading>
+            <Heading fontSize="sm" color="gray.200" mb="2">Meios de pagamento:</Heading>
 
-            <HStack alignItems="center" mt="2">
-              <MaterialCommunityIcons name="barcode-scan" size={16} color={colors.gray[200]}/>
-              <Text fontSize="sm" ml="2" color="gray.200">
-                Boleto
-              </Text>
-            </HStack>
-
-            <HStack alignItems="center" mt="1">
-              <MaterialCommunityIcons name="qrcode" size={16} color={colors.gray[200]}/>
-              <Text fontSize="sm" ml="2" color="gray.200">
-                Pix
-              </Text>
-            </HStack>
-
-            <HStack alignItems="center" mt="1">
-              <MaterialCommunityIcons name="bank" size={16} color={colors.gray[200]} />
-              <Text fontSize="sm" ml="2" color="gray.200">
-                Depósito Bancário
-              </Text>
-            </HStack>
+            {paymentMethodFormatter(paymentMethod)} 
           </VStack>
 
           <HStack mt="10" mb="4">
