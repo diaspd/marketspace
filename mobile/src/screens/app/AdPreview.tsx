@@ -1,23 +1,47 @@
 import { useState } from "react";
 
 import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ArrowLeft, Tag } from 'phosphor-react-native';
 
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { useAuth } from "@hooks/useAuth";
+
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+type RouteParams = {
+  title: string;
+  description: string;
+  price: string;
+  images: any[];
+  paymentMethods: string[];
+  isNew: boolean;
+  acceptTrade: boolean;
+};
 
 export function AdPreview() {
-  const isNew = false 
-  const [isAdDisabled, setIsAdDisabled] = useState(false)
-
+  const [isAdDisabled, setIsAdDisabled] = useState(false);
   const { colors } = useTheme();
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+  const { user } = useAuth();
+  const route = useRoute();
+
+  const {
+    title,
+    description,
+    price,
+    images,
+    paymentMethods,
+    isNew,
+    acceptTrade,
+  } = route.params as RouteParams;
 
   function handleGoToCreateAd() {
     navigation.navigate('createad')
@@ -47,7 +71,7 @@ export function AdPreview() {
               mr="2"
             />
 
-            <Text fontSize="md" color="gray.100">Pedro Dias</Text>
+            <Text fontSize="md" color="gray.100">{user.name}</Text>
           </HStack>
 
           <Box bg="gray.500" rounded="full" px="2.5" alignItems="center" mt="6">
@@ -57,27 +81,27 @@ export function AdPreview() {
           </Box>
 
           <HStack w="full" mt="3">
-            <Heading numberOfLines={1} maxW={240} fontSize="lg" color="gray.100">Luminária pendente</Heading>
+            <Heading numberOfLines={1} maxW={240} fontSize="lg" color="gray.100">{title}</Heading>
 
             <Box ml="auto">
               <Heading fontSize="lg" color="blue.700">
                 <Text fontSize="sm">
                   R${' '}
                 </Text>
-                45,00
+                {price}
               </Heading>
             </Box>
           </HStack>
 
           <Text fontSize="sm" color="gray.200" mt="2" numberOfLines={4}>
-            Cras congue cursus in tortor sagittis placerat nunc, tellus arcu. Vitae ante leo eget maecenas urna mattis cursus. lorem 
+            {description}
           </Text>
 
           <HStack w="full" mt="3" alignItems="baseline">
             <Heading fontSize="sm" color="gray.200">Aceita troca?</Heading>
 
             <Text fontSize="sm" ml="1">
-              Não
+              {acceptTrade ? "Sim" : "Não"}
             </Text>
           </HStack>
 
