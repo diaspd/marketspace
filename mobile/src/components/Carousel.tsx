@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Text, Image, useTheme, VStack, Box } from "native-base";
 
@@ -6,13 +6,14 @@ import type { ICarouselInstance } from "react-native-reanimated-carousel";
 import Carousel, { Pagination } from "react-native-reanimated-carousel"
 import { useSharedValue } from "react-native-reanimated";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { api } from "@services/api";
  
 type Carousel = {
-  isAdDisabled: boolean
+  isAdDisabled: boolean;
+  images: any[];
 }
 
-export function CarouselComponent({isAdDisabled}: Carousel) {
-  const [data, setData] = useState([...new Array(3).keys()]);
+export function CarouselComponent({isAdDisabled, images}: Carousel) {
   const ref = useRef<ICarouselInstance>(null);
 
   const { colors, opacity } = useTheme();
@@ -36,15 +37,19 @@ export function CarouselComponent({isAdDisabled}: Carousel) {
             loop={false}
             ref={ref}
             style={{ width: "100%" }}
-            data={data}
+            data={images}
             onProgressChange={progress}
             pagingEnabled
-            renderItem={({ index }) => (
+            renderItem={({ item }) => (
               <Box flex={1}>
                 <Image 
                   w="full" 
                   h="full"
-                  source={{ uri: 'https://github.com/diaspd.png'}}
+                  source={{
+                    uri: item.uri
+                      ? item.uri
+                      : `${api.defaults.baseURL}/images/${item.path}`,
+                  }}
                   alt=""
                   opacity={isAdDisabled ? '95' : '100'}
                   blurRadius={isAdDisabled ? 2 : 0}
@@ -58,7 +63,7 @@ export function CarouselComponent({isAdDisabled}: Carousel) {
 
           <Pagination.Basic
               progress={progress}
-              data={data}
+              data={images}
               activeDotStyle={{ backgroundColor: colors.gray[700], opacity: opacity[100]}}
               dotStyle={{ backgroundColor: colors.gray[500], borderRadius: 50, opacity: opacity[80], width: 120, height: 4 }}
               containerStyle={{ gap: 5, marginTop: 280 }}

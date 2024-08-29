@@ -59,7 +59,7 @@ export function AdPreview() {
         <Text mt="1" fontSize="sm" color="gray.700">É assim que seu produto vai aparecer!</Text>
       </VStack>
 
-      <CarouselComponent isAdDisabled={isAdDisabled} />
+      <CarouselComponent isAdDisabled={isAdDisabled} images={images}/>
 
       <ScrollView>
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
