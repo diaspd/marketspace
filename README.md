@@ -76,7 +76,7 @@ This project was developed with the following technologies:
 </br>
 
 ## 📄 Project
-💰 A project made for people share products to sell. Using react hook form, yup, axios, context, expo image picker, api connection and more.
+💰 A project made for people share products to sell. Using react hook form, yup, axios, context, expo image picker, async storage, api connection and more.
 
 <br></br>
 
