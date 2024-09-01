@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import { Box, Heading, HStack, ScrollView, Text, useTheme, useToast, VStack } from "native-base";
+import { Box, Heading, HStack, ScrollView, Skeleton, Text, useTheme, useToast, VStack } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -17,12 +17,14 @@ import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
 import { useAuth } from "@hooks/useAuth";
 import { usePriceFormatter } from "@hooks/usePriceFormatter";
+import { Loading } from "@components/Loading";
 
 type RouteParams = {
   id: string;
 };
 
 export function AdDetails() {
+  const [isLoading, setIsLoading] = useState(false)
   const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
   const [isAdDisabled, setIsAdDisabled] = useState(false);
 
@@ -36,10 +38,9 @@ export function AdDetails() {
   const navigation = useNavigation<AppNavigatorRoutesProps>();
 
   const { formatPrice } = usePriceFormatter()
-  
-  const userId = id.toString() 
 
   useEffect(() => {
+    setIsLoading(true)
     const loadData = async () => {
       try {
         const productData = await api.get(`/products/${id}`);
@@ -61,6 +62,7 @@ export function AdDetails() {
     };
 
     loadData();
+    setIsLoading(false);
   }, [id]);
 
   const handleGoToEditAd = () => navigation.navigate('editad');
@@ -91,23 +93,35 @@ export function AdDetails() {
     }
   };
 
-  const formattedPrice = formatPrice(product.price)
+  const formattedPrice = product.price !== undefined ? formatPrice(product.price) : "N/A";
 
   return (
     <VStack flex={1}>
-      <HStack mx="6" mt="16" mb="4" justifyContent="space-between">
+      {isLoading ? <Loading /> : (
+        <>
+        <HStack mx="6" mt="16" mb="4" justifyContent="space-between">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <ArrowLeft size={24} color={colors.gray[100]} />
         </TouchableOpacity>
 
-        {product.id == userId && (
+        {product.id && (
          <TouchableOpacity onPress={handleGoToEditAd}>
           <PencilLine size={24} color={colors.gray[100]} />
          </TouchableOpacity>
         )}
       </HStack>
 
-      <CarouselComponent isAdDisabled={isAdDisabled} images={product.product_images} />
+      {product.product_images ? (
+         <CarouselComponent isAdDisabled={isAdDisabled} images={product.product_images} />
+      ) : (
+        <Skeleton 
+          w="full"
+          h="72"
+          mb="5"
+          startColor="gray.500"
+          endColor="coolGray.300"
+        />  
+      )}
 
       <ScrollView>
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
@@ -120,7 +134,7 @@ export function AdDetails() {
               mr="2"
             />
 
-            <Text fontSize="md" color="gray.100">Pedro Dias</Text>
+            <Text fontSize="md" color="gray.100">{user.name}</Text>
           </HStack>
 
           <Box bg="gray.500" rounded="full" px="2.5" alignItems="center" mt="6">
@@ -179,7 +193,7 @@ export function AdDetails() {
             </HStack>
           </VStack>
 
-          {product.id == userId ? (
+          {product.id ? (
             <>
               {isAdDisabled ? (
                 <Button 
@@ -206,7 +220,7 @@ export function AdDetails() {
                     <Text fontSize="sm">
                       R${' '}
                     </Text>
-                    {product.price}
+                    {formattedPrice}
                   </Heading>
                 </Box>
 
@@ -222,6 +236,8 @@ export function AdDetails() {
           )}
       </VStack>
       </ScrollView>
+      </>
+      )}
     </VStack>
   )
 }
