@@ -16,6 +16,7 @@ import type { ProductDTO } from "@dtos/ProductDTO";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
 import { useAuth } from "@hooks/useAuth";
+import { usePriceFormatter } from "@hooks/usePriceFormatter";
 
 type RouteParams = {
   id: string;
@@ -33,6 +34,8 @@ export function AdDetails() {
   
   const { id } = route.params as RouteParams;
   const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+  const { formatPrice } = usePriceFormatter()
   
   const userId = id.toString() 
 
@@ -88,6 +91,8 @@ export function AdDetails() {
     }
   };
 
+  const formattedPrice = formatPrice(product.price)
+
   return (
     <VStack flex={1}>
       <HStack mx="6" mt="16" mb="4" justifyContent="space-between">
@@ -132,7 +137,7 @@ export function AdDetails() {
                 <Text fontSize="sm">
                   R${' '}
                 </Text>
-                {product.price}
+                {formattedPrice}
               </Heading>
             </Box>
           </HStack>
