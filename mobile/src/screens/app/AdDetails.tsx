@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, useToast, VStack } from "native-base";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
@@ -12,28 +12,81 @@ import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { ProductDTO } from "@dtos/ProductDTO";
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+import { useAuth } from "@hooks/useAuth";
+
+type RouteParams = {
+  id: string;
+};
 
 export function AdDetails() {
-  const isNew = false 
-  const [isAdDisabled, setIsAdDisabled] = useState(false)
-
-  const isAdMine = false
+  const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
+  const [isAdDisabled, setIsAdDisabled] = useState(false);
 
   const { colors } = useTheme();
+  const { user } = useAuth();
 
+  const route = useRoute();
+  const toast = useToast();
+  
+  const { id } = route.params as RouteParams;
   const navigation = useNavigation<AppNavigatorRoutesProps>();
+  
+  const userId = id.toString() 
 
-  function handleGoToEditAd() {
-    navigation.navigate('editad')
-  }
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const productData = await api.get(`/products/${id}`);
+        setProduct(productData.data);
 
-  function handleSwitchAdAvailabilityToAvailable() {
-    setIsAdDisabled(false)
-  }
+        setIsAdDisabled(!productData.data.is_active);
+      } catch (error) {
+        const isAppError = error instanceof AppError;
+        const title = isAppError
+          ? error.message
+          : "Não foi possível receber os dados do anúncio. Tente novamente!";
 
-  function handleSwitchAdAvailabilityToDisabled() {
-    setIsAdDisabled(true)
-  }
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+    };
+
+    loadData();
+  }, [id]);
+
+  const handleGoToEditAd = () => navigation.navigate('editad');
+
+  const handleSwitchAdAvailabilityToAvailable = async () => {
+    try {
+      await api.patch(`/products/${id}`, { is_active: true });
+      setIsAdDisabled(false);
+    } catch (error) {
+      toast.show({
+        title: "Não foi possível reativar o anúncio.",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  };
+
+  const handleSwitchAdAvailabilityToDisabled = async () => {
+    try {
+      await api.patch(`/products/${id}`, { is_active: false });
+      setIsAdDisabled(true);
+    } catch (error) {
+      toast.show({
+        title: "Não foi possível desativar o anúncio.",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+  };
 
   return (
     <VStack flex={1}>
@@ -42,14 +95,14 @@ export function AdDetails() {
           <ArrowLeft size={24} color={colors.gray[100]} />
         </TouchableOpacity>
 
-        {isAdMine && (
+        {product.id == userId && (
          <TouchableOpacity onPress={handleGoToEditAd}>
           <PencilLine size={24} color={colors.gray[100]} />
          </TouchableOpacity>
         )}
       </HStack>
 
-      <CarouselComponent isAdDisabled={isAdDisabled} />
+      <CarouselComponent isAdDisabled={isAdDisabled} images={product.product_images} />
 
       <ScrollView>
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
@@ -67,32 +120,32 @@ export function AdDetails() {
 
           <Box bg="gray.500" rounded="full" px="2.5" alignItems="center" mt="6">
             <Text color="gray.200" fontFamily="heading" fontSize="xs">
-              {isNew ? "NOVO" : "USADO"}
+              {product.is_new ? "NOVO" : "USADO"}
             </Text> 
           </Box>
 
           <HStack w="full" mt="3">
-            <Heading numberOfLines={1} maxW={240} fontSize="lg" color="gray.100">Luminária pendente</Heading>
+            <Heading numberOfLines={1} maxW={240} fontSize="lg" color="gray.100">{product.name}</Heading>
 
             <Box ml="auto">
               <Heading fontSize="lg" color="blue.700">
                 <Text fontSize="sm">
                   R${' '}
                 </Text>
-                45,00
+                {product.price}
               </Heading>
             </Box>
           </HStack>
 
           <Text fontSize="sm" color="gray.200" mt="2" numberOfLines={4}>
-            Cras congue cursus in tortor sagittis placerat nunc, tellus arcu. Vitae ante leo eget maecenas urna mattis cursus. lorem 
+          {product.description}
           </Text>
 
           <HStack w="full" mt="3" alignItems="baseline">
             <Heading fontSize="sm" color="gray.200">Aceita troca?</Heading>
 
             <Text fontSize="sm" ml="1">
-              Não
+              {product.accept_trade ? 'Sim' : 'Não'}
             </Text>
           </HStack>
 
@@ -121,7 +174,7 @@ export function AdDetails() {
             </HStack>
           </VStack>
 
-          {isAdMine ? (
+          {product.id == userId ? (
             <>
               {isAdDisabled ? (
                 <Button 
@@ -148,17 +201,20 @@ export function AdDetails() {
                     <Text fontSize="sm">
                       R${' '}
                     </Text>
-                    120,00
+                    {product.price}
                   </Heading>
                 </Box>
 
                 <Box>
-                  <Button title="Entrar em contato" variant="primary" w="170" leftIcon={<WhatsappLogo size={16} color={colors.gray[700]} weight="fill"/>}/>
+                  <Button 
+                    title="Entrar em contato" 
+                    variant="primary" w="170" 
+                    leftIcon={<WhatsappLogo size={16} color={colors.gray[700]} weight="fill"/>}
+                    onPress={() => `https://wa.me/${user.tel}`}  
+                  />
                 </Box>
               </HStack>
           )}
-
-  
       </VStack>
       </ScrollView>
     </VStack>

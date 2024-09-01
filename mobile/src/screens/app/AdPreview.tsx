@@ -1,9 +1,8 @@
 import { useState } from "react";
 
-import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack } from "native-base";
+import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ArrowLeft, Tag } from 'phosphor-react-native';
 
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -14,6 +13,9 @@ import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
 import { paymentMethodFormatter } from "@utils/paymentMethodFormatter";
+import { api } from "@services/api";
+import { useForm } from "react-hook-form";
+import { AppError } from "@utils/AppError";
 
 type RouteParams = {
   title: string;
@@ -26,13 +28,18 @@ type RouteParams = {
 };
 
 export function AdPreview() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isAdDisabled, setIsAdDisabled] = useState(false);
+  
   const { colors } = useTheme();
+  const toast = useToast();
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const route = useRoute();
+
+  const { handleSubmit } = useForm<RouteParams>();
 
   const { user } = useAuth();
-  const route = useRoute();
 
   const {
     title,
@@ -48,9 +55,56 @@ export function AdPreview() {
     navigation.navigate('createad')
   }
 
-  function handleGoToMyAds() {
-    navigation.navigate('myads')
-  }
+  async function handlePublishAd() {
+    setIsLoading(true);
+
+    try {
+      const product = await api.post("/products", {
+        name: title,
+        description,
+        price: parseInt(price.replace(/[^0-9]/g, "")),
+        payment_methods: paymentMethod,
+        is_new: isNew,
+        accept_trade: acceptTrade,
+      });
+
+      const imageData = new FormData();
+
+      images.forEach((item) => {
+        const imageFile = {
+          ...item,
+          name: user.name + "." + item.name,
+        } as any;
+
+        imageData.append("images", imageFile);
+      });
+
+      imageData.append("product_id", product.data.id);
+
+      const imagesData = await api.post("/products/images", imageData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      navigation.navigate("myads");
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não publicar o anúncio. Tente novamente mais tarde!";
+
+      if (isAppError) {
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <VStack flex={1}>
@@ -59,7 +113,7 @@ export function AdPreview() {
         <Text mt="1" fontSize="sm" color="gray.700">É assim que seu produto vai aparecer!</Text>
       </VStack>
 
-      <CarouselComponent isAdDisabled={isAdDisabled} images={images}/>
+      <CarouselComponent isAdDisabled={isAdDisabled} images={images} />
 
       <ScrollView>
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
@@ -114,7 +168,7 @@ export function AdPreview() {
 
           <HStack mt="10" mb="4">
             <Button title="Voltar e editar" variant="secondary" w="175" onPress={handleGoToCreateAd} leftIcon={<ArrowLeft size={16} color={colors.gray[100]} />} />
-            <Button title="Publicar" variant="primary" w="175" ml="3" onPress={handleGoToMyAds} leftIcon={<Tag size={16} color={colors.gray[600]} />}/>
+            <Button title="Publicar" variant="primary" w="175" ml="3" onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}/>
           </HStack>
       </VStack>
       </ScrollView>

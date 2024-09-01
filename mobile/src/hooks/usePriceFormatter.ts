@@ -1,6 +1,6 @@
 export function usePriceFormatter() {
-    const formatPrice = (input: string) => {
-    const numericValue = input.replace(/[^0-9]/g, '');
+  const formatPrice = (input: number | string) => {
+    const numericValue = input.toString().replace(/[^0-9]/g, '');
 
     if (numericValue.length > 0) {
       const numberValue = parseInt(numericValue, 10);
@@ -8,9 +8,9 @@ export function usePriceFormatter() {
       return (numberValue / 100)
         .toFixed(2) 
         .replace('.', ',') 
-        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); 
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-    return '';
+    return '0,00';
   };
 
   return {

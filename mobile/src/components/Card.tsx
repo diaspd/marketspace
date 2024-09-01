@@ -1,63 +1,125 @@
-import { Box, HStack, Image, Text, Heading, Pressable } from "native-base";
-import { Avatar } from "@components/Avatar";
+import { useEffect, useState } from "react";
+import { Box, HStack, Image, Text, Heading, Pressable, IStackProps } from "native-base";
 
-import ShoesImg from '@assets/shoes.png'
 import { useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
-export function Card({data = 'string', isAdMine = false}) {
-  const isNew = false 
-  const isAdDisabled = false
+import { api } from "@services/api";
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>()
+import type { ProductDTO } from "@dtos/ProductDTO";
+import { AppError } from "@utils/AppError";
+import { usePriceFormatter } from "@hooks/usePriceFormatter";
+
+import { Avatar } from "@components/Avatar";
+
+type Props = IStackProps & {
+  title: string;
+  price: string;
+  used: boolean;
+  active: boolean;
+  image: string;
+  id: string;
+  showProfileImg?: boolean;
+  profileImage?: string;
+};
+
+export function Card({
+  title,
+  price,
+  used,
+  active = true,
+  image,
+  profileImage,
+  id
+  }: Props) {
+  const [product, setProduct] = useState({} as ProductDTO);
+
+  const { formatPrice } = usePriceFormatter();
+  const formattedPrice = formatPrice(price);
+
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+  const isAdMine = true
 
   function handleGoToAdDetails() {
-    navigation.navigate('addetails')
-  }
+    navigation.navigate("addetails", { id });
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const productData = await api.get(`products/${id}`);
+        setProduct(productData.data);
+      } catch (error) {
+        const isAppError = error instanceof AppError;
+        const title = isAppError
+          ? error.message
+          : "Não foi possível receber os dados do anúncio. Tente Novamente!";
+
+        if (isAppError) {
+          console.log('erro =>', title);
+        }
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <>
     <Pressable mb="6" onPress={handleGoToAdDetails}> 
-      <Box w={170} h="24" opacity={isAdDisabled ? '75' : '100'}>
-        <Image 
-          source={ShoesImg}
-          alt=""
-          resizeMode='stretch'
-          position="absolute"
-          rounded="md"
-          w="full"
-          backgroundColor={isAdDisabled ? 'gray.100': 'gray.500'}
-        />
+      <Box w={170} h="24" opacity={active ? '100' : '75'}>
 
-        <HStack alignItems="flex-start" justifyContent="space-between" px="1" mt="1">
-          {!isAdMine && (
-            <Avatar 
-              source={{ uri: 'https://github.com/diaspd.png' }}
-              size={8} 
-              borderWidthsize={2} 
-              borderColor="gray.700"
-              alt="" 
+      <HStack alignItems="flex-start" justifyContent="space-between" mt="1">
+        {profileImage && (
+            <Image
+              h={8}
+              w={8}
+              source={{
+                uri: profileImage,
+              }}
+              alt={title}
+              borderRadius="full"
+              position="absolute"
+              zIndex={100}
+              left={1}
+              top={1}
+              borderWidth={1}
+              borderColor="gray.300"
             />
           )}
+          <Image
+            h="24"
+            w="lg"
+            source={{
+              uri: image,
+            }}
+            alt={title}
+            resizeMode="cover"
+            borderRadius={10}
+            blurRadius={active ? 0 : 10}
+            borderWidth={1}
+            borderColor="gray.500"
+          />
 
-          <Box bg={isNew ? "blue.500" : "gray.200"} rounded="full" px="2" py="0.5" alignItems="center" ml="auto">
+          <Box bg={product.is_new ? "blue.500" : "gray.200"} rounded="full" mt="2" mr="1" px="2" py="0.5" alignItems="center" ml="auto">
             <Text color="gray.600" fontFamily="heading" fontSize="xs">
-              {isNew ? "NOVO" : "USADO"}
+              {product.is_new ? "NOVO" : "USADO"}
             </Text>
           </Box>
         </HStack>
 
         
-        {isAdDisabled && (
+        {!active && (
           <Text mt="auto" color="gray.700" fontWeight="bold" fontSize="xs" px="2">ANÚNCIO DESATIVADO</Text>
         )}
       </Box>
 
-      <Text mt="2" maxW={166} noOfLines={1} color={isAdDisabled ? "gray.400" : "gray.200"}>{data}</Text>
-      <Text fontSize="sm" mt="0.5" color={isAdDisabled ? "gray.400" : "gray.100"} maxW={166} noOfLines={1}>
+      <Text mt="2" maxW={166} noOfLines={1} color={active ? "gray.200" : "gray.400"}>{product.name}</Text>
+      <Text fontSize="sm" mt="0.5" color={active ? "gray.100" : "gray.400"} maxW={166} noOfLines={1}>
         R$
-        <Heading fontSize="lg" color={isAdDisabled ? "gray.400" : "gray.100"}>
-          {' '}59,90 
+        <Heading fontSize="lg" color={active ? "gray.100" : "gray.400"}>
+          {' '}{formattedPrice}
         </Heading>
       </Text> 
     </Pressable>

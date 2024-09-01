@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast } from "native-base";
 
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 import TagSvg from '@assets/icons/tag.svg';
@@ -19,10 +19,12 @@ import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
 import { Button } from "@components/Button";
+import type { ProductDTO } from "@dtos/ProductDTO";
 
 export function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [product, setProduct] = useState<ProductDTO[]>([]);
   const [isSwitchActive, setIsSwitchActive] = useState(false)
-  const [product, setProduct] = useState<string[]>([]);
   
   const {
     isOpen,
@@ -37,22 +39,34 @@ export function Home() {
   
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
-  async function fetchProducts() {
-    try {
-      const response = await api.get('/products/')
+  useFocusEffect(
+    useCallback(() => {
+      const loadData = async () => {
+        try {
+          const fetchProducts = await api.get(`/products`);
 
-      setProduct(response.data)
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError ? error.message : 'Não foi possível carregar os grupos musculares.'
+          setProduct(fetchProducts.data);
+        } catch (error) {
+          const isAppError = error instanceof AppError;
+          const title = isAppError
+            ? error.message
+            : "Não foi possível encontrar seus anúncios, tente novamente mais tarde!";
 
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500'
-      })
-    }
-  }
+          if (isAppError) {
+            toast.show({
+              title,
+              placement: "top",
+              bgColor: "red.500",
+            });
+          }
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      loadData();
+    }, [])
+  );
 
   function handleGoToMyAds() {
     navigation.navigate('myads')
@@ -61,10 +75,6 @@ export function Home() {
   function handleChangeSwitch() {
     setIsSwitchActive(prevState => !prevState)
   }
-
-  useEffect(() => {
-    fetchProducts();
-  }, [])
 
   return (
     <VStack  flex={1}>
@@ -108,7 +118,7 @@ export function Home() {
             placeholder="Buscar anúncio" 
             mt="12" 
             rightElement={
-            <HStack justifyContent="space-between" alignItems="center" mr="4" w={"16"}>
+            <HStack justifyContent="space-between" alignItems="center" mr="4" w="16">
               <TouchableOpacity>
                 <Feather name="search" size={20} color={colors.gray[200]} />
               </TouchableOpacity>
@@ -224,10 +234,18 @@ export function Home() {
 
          <FlatList 
             data={product}
-            keyExtractor={item => item}
+            keyExtractor={(item) => item.id}
             columnWrapperStyle={{ flex: 1, justifyContent: 'space-between'}}
             renderItem={({item}) => (
-              <Card data={item} />
+              <Card 
+                title={item.name}
+                image={`${api.defaults.baseURL}/images/${item.product_images[0].path}`}
+                active={item.is_active}
+                used={!item.is_new}
+                price={item.price.toString()}
+                id={item.id}
+                profileImage={`${api.defaults.baseURL}/images/${item.user?.avatar}`} 
+              />
             )}
             numColumns={2}
             mt="5"

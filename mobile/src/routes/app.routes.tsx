@@ -20,7 +20,9 @@ type AppRoutes = {
   home: undefined;
   myads: undefined;
   logout: undefined;
-  addetails: undefined;
+  addetails: {
+    id: string;
+  };
   createad: undefined;
   editad: undefined;
   adpreview: {

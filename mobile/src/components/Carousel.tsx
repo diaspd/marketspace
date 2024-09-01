@@ -30,17 +30,18 @@ export function CarouselComponent({isAdDisabled, images}: Carousel) {
   return (
       <GestureHandlerRootView style={{ marginBottom: 24 }}>
         <VStack>
-          <Carousel
-            vertical={false}
-            width={412}
-            height={290}
-            loop={false}
-            ref={ref}
-            style={{ width: "100%" }}
-            data={images}
-            onProgressChange={progress}
-            pagingEnabled
-            renderItem={({ item }) => (
+         {images ? (
+            <Carousel
+              vertical={false}
+              width={412}
+              height={290}
+              loop={true}
+              ref={ref}
+              style={{ width: "100%" }}
+              data={images}
+              onProgressChange={progress}
+              pagingEnabled
+              renderItem={({ item }) => (
               <Box flex={1}>
                 <Image 
                   w="full" 
@@ -58,8 +59,9 @@ export function CarouselComponent({isAdDisabled, images}: Carousel) {
 
                 {isAdDisabled &&  <Text mt="-150" color="gray.700" textAlign="center" fontSize="sm" fontFamily="heading">ANÚNCIO DESATIVADO</Text>}
               </Box>
-             )}
-          />
+              )}
+            />
+         ):  <Text alignSelf="center" position="absolute" bottom="32"fontFamily="body" color="gray.100">Não foi possivel carregar as imagens desse produto!</Text>}
 
           <Pagination.Basic
               progress={progress}
