@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, FlatList, Text, useTheme, Menu, VStack, useToast } from "native-base";
+import { Box, Heading, HStack, FlatList, Text, useTheme, Menu, VStack, useToast, Skeleton } from "native-base";
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -37,6 +37,7 @@ export function MyAds() {
 
   useFocusEffect(
     useCallback(() => {
+      setIsLoading(true);
       const loadData = async () => {
         try {
           const response = await api.get('/users/products');
@@ -74,7 +75,8 @@ export function MyAds() {
         </HStack>
 
         <Box mb="5" display="flex" alignItems="baseline" justifyContent="space-between" flexDirection="row">
-          <Text>{myProduct.length} anúncios</Text>
+          <Text>{isLoading ? <Skeleton w="20" h="3" rounded="xs" startColor="gray.500" endColor="coolGray.300"/> : myProduct.length + ' anúncios'} </Text>
+          
           <Menu
             w="32"
             placement="bottom right"
@@ -105,23 +107,46 @@ export function MyAds() {
           </Menu>
         </Box>
 
-        <FlatList
-          data={productsFiltered}
-          keyExtractor={(item) => item.id}
-          columnWrapperStyle={{ flex: 1, justifyContent: 'space-between' }}
-          renderItem={({ item }) => (
-            <Card
-              title={item.name}
-              image={`${api.defaults.baseURL}/images/${item.product_images[0].path}`}
-              active={item.is_active}
-              used={!item.is_new}
-              price={item.price.toString()}
-              id={item.id}
-            />
-          )}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-        />
+        {isLoading ? (
+          <Box 
+            flex={1} 
+            mt="5"
+            display="flex"
+            flexDir="row"
+            flexWrap="wrap"
+            justifyContent="space-between"
+          >
+            {Array.from({ length: 10 }).map((_, i) => (
+              <Skeleton 
+                key={i}
+                w="48%"
+                h="24"
+                rounded="md"
+                mb="2"
+                startColor="gray.500"
+                endColor="coolGray.300"
+              />
+            ))}
+          </Box>
+          ) : ( 
+          <FlatList
+            data={productsFiltered}
+            keyExtractor={(item) => item.id}
+            columnWrapperStyle={{ flex: 1, justifyContent: 'space-between' }}
+            renderItem={({ item }) => (
+              <Card
+                title={item.name}
+                image={`${api.defaults.baseURL}/images/${item.product_images[0].path}`}
+                active={item.is_active}
+                used={!item.is_new}
+                price={item.price.toString()}
+                id={item.id}
+              />
+            )}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
       </Box>
     </VStack>
   )
