@@ -9,6 +9,7 @@ import { useAuth } from "@hooks/useAuth";
 
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
+import { api } from "@services/api";
 
 export function HomeHeader() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -22,7 +23,14 @@ export function HomeHeader() {
   return (
     <Box px="6" mt="16">
     <HStack>
-      <Avatar size={45} alt="" borderWidthsize={2} source={{ uri: 'https://github.com/diaspd.png' }}/>
+      <Avatar 
+        size={45} 
+        borderWidthsize={2} 
+        source={{
+          uri: `${api.defaults.baseURL}/images/${user.avatar}`,
+        }}
+        alt="Foto de perfil" 
+      />
 
       <VStack ml="2" mt="0.5">
         <Text fontSize="sm">Boas vindas,</Text>
