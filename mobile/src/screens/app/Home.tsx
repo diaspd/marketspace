@@ -24,6 +24,7 @@ import type { ProductDTO } from "@dtos/ProductDTO";
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [product, setProduct] = useState<ProductDTO[]>([]);
+  const [availableAds, setAvailableAds] = useState(0);
   const [isSwitchActive, setIsSwitchActive] = useState(false)
   
   const {
@@ -45,8 +46,10 @@ export function Home() {
       const loadData = async () => {
         try {
           const fetchProducts = await api.get(`/products`);
+          const myProductsData = await api.get(`/users/products`);
 
           setProduct(fetchProducts.data);
+          setAvailableAds(myProductsData.data.length);
         } catch (error) {
           const isAppError = error instanceof AppError;
           const title = isAppError
@@ -97,7 +100,7 @@ export function Home() {
             <TagSvg fill={colors.blue[500]} width={24} height={24} />
 
             <VStack ml="4">
-              <Heading color="gray.200">4</Heading>
+              <Heading color="gray.200">{availableAds}</Heading>
               <Text color="gray.200" fontSize="sm">anúncios ativos</Text>
             </VStack>       
           </HStack>
