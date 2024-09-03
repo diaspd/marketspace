@@ -127,7 +127,7 @@ export function AdDetails() {
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
           <HStack alignItems="center">
             <Avatar 
-              source={{ uri: 'https://github.com/diaspd.png'}} 
+              source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
               size={8} 
               borderWidthsize={2} 
               alt=""
