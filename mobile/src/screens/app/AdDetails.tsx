@@ -24,27 +24,38 @@ type RouteParams = {
 };
 
 export function AdDetails() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState<ProductDTO>({} as ProductDTO);
+  const [isProductMine, setIsProductMine] = useState<boolean>(false);
   const [isAdDisabled, setIsAdDisabled] = useState(false);
-
+  
   const { colors } = useTheme();
   const { user } = useAuth();
-
+  
   const route = useRoute();
   const toast = useToast();
   
   const { id } = route.params as RouteParams;
   const navigation = useNavigation<AppNavigatorRoutesProps>();
-
+  
   const { formatPrice } = usePriceFormatter()
+  
+  const formattedPrice = product.price !== undefined ? formatPrice(product.price) : "N/A";
 
   useEffect(() => {
     setIsLoading(true)
     const loadData = async () => {
       try {
         const productData = await api.get(`/products/${id}`);
+        const userProductData = await api.get('/users/products');
+        
         setProduct(productData.data);
+
+        if (userProductData.data[0].user_id === productData.data.user_id) {
+          setIsProductMine(true)
+        } else {
+          setIsProductMine(false)
+        }
 
         setIsAdDisabled(!productData.data.is_active);
       } catch (error) {
@@ -93,8 +104,6 @@ export function AdDetails() {
     }
   };
 
-  const formattedPrice = product.price !== undefined ? formatPrice(product.price) : "N/A";
-
   return (
     <VStack flex={1}>
       {isLoading ? <Loading /> : (
@@ -104,7 +113,7 @@ export function AdDetails() {
           <ArrowLeft size={24} color={colors.gray[100]} />
         </TouchableOpacity>
 
-        {product.id && (
+        {isProductMine && (
          <TouchableOpacity onPress={handleGoToEditAd}>
           <PencilLine size={24} color={colors.gray[100]} />
          </TouchableOpacity>
@@ -193,7 +202,7 @@ export function AdDetails() {
             </HStack>
           </VStack>
 
-          {product.id ? (
+          {isProductMine ? (
             <>
               {isAdDisabled ? (
                 <Button 
