@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Linking, TouchableOpacity } from "react-native";
 
 import { Box, Heading, HStack, ScrollView, Skeleton, Text, useTheme, useToast, VStack } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -103,6 +103,11 @@ export function AdDetails() {
       });
     }
   };
+
+  async function handleSendMessageOnWhatsapp() {
+    await Linking.openURL
+      (`https://wa.me/${user.tel}?text="Olá, vi seu anúncio no marketspace e fiquei interessado sobre o ${product.name}"`)
+  }
 
   return (
     <VStack flex={1}>
@@ -238,7 +243,7 @@ export function AdDetails() {
                     title="Entrar em contato" 
                     variant="primary" w="170" 
                     leftIcon={<WhatsappLogo size={16} color={colors.gray[700]} weight="fill"/>}
-                    onPress={() => `https://wa.me/${user.tel}`}  
+                    onPress={handleSendMessageOnWhatsapp}  
                   />
                 </Box>
               </HStack>
