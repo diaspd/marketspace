@@ -105,8 +105,13 @@ export function AdDetails() {
   };
 
   async function handleSendMessageOnWhatsapp() {
-    await Linking.openURL
-      (`https://wa.me/${user.tel}?text="Olá, vi seu anúncio no marketspace e fiquei interessado sobre o ${product.name}"`)
+    try {
+      await Linking.openURL
+        (`whatsapp://send?text="Olá, vi seu anúncio no marketspace e fiquei interessado sobre o produto: ${product.name}"&phone=${user.tel}`);
+    } catch {
+      await Linking.openURL
+        (`https://wa.me/${user.tel}?text="Olá, vi seu anúncio no marketspace e fiquei interessado sobre o produto: ${product.name}"`)
+    }
   }
 
   return (
