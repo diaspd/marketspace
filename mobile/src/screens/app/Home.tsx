@@ -76,10 +76,6 @@ export function Home() {
     navigation.navigate('myads')
   }
 
-  function handleChangeSwitch() {
-    setIsSwitchActive(prevState => !prevState)
-  }
-
   return (
     <VStack  flex={1}>
        <HomeHeader />
@@ -180,7 +176,7 @@ export function Home() {
                         ml="-1"
                         mr="auto"
                         offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" offThumbColor="gray.700"
-                        onToggle={handleChangeSwitch}
+                        onToggle={() => setIsSwitchActive(prevState => !prevState)}
                       />
                     </Box>
                   </VStack>
