@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast, Skeleton, ScrollView } from "native-base";
+import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast, Skeleton, ScrollView, Pressable } from "native-base";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -23,6 +23,7 @@ import type { ProductDTO } from "@dtos/ProductDTO";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isSelected, setIsSelected] = useState(true);
   const [product, setProduct] = useState<ProductDTO[]>([]);
   const [availableAds, setAvailableAds] = useState(0);
   const [isSwitchActive, setIsSwitchActive] = useState(false)
@@ -32,8 +33,6 @@ export function Home() {
     onOpen,
     onClose
   } = useDisclose();
-  
-  const isSelected = true 
   
   const { colors } = useTheme();
   const toast = useToast();
@@ -145,25 +144,29 @@ export function Home() {
                     <Text fontWeight="bold" color="gray.200" mb="3">Condição</Text>
                 
                     <HStack mr="auto">
-                      <Box flexDir="row" bg={isSelected ? "blue.700" : "gray.500"} rounded="full" px="2" py="0.5" alignItems="center" ml="auto" mr="2">
-                        <Text color={isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
-                          NOVO 
-                        </Text>
+                      <Pressable onPress={() => setIsSelected(prevState => !prevState)}>
+                        <Box flexDir="row" bg={isSelected ? "blue.700" : "gray.500"} rounded="full" px="2" py="2" alignItems="center" ml="auto" mr="2">
+                          <Text color={isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
+                            NOVO 
+                          </Text>
 
-                        {isSelected && (
-                          <Octicons name="x-circle-fill" size={14} color="white" />
-                        )}
-                      </Box>
+                          {isSelected && (
+                            <Octicons name="x-circle-fill" size={14} color="white" />
+                          )}
+                        </Box>
+                      </Pressable>
 
-                      <Box flexDir="row" bg={!isSelected ? "blue.700" : "gray.500"} rounded="full" px="1.5" py="2" alignItems="center" ml="auto">
-                        <Text color={!isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
-                          USADO
-                        </Text>
+                      <Pressable onPress={() => setIsSelected(prevState => !prevState)}>
+                        <Box flexDir="row" bg={!isSelected ? "blue.700" : "gray.500"} rounded="full" px="1.5" py="2" alignItems="center" ml="auto">
+                          <Text color={!isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
+                            USADO
+                          </Text>
 
-                        {!isSelected && (
-                          <Octicons name="x-circle-fill" size={14} color="white" />
-                        )}
-                      </Box>
+                          {!isSelected && (
+                            <Octicons name="x-circle-fill" size={14} color="white" />
+                          )}
+                        </Box>
+                      </Pressable>
                     </HStack>
                   </VStack>
 
