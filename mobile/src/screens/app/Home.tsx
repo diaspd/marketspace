@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast, Skeleton, ScrollView, Pressable } from "native-base";
+import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast, Skeleton, ScrollView, Pressable, Radio } from "native-base";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
@@ -20,24 +20,75 @@ import { Input } from "@components/Input";
 import { Card } from "@components/Card";
 import { Button } from "@components/Button";
 import type { ProductDTO } from "@dtos/ProductDTO";
+import { useForm } from "react-hook-form";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSelected, setIsSelected] = useState(true);
+  const [isNew, setIsNew] = useState(true);
+  const [acceptTrade, setAcceptTrade] = useState(false);
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([
+    "pix",
+    "boleto",
+    "cash",
+    "deposit",
+    "card",
+  ]);
   const [product, setProduct] = useState<ProductDTO[]>([]);
   const [availableAds, setAvailableAds] = useState(0);
-  const [isSwitchActive, setIsSwitchActive] = useState(false)
   
   const {
     isOpen,
     onOpen,
     onClose
   } = useDisclose();
-  
+
+  const {
+    handleSubmit,
+  } = useForm();
+
   const { colors } = useTheme();
   const toast = useToast();
   
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleGoToMyAds() {
+    navigation.navigate('myads')
+  }
+
+  async function handleApllyFilters(search: any) {
+    try {
+      let paymentMethodsQuery = "";
+
+      paymentMethods.forEach((item) => {
+        paymentMethodsQuery = paymentMethodsQuery + `&payment_methods=${item}`;
+      });
+
+      setIsLoading(true);
+      const productsData = await api.get(
+        `/products/?is_new=${isNew}&accept_trade=${acceptTrade}${paymentMethodsQuery}${
+          search.length > 0 && `&query=${search}`
+        }`
+      );
+
+      setProduct(productsData.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível filtrar os produtos. Tente Novamente!";
+
+      if (isAppError) {
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -70,10 +121,6 @@ export function Home() {
       loadData();
     }, [])
   );
-
-  function handleGoToMyAds() {
-    navigation.navigate('myads')
-  }
 
   return (
     <VStack  flex={1}>
@@ -142,44 +189,53 @@ export function Home() {
 
                   <VStack alignItems="start" w="full" mb="3">
                     <Text fontWeight="bold" color="gray.200" mb="3">Condição</Text>
-                
-                    <HStack mr="auto">
-                      <Pressable onPress={() => setIsSelected(prevState => !prevState)}>
-                        <Box flexDir="row" bg={isSelected ? "blue.700" : "gray.500"} rounded="full" px="2" py="2" alignItems="center" ml="auto" mr="2">
-                          <Text color={isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
-                            NOVO 
-                          </Text>
 
-                          {isSelected && (
-                            <Octicons name="x-circle-fill" size={14} color="white" />
-                          )}
-                        </Box>
-                      </Pressable>
+                    <Radio.Group
+                      name="productCondition"
+                      value={isNew ? "new" : "used"}
+                      onChange={(nextValue) => {
+                        setIsNew(nextValue === "new" ? true : false);
+                      }}
+                    >              
+                      <HStack mr="auto">
+                        <Pressable onPress={() => setIsNew(true)}>
+                          <Box flexDir="row" bg={isNew ? "blue.700" : "gray.500"} rounded="full" px="2" py="2" alignItems="center" ml="auto" mr="2">
+                            <Text color={isNew ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
+                              NOVO 
+                            </Text>
 
-                      <Pressable onPress={() => setIsSelected(prevState => !prevState)}>
-                        <Box flexDir="row" bg={!isSelected ? "blue.700" : "gray.500"} rounded="full" px="1.5" py="2" alignItems="center" ml="auto">
-                          <Text color={!isSelected ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
-                            USADO
-                          </Text>
+                            {isNew && (
+                              <Octicons name="x-circle-fill" size={14} color="white" />
+                            )}
+                          </Box>
+                        </Pressable>
 
-                          {!isSelected && (
-                            <Octicons name="x-circle-fill" size={14} color="white" />
-                          )}
-                        </Box>
-                      </Pressable>
-                    </HStack>
+                        <Pressable onPress={() => setIsNew(false)}>
+                          <Box flexDir="row" bg={!isNew ? "blue.700" : "gray.500"} rounded="full" px="1.5" py="2" alignItems="center" ml="auto">
+                            <Text color={!isNew ? "gray.700" : "gray.300"} fontFamily="heading" fontSize="xs" mr="2" ml="2">
+                              USADO
+                            </Text>
+
+                            {!isNew && (
+                              <Octicons name="x-circle-fill" size={14} color="white" />
+                            )}
+                          </Box>
+                        </Pressable>
+                      </HStack>
+                    </Radio.Group>
                   </VStack>
 
                   <VStack alignItems="start" w="full" mb="3">
                     <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
 
-                    <Box bg={isSwitchActive ? "blue.700" : "gray.500"} w="42" h="22" mt="3" rounded="full" alignItems="center" justifyContent="center">
+                    <Box bg={acceptTrade ? "blue.700" : "gray.500"} w="42" h="22" mt="3" rounded="full" alignItems="center" justifyContent="center">
                       <Switch 
-                        isChecked={isSwitchActive}
+                        isChecked={acceptTrade}
+                        onToggle={(value) => setAcceptTrade(value)}
+                        value={acceptTrade}
                         ml="-1"
                         mr="auto"
-                        offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" offThumbColor="gray.700"
-                        onToggle={() => setIsSwitchActive(prevState => !prevState)}
+                        offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" 
                       />
                     </Box>
                   </VStack>
@@ -187,47 +243,40 @@ export function Home() {
                   <VStack alignItems="start" w="full">
                     <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
 
-                    <VStack space="2">
-                      <Checkbox 
-                        value="Boleto" 
+                    {[
+                      { value: "boleto", label: "Boleto" },
+                      { value: "pix", label: "Pix" },
+                      { value: "cash", label: "Dinheiro" },
+                      { value: "card", label: "Cartão de Crédito" },
+                      { value: "deposit", label: "Depósito Bancário" }
+                    ].map((method) => (
+                      <Checkbox
+                        key={method.value}
+                        value={method.value}
+                        isChecked={paymentMethods.includes(method.value)}
+                        onChange={() => {
+                          if (paymentMethods.includes(method.value)) {
+                            setPaymentMethods((prev) => prev.filter((item) => item !== method.value));
+                          } else {
+                            setPaymentMethods((prev) => [...prev, method.value]);
+                          }
+                        }}
                         _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
-                        _text={{ color: 'gray.200'}}
-                      >Boleto
+                        _text={{ color: 'gray.200' }}
+                      >
+                        {method.label} 
                       </Checkbox>
-                      
-                      <Checkbox 
-                        value="Pix" 
-                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
-                        _text={{ color: 'gray.200'}}
-                      >Pix
-                      </Checkbox>
-
-                      <Checkbox 
-                        value="Dinheiro" 
-                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
-                        _text={{ color: 'gray.200'}}
-                      >Dinheiro
-                      </Checkbox>
-
-                      <Checkbox 
-                        value="Cartão de Crédito" 
-                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
-                        _text={{ color: 'gray.200'}}
-                      >Cartão de Crédito
-                      </Checkbox>
-                      
-                      <Checkbox 
-                        value="Depósito Bancário" 
-                        _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
-                        _text={{ color: 'gray.200'}}
-                      >Depósito Bancário
-                      </Checkbox>
-                    </VStack>    
+                    ))}
                   </VStack>
 
                   <HStack justifyContent="space-between" w="full" mt="16" space={3}>
                     <Button title="Resetar filtros" variant="secondary" size="176" />
-                    <Button title="Aplicar filtros" variant="terciary" size="176" />
+                    <Button 
+                      title="Aplicar filtros" 
+                      variant="terciary" 
+                      size="176" 
+                      onPress={handleSubmit(handleApllyFilters)}
+                    />
                   </HStack>
                 </Actionsheet.Content>
               </Actionsheet>
