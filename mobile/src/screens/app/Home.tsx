@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast, Skeleton, ScrollView, Pressable, Radio } from "native-base";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { useForm } from "react-hook-form";
 
 import TagSvg from '@assets/icons/tag.svg';
 
@@ -12,20 +14,18 @@ import { Feather } from '@expo/vector-icons';
 import Octicons from '@expo/vector-icons/Octicons';
 
 import { api } from "@services/api";
-
 import { AppError } from "@utils/AppError";
+
+import type { ProductDTO } from "@dtos/ProductDTO";
 
 import { HomeHeader } from "@components/HomeHeader";
 import { Input } from "@components/Input";
 import { Card } from "@components/Card";
 import { Button } from "@components/Button";
-import type { ProductDTO } from "@dtos/ProductDTO";
-import { useForm } from "react-hook-form";
 import { EmptyList } from "@components/EmptyList";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isSelected, setIsSelected] = useState(true);
   const [isNew, setIsNew] = useState(true);
   const [acceptTrade, setAcceptTrade] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState<string[]>([
@@ -74,9 +74,10 @@ export function Home() {
 
       if (productsData.data == 0) {
         toast.show({
-          title: 'Não foi encontrado nenhum produto com essas especificações',
+          title: 'Não foi encontrado nenhum produto com essas especificações.',
+          _title: { textAlign: 'center'},
           placement: "top",
-          bgColor: "yellow.400",
+          bgColor: "yellow.500",
         });
       }
 
