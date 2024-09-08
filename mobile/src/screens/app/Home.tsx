@@ -72,6 +72,7 @@ export function Home() {
       );
 
       setProduct(productsData.data);
+      onClose()
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
