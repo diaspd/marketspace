@@ -21,6 +21,7 @@ import { Card } from "@components/Card";
 import { Button } from "@components/Button";
 import type { ProductDTO } from "@dtos/ProductDTO";
 import { useForm } from "react-hook-form";
+import { EmptyList } from "@components/EmptyList";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +71,14 @@ export function Home() {
           search.length > 0 && `&query=${search}`
         }`
       );
+
+      if (productsData.data == 0) {
+        toast.show({
+          title: 'Não foi encontrado nenhum produto com essas especificações',
+          placement: "top",
+          bgColor: "yellow.400",
+        });
+      }
 
       setProduct(productsData.data);
       onClose()
@@ -325,6 +334,9 @@ export function Home() {
               numColumns={2}
               mt="5"
               showsVerticalScrollIndicator={false}
+              ListEmptyComponent={
+                <EmptyList description="Ainda não foi cadastrado nenhum produto." hasIcon iconName="warehouse" />
+              }
             />
           )}
 
