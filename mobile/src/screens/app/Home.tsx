@@ -5,7 +5,7 @@ import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose,
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import TagSvg from '@assets/icons/tag.svg';
 
@@ -46,6 +46,7 @@ export function Home() {
 
   const {
     handleSubmit,
+    control,
   } = useForm();
 
   const { colors } = useTheme();
@@ -57,45 +58,74 @@ export function Home() {
     navigation.navigate('myads')
   }
 
-  async function handleApllyFilters(search: any) {
+  async function handleSearchByName(data: any) {
     try {
-      let paymentMethodsQuery = "";
-
-      paymentMethods.forEach((item) => {
-        paymentMethodsQuery = paymentMethodsQuery + `&payment_methods=${item}`;
-      });
-
+      const search = data.search;
+      
       setIsLoading(true);
+  
+      const productsData = search.length > 0
+        ? await api.get(`/products?query=${search}`)
+        : await api.get(`/products`);
+  
+      if (productsData.data.length === 0) {
+        toast.show({
+          title: 'Nenhum produto encontrado.',
+          _title: { textAlign: 'center' },
+          placement: "top",
+          bgColor: "yellow.500",
+        });
+      }
+  
+      setProduct(productsData.data);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível buscar o produto. Tente novamente!";
+  
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleApllyFilters(data: any) {
+    try {
+      let paymentMethodsQuery = paymentMethods.map((item) => `&payment_methods=${item}`).join('');
+      setIsLoading(true);
+
       const productsData = await api.get(
         `/products/?is_new=${isNew}&accept_trade=${acceptTrade}${paymentMethodsQuery}${
-          search.length > 0 && `&query=${search}`
+          data.search ? `&query=${data.search}` : ''
         }`
       );
 
-      if (productsData.data == 0) {
+      if (productsData.data.length === 0) {
         toast.show({
           title: 'Não foi encontrado nenhum produto com essas especificações.',
-          _title: { textAlign: 'center'},
           placement: "top",
           bgColor: "yellow.500",
         });
       }
 
       setProduct(productsData.data);
-      onClose()
+      onClose();
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
-        : "Não foi possível filtrar os produtos. Tente Novamente!";
-
-      if (isAppError) {
-        toast.show({
-          title,
-          placement: "top",
-          bgColor: "red.500",
-        });
-      }
+        : "Não foi possível filtrar os produtos. Tente novamente!";
+      
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -171,12 +201,31 @@ export function Home() {
           
           <Text color="gray.300" mt="8">Compre produtos variados</Text>
 
-          <Input 
-            placeholder="Buscar anúncio" 
-            mt="12" 
-            rightElement={
-            <HStack justifyContent="space-between" alignItems="center" mr="4" w="16">
-              <TouchableOpacity>
+          <HStack
+            alignItems="center"
+            mt="12"
+            mr="12"
+            bg="gray.700"
+            w="full"
+            h="10"
+            borderRadius="md"
+          >
+          <Controller
+            control={control}
+            name="search"
+            render={({ field: { onChange, value } }) => (
+            <>
+              <Input 
+                placeholder="Buscar anúncio" 
+                onChangeText={onChange}
+                value={value}
+              />
+            </>
+            )}
+          />
+          
+          <HStack justifyContent="space-between" alignItems="center" w="16" mb="5" ml="-20">
+              <TouchableOpacity onPress={handleSubmit(handleSearchByName)}> 
                 <Feather name="search" size={20} color={colors.gray[200]} />
               </TouchableOpacity>
 
@@ -292,8 +341,7 @@ export function Home() {
                 </Actionsheet.Content>
               </Actionsheet>
             </HStack>
-            }  
-          />
+          </HStack>
 
           {isLoading ? (
             <Box 
