@@ -205,7 +205,7 @@ export function Home() {
                             </Text>
 
                             {isNew && (
-                              <Octicons name="x-circle-fill" size={14} color="white" />
+                              <Octicons name="x-circle-fill" size={14} color="white" onPress={() => setIsNew(false)}/>
                             )}
                           </Box>
                         </Pressable>
@@ -217,7 +217,7 @@ export function Home() {
                             </Text>
 
                             {!isNew && (
-                              <Octicons name="x-circle-fill" size={14} color="white" />
+                              <Octicons name="x-circle-fill" size={14} color="white" onPress={() => setIsNew(true)}/>
                             )}
                           </Box>
                         </Pressable>
