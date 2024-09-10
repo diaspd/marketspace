@@ -13,6 +13,7 @@ import { usePriceFormatter } from "@hooks/usePriceFormatter";
 type Props = IStackProps & {
   title: string;
   price: string;
+  used: boolean;
   active: boolean;
   image: string;
   id: string;
@@ -23,6 +24,7 @@ type Props = IStackProps & {
 export function Card({
   title,
   price,
+  used,
   active = true,
   image,
   profileImage,
@@ -96,9 +98,9 @@ export function Card({
             borderColor="gray.500"
           />
 
-          <Box bg={product.is_new ? "blue.500" : "gray.200"} rounded="full" mt="2" mr="1" px="2" py="0.5" alignItems="center" ml="auto">
+          <Box bg={used ? "gray.200" : "blue.500"} rounded="full" mt="2" mr="1" px="2" py="0.5" alignItems="center" ml="auto">
             <Text color="gray.600" fontFamily="heading" fontSize="xs">
-              {product.is_new ? "NOVO" : "USADO"}
+              {used ? "USADO" : "NOVO"}
             </Text>
           </Box>
         </HStack>

@@ -43,9 +43,9 @@ export function AdDetails() {
   const formattedPrice = product.price !== undefined ? formatPrice(product.price) : "N/A";
 
   useEffect(() => {
-    setIsLoading(true)
     const loadData = async () => {
       try {
+        setIsLoading(true)
         const productData = await api.get(`/products/${id}`);
         const userProductData = await api.get('/users/products');
         
@@ -69,11 +69,12 @@ export function AdDetails() {
           placement: "top",
           bgColor: "red.500",
         });
+      } finally {
+        setIsLoading(false)
       }
     };
 
     loadData();
-    setIsLoading(false);
   }, [id]);
 
   const handleGoToEditAd = () => navigation.navigate('editad');
