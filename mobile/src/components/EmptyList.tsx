@@ -3,8 +3,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 type Props = {
   description: string;
-  hasIcon?: boolean;
-  iconName?: string
+  hasIcon: boolean;
+  iconName: string
 }
 
 export function EmptyList({description, hasIcon, iconName}: Props) {

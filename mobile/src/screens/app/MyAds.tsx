@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
-import { Box, Heading, HStack, FlatList, Text, useTheme, Menu, VStack, useToast, Skeleton } from "native-base";
+import { Box, Heading, HStack, FlatList, Text, useTheme, Menu, VStack, useToast, Skeleton, Center } from "native-base";
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -147,7 +147,9 @@ export function MyAds() {
             numColumns={2}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
-              <EmptyList description="Você ainda não registrou nenhum produto." />
+              <Center mt="12">
+                <EmptyList description="Você ainda não registrou nenhum produto." hasIcon iconName="list-status" />
+              </Center>
             }
           />
         )}
