@@ -10,12 +10,9 @@ import type { ProductDTO } from "@dtos/ProductDTO";
 import { AppError } from "@utils/AppError";
 import { usePriceFormatter } from "@hooks/usePriceFormatter";
 
-import { Avatar } from "@components/Avatar";
-
 type Props = IStackProps & {
   title: string;
   price: string;
-  used: boolean;
   active: boolean;
   image: string;
   id: string;
@@ -26,7 +23,6 @@ type Props = IStackProps & {
 export function Card({
   title,
   price,
-  used,
   active = true,
   image,
   profileImage,
@@ -38,8 +34,6 @@ export function Card({
   const formattedPrice = formatPrice(price);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
-
-  const isAdMine = true
 
   function handleGoToAdDetails() {
     navigation.navigate("addetails", { id });
