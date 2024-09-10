@@ -3,7 +3,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 type Props = {
   description: string;
-  hasIcon: boolean;
+  hasIcon?: boolean;
   iconName?: string
 }
 

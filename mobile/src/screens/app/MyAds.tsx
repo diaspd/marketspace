@@ -10,6 +10,7 @@ import { AppError } from "@utils/AppError";
 import { Card } from "@components/Card";
 import type { ProductDTO } from "@dtos/ProductDTO";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { EmptyList } from "@components/EmptyList";
 
 export function MyAds() {
   const [isLoading, setIsLoading] = useState(true);
@@ -130,7 +131,7 @@ export function MyAds() {
           </Box>
           ) : ( 
           <FlatList
-            data={productsFiltered}
+            data={myProduct}
             keyExtractor={(item) => item.id}
             columnWrapperStyle={{ flex: 1, justifyContent: 'space-between' }}
             renderItem={({ item }) => (
@@ -145,6 +146,9 @@ export function MyAds() {
             )}
             numColumns={2}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <EmptyList description="Você ainda não registrou nenhum produto." />
+            }
           />
         )}
       </Box>
