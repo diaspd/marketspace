@@ -78,7 +78,7 @@ export function AdDetails() {
 
   const handleGoToEditAd = () => navigation.navigate('editad');
 
-  const handleSwitchAdAvailabilityToAvailable = async () => {
+  async function handleSwitchAdAvailabilityToAvailable() {
     try {
       await api.patch(`/products/${id}`, { is_active: true });
       setIsAdDisabled(false);
@@ -91,7 +91,7 @@ export function AdDetails() {
     }
   };
 
-  const handleSwitchAdAvailabilityToDisabled = async () => {
+  async function handleSwitchAdAvailabilityToDisabled() {
     try {
       await api.patch(`/products/${id}`, { is_active: false });
       setIsAdDisabled(true);
@@ -101,6 +101,28 @@ export function AdDetails() {
         placement: "top",
         bgColor: "red.500",
       });
+    }
+  };
+
+  async function handleDeleteAd() {
+    try {
+      setIsLoading(true);
+      await api.delete(`products/${id}`);
+
+      navigation.navigate("myads");
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível deletar seu produto. Tente Novamente!";
+
+      if (isAppError) {
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
     }
   };
 
@@ -230,7 +252,14 @@ export function AdDetails() {
                 />
               )}
     
-              <Button title="Excluir anúncio" variant="secondary" mt="2" leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}/>
+              <Button 
+                title="Excluir anúncio" 
+                variant="secondary" 
+                mt="2" 
+                leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}
+                onPress={handleDeleteAd}
+                isLoading={isLoading}  
+              />
             </>
           ): (
               <HStack alignItems="center" justifyContent="space-between" w="full">
