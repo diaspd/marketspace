@@ -77,7 +77,7 @@ export function AdDetails() {
     loadData();
   }, [id]);
 
-  const handleGoToEditAd = () => navigation.navigate('editad');
+  // const handleGoToEditAd = () => navigation.navigate('');
 
   async function handleSwitchAdAvailabilityToAvailable() {
     try {
@@ -147,7 +147,7 @@ export function AdDetails() {
         </TouchableOpacity>
 
         {isProductMine && (
-         <TouchableOpacity onPress={handleGoToEditAd}>
+         <TouchableOpacity>
           <PencilLine size={24} color={colors.gray[100]} />
          </TouchableOpacity>
         )}
