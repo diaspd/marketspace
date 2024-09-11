@@ -77,7 +77,18 @@ export function AdDetails() {
     loadData();
   }, [id]);
 
-  // const handleGoToEditAd = () => navigation.navigate('');
+  const handleGoToEditAd = () => navigation.navigate('editad', {
+    title: product.name,
+    description: product.description,
+    price: product.price.toString(),
+    images: product.product_images,
+    paymentMethod: Array.isArray(product.payment_methods) ? 
+    product.payment_methods.map((item) => item.key)
+    : [],
+    isNew: product.is_new,
+    acceptTrade: product.accept_trade,
+    id: product.id,
+  });
 
   async function handleSwitchAdAvailabilityToAvailable() {
     try {
@@ -147,7 +158,7 @@ export function AdDetails() {
         </TouchableOpacity>
 
         {isProductMine && (
-         <TouchableOpacity>
+         <TouchableOpacity onPress={handleGoToEditAd}>
           <PencilLine size={24} color={colors.gray[100]} />
          </TouchableOpacity>
         )}

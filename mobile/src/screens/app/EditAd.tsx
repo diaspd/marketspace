@@ -2,7 +2,7 @@ import { TouchableOpacity } from "react-native";
 import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
 
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 import { Plus } from "phosphor-react-native";
 import { Input } from "@components/Input";
@@ -10,9 +10,35 @@ import { useState } from "react";
 import { Button } from "@components/Button";
 
 import { usePriceFormatter } from '@hooks/usePriceFormatter'
+import { api } from "@services/api";
+
+interface RouteParams {
+  title: string;
+  description: string;
+  price: string;
+  images: any[];
+  paymentMethods: string[];
+  isNew: boolean;
+  acceptTrade: boolean;
+  id: string;
+};
 
 export function EditAd() {
-  const [isSwitchActive, setIsSwitchActive] = useState(false)
+  const route = useRoute();
+
+  const {
+    title,
+    description,
+    price,
+    images: previsImages,
+    paymentMethods: previsPaymentMethods,
+    isNew: previsIsNew,
+    acceptTrade: previssAcceptTrade,
+    id,
+  } = route.params as RouteParams;
+
+  const [isSwitchActive, setIsSwitchActive] = useState(false);
+  const [images, setImages] = useState<any[]>(previsImages);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
@@ -33,33 +59,39 @@ export function EditAd() {
       <Text mt="1" color="gray.300">Escolha até 3 imagens para mostrar o quando o seu produto é incrível!</Text>
 
       <HStack my={5}>
-        <Image
-          w={88}
-          h={88}
-          mr={2}
-          source={{
-            uri: 'https://github.com/diaspd.png',
-          }}
-          alt="Imagem do anúncio"
-          resizeMode="cover"
-          borderRadius={8}
-        />
+        {images.length > 0 &&
+          images.map((imageData) => (
+            <Image
+              w={88}
+              h={88}
+              mr={2}
+              source={{
+                uri: `${api.defaults.baseURL}/images/${imageData.path}`,
+              }}
+              alt="Imagem novo anúncio"
+              resizeMode="cover"
+              borderRadius={8}
+              key={imageData.path}
+            />
+          ))}
 
-        <NativeBaseButton
-          bg="gray.500"
-          w={88}
-          h={88}
-          ml={2}
-          mb="6"
-          _pressed={{
-            borderWidth: 1,
-            bg: "gray.500",
-            borderColor: "gray.400",
-          }}
-          onPress={() => console.log('foto adicionada')}
-        >
-          <Plus color={colors.gray[400]} />
-        </NativeBaseButton>
+        {images.length < 3 && (
+          <NativeBaseButton
+            bg="gray.500"
+            w={88}
+            h={88}
+            ml={2}
+             mb="6"
+            _pressed={{
+              borderWidth: 1,
+              bg: "gray.500",
+              borderColor: "gray.400",
+            }}
+            // onPress={handleAdNewPhoto}
+          >
+            <Plus color={colors.gray[400]} />
+          </NativeBaseButton>
+        )}
       </HStack>
 
       <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>

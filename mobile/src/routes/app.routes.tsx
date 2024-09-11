@@ -29,7 +29,7 @@ type AppRoutes = {
     description: string;
     price: string;
     images: any[];
-    paymentMethods: string[];
+    paymentMethod: string[];
     isNew: boolean;
     acceptTrade: boolean;
     id: string;
