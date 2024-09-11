@@ -96,10 +96,11 @@ export function EditAd() {
 
       <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
 
-      <Input mt="4" placeholder="Título do anúncio"/>
+      <Input mt="4" placeholder="Título do anúncio" value={title} />
 
       <TextArea 
         placeholder="Descrição do produto" 
+        value={description} 
         autoCompleteType="none" 
         fontSize="md" 
         h="32"
@@ -129,6 +130,7 @@ export function EditAd() {
         keyboardType="numeric"
         mt="4"
         InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
+        value={price} 
       />
       
 
