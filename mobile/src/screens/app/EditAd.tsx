@@ -73,7 +73,6 @@ export function EditAd() {
     defaultValues: {
       title,
       description,
-      price,
     },
     resolver: yupResolver(editAdSchema),
   });
@@ -138,7 +137,6 @@ export function EditAd() {
       <Controller
         control={control}
         name="title"
-        rules={{ required: "Informe o título do anúncio" }}
         render={({ field: { onChange, value } }) => (
           <Input
             placeholder="Título do anúncio"
@@ -149,18 +147,32 @@ export function EditAd() {
         )}
       />
 
-      <TextArea 
-        placeholder="Descrição do produto" 
-        value={description} 
-        autoCompleteType="none" 
-        fontSize="md" 
-        h="32"
-        color={colors.gray[200]}
-        variant="unstyled"
-        borderWidth={1}
-        borderColor={colors.gray[700]}
-        _focus={{ borderColor: 'gray.100'}}
-        backgroundColor={colors.gray[700]}
+      <Controller 
+        control={control}
+        name='description'
+        render={({ field: { onChange, value }}) => (
+        <>
+          <TextArea 
+            placeholder="Descrição do produto" 
+            autoCompleteType="none" 
+            fontSize="md" 
+            h="32"
+            mt="4" 
+            color={colors.gray[200]}
+            variant="unstyled"
+            borderWidth={1}
+            borderColor={colors.gray[700]}
+            _focus={{ borderColor: 'gray.100'}}
+            backgroundColor={colors.gray[700]}
+            onChangeText={onChange}
+            value={value}
+          />
+
+          <Text color={colors.red[400]} fontSize="xs">
+            {errors.description?.message}
+          </Text>
+        </>
+        )}
       />
 
       <Radio.Group name="myRadioGroup" accessibilityLabel="Selecione o estado do seu produto">
