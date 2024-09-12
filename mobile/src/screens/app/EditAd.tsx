@@ -175,12 +175,30 @@ export function EditAd() {
         )}
       />
 
-      <Radio.Group name="myRadioGroup" accessibilityLabel="Selecione o estado do seu produto">
+      <Radio.Group
+        name="myRadioGroup"
+        accessibilityLabel="Selecione o estado do seu produto"
+        value={isNew ? "new" : "used"}
+        onChange={(nextValue) => {
+          setIsNew(nextValue === "new" ? true : false);
+        }}
+      >
         <HStack mt="4">
-          <Radio value="new" size="sm" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}>
+          <Radio
+            value="new"
+            size="sm"
+            _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
+            icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
+          >
             Produto novo
           </Radio>
-          <Radio value="used" ml="5" size="sm" _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}>
+          <Radio
+            value="used"
+            ml="5"
+            size="sm"
+            _checked={{ borderColor: colors.blue[700], color: colors.blue[700] }} 
+            icon={<Box w="5" h="5" bg="blue.700" rounded="full" />}
+          >
             Produto usado
           </Radio>
         </HStack>
