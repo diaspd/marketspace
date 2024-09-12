@@ -1,17 +1,25 @@
+import { useState } from "react";
 import { TouchableOpacity } from "react-native";
+
 import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
 
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation, useRoute } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as y from 'yup'
+
 import { Plus } from "phosphor-react-native";
+import { AntDesign } from '@expo/vector-icons';
+
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
 import { Input } from "@components/Input";
-import { useState } from "react";
 import { Button } from "@components/Button";
 
 import { usePriceFormatter } from '@hooks/usePriceFormatter'
 import { api } from "@services/api";
-import { Controller, useForm } from "react-hook-form";
+
 
 interface RouteParams {
   title: string;
@@ -24,6 +32,18 @@ interface RouteParams {
   id: string;
 };
 
+interface FormDataProps {
+  title: string;
+  description: string;
+  price: string;
+};
+
+const editAdSchema = y.object({
+  title: y.string().required('Informe o título do anúncio.'),
+  description: y.string().required('Informe a descrição do anúncio.'),
+  price: y.string().required('Informe o valor do produto.'),
+});
+
 export function EditAd() {
   const route = useRoute();
 
@@ -34,17 +54,29 @@ export function EditAd() {
     images: previsImages,
     paymentMethods: previsPaymentMethods,
     isNew: previsIsNew,
-    acceptTrade: previssAcceptTrade,
+    acceptTrade: previsAcceptTrade,
     id,
   } = route.params as RouteParams;
 
-  const [isSwitchActive, setIsSwitchActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState<any[]>(previsImages);
+  const [isSwitchActive, setIsSwitchActive] = useState(false);
+  const [isNew, setIsNew] = useState<boolean>(previsIsNew);
+  const [paymentMethods, setPaymentMethods] =
+    useState<string[]>(previsPaymentMethods);
+  const [acceptTrade, setAcceptTrade] = useState<boolean>(previsAcceptTrade);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
 
-  const { control, handleSubmit, formState: { errors } } = useForm({});
+  const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
+    defaultValues: {
+      title,
+      description,
+      price,
+    },
+    resolver: yupResolver(editAdSchema),
+  });
 
   const { formatPrice } = usePriceFormatter();
 

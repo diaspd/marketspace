@@ -33,7 +33,7 @@ type FormDataProps = {
 
 const signInSchema = y.object({
   title: y.string().required('Informe o título do anúncio.'),
-  description: y.string().required('Informe o descrição do anúncio.'),
+  description: y.string().required('Informe a descrição do anúncio.'),
   acceptTrade: y.boolean().required(''),
   price: y.string().required('Informe o valor do produto.'),
 })
