@@ -80,6 +80,10 @@ export function EditAd() {
 
   const { formatPrice } = usePriceFormatter();
 
+  function handleSaveChangesAndGoToPreview({ title, description, price }: FormDataProps) {
+    console.log(title, description, price)
+  };
+
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
@@ -131,7 +135,19 @@ export function EditAd() {
 
       <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
 
-      <Input mt="4" placeholder="Título do anúncio" value={title} />
+      <Controller
+        control={control}
+        name="title"
+        rules={{ required: "Informe o título do anúncio" }}
+        render={({ field: { onChange, value } }) => (
+          <Input
+            placeholder="Título do anúncio"
+            onChangeText={onChange}
+            value={value}
+            errorMessage={errors.title?.message}
+          />
+        )}
+      />
 
       <TextArea 
         placeholder="Descrição do produto" 
@@ -240,7 +256,12 @@ export function EditAd() {
 
       <HStack flex={1} mb="8" mt="12">
         <Button title="Cancelar" variant="secondary" w="175" onPress={() => navigation.goBack()}/>
-        <Button title="Avançar" variant="terciary" w="175" ml="3" onPress={() => navigation.navigate('myads')}/>
+        <Button 
+          title="Avançar" 
+          variant="terciary" 
+          w="175" ml="3" 
+          onPress={handleSubmit(handleSaveChangesAndGoToPreview)}
+        />
       </HStack>
     </ScrollView> 
   )
