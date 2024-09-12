@@ -11,6 +11,7 @@ import { Button } from "@components/Button";
 
 import { usePriceFormatter } from '@hooks/usePriceFormatter'
 import { api } from "@services/api";
+import { Controller, useForm } from "react-hook-form";
 
 interface RouteParams {
   title: string;
@@ -42,6 +43,8 @@ export function EditAd() {
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
+
+  const { control, handleSubmit, formState: { errors } } = useForm({});
 
   const { formatPrice } = usePriceFormatter();
 
@@ -125,14 +128,28 @@ export function EditAd() {
 
       <Heading fontSize="md" color="gray.200" mt="8">Venda</Heading>
 
-      <Input 
-        placeholder="Valor do produto" 
-        keyboardType="numeric"
-        mt="4"
-        InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
-        value={price} 
+      <Controller 
+        control={control}
+        name="price"
+        render={({ field: { onChange, value } }) => {
+          const handleChange = (value: string) => {
+            const formattedValue = formatPrice(value);
+            onChange(formattedValue); 
+          };
+
+          return (
+            <Input 
+              placeholder="Valor do produto" 
+              keyboardType="numeric"
+              value={value} 
+              onChangeText={handleChange} 
+              mt="4"
+              defaultValue={formatPrice(price)}
+              InputLeftElement={<Text fontSize="md" ml="4">R$</Text>}
+            />
+          );
+        }}
       />
-      
 
       <VStack alignItems="start" w="full" mb="3">
         <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
