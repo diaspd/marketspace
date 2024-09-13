@@ -232,15 +232,27 @@ export function EditAd() {
       <VStack alignItems="start" w="full" mb="3">
         <Text fontWeight="bold" color="gray.200">Aceita troca?</Text>
 
-        <Box bg={isSwitchActive ? "blue.700" : "gray.500"} w="42" h="22" mt="3" rounded="full" alignItems="center" justifyContent="center">
-          <Switch 
-            isChecked={isSwitchActive}
-            ml="-1"
-            mr="auto"
-            offTrackColor="transparent" onTrackColor="transparent" onThumbColor="gray.700" offThumbColor="gray.700"
-            onToggle={() => setIsSwitchActive(prevState => !prevState)}
-          />
-        </Box>
+              <Box
+                bg={acceptTrade ? "blue.700" : "gray.500"}
+                w="42"
+                h="22"
+                mt="3"
+                rounded="full"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Switch 
+                  isChecked={acceptTrade}
+                  value={acceptTrade}
+                  ml="-1"
+                  mr="auto"
+                  offTrackColor="transparent"
+                  onTrackColor="transparent"
+                  onThumbColor="gray.700"
+                  offThumbColor="gray.700"
+                  onToggle={(value) => setAcceptTrade(value)} 
+                />
+              </Box>
       </VStack>
 
       <VStack alignItems="start" w="full" mt="4">
