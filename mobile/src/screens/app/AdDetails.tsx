@@ -4,19 +4,22 @@ import { Linking, TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, ScrollView, Skeleton, Text, useTheme, useToast, VStack } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Feather from '@expo/vector-icons/Feather';
 import { ArrowLeft, PencilLine, WhatsappLogo } from 'phosphor-react-native';
 
-import { CarouselComponent }  from '@components/Carousel'
-import { Avatar } from "@components/Avatar";
-import { Button } from "@components/Button";
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
 import type { ProductDTO } from "@dtos/ProductDTO";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
+import { paymentMethodFormatter } from "@utils/paymentMethodFormatter";
+
 import { useAuth } from "@hooks/useAuth";
 import { usePriceFormatter } from "@hooks/usePriceFormatter";
+
+import { CarouselComponent } from '@components/Carousel';
+import { Avatar } from "@components/Avatar";
+import { Button } from "@components/Button";
 import { Loading } from "@components/Loading";
 
 type RouteParams = {
@@ -222,28 +225,12 @@ export function AdDetails() {
           </HStack>
 
           <VStack w="full" mt="4" mb="8">
-            <Heading fontSize="sm" color="gray.200">Meios de pagamento:</Heading>
+            <Heading fontSize="sm" color="gray.200" mb="2">Meios de pagamento:</Heading>
 
-            <HStack alignItems="center" mt="2">
-              <MaterialCommunityIcons name="barcode-scan" size={16} color={colors.gray[200]}/>
-              <Text fontSize="sm" ml="2" color="gray.200">
-                Boleto
-              </Text>
-            </HStack>
-
-            <HStack alignItems="center" mt="1">
-              <MaterialCommunityIcons name="qrcode" size={16} color={colors.gray[200]}/>
-              <Text fontSize="sm" ml="2" color="gray.200">
-                Pix
-              </Text>
-            </HStack>
-
-            <HStack alignItems="center" mt="1">
-              <MaterialCommunityIcons name="bank" size={16} color={colors.gray[200]} />
-              <Text fontSize="sm" ml="2" color="gray.200">
-                Depósito Bancário
-              </Text>
-            </HStack>
+            {paymentMethodFormatter(Array.isArray(product.payment_methods) 
+              ? product.payment_methods.map((item) => item.key)
+              : []
+            )} 
           </VStack>
 
           {isProductMine ? (

@@ -14,7 +14,7 @@ export function paymentMethodFormatter(paymentMethod: string[]) {
   return (
     <>
       {paymentMethod.includes("boleto") && (
-        <HStack alignItems="center">
+        <HStack alignItems="center" my="0.5">
           <Barcode size={20} color={theme.colors.gray[100]} />
           <Text ml={2} color="gray.300">
             Boleto
@@ -22,7 +22,7 @@ export function paymentMethodFormatter(paymentMethod: string[]) {
         </HStack>
       )}
       {paymentMethod.includes("pix") && (
-        <HStack alignItems="center">
+        <HStack alignItems="center" my="0.5">
           <QrCode size={20} color={theme.colors.gray[100]} />
           <Text ml={2} color="gray.300">
             Pix
@@ -30,7 +30,7 @@ export function paymentMethodFormatter(paymentMethod: string[]) {
         </HStack>
       )}
       {paymentMethod.includes("deposit") && (
-        <HStack alignItems="center">
+        <HStack alignItems="center" my="0.5">
           <Bank size={20} color={theme.colors.gray[100]} />
           <Text ml={2} color="gray.300">
             Depósito Bancário
@@ -38,7 +38,7 @@ export function paymentMethodFormatter(paymentMethod: string[]) {
         </HStack>
       )}
       {paymentMethod.includes("cash") && (
-        <HStack alignItems="center">
+        <HStack alignItems="center" my="0.5">
           <Money size={20} color={theme.colors.gray[100]} />
           <Text ml={2} color="gray.300">
             Dinheiro
@@ -46,7 +46,7 @@ export function paymentMethodFormatter(paymentMethod: string[]) {
         </HStack>
       )}
       {paymentMethod.includes("card") && (
-        <HStack alignItems="center">
+        <HStack alignItems="center" my="0.5">
           <CreditCard size={20} color={theme.colors.gray[100]} />
           <Text ml={2} color="gray.300">
             Cartão de Crédito
