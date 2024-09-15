@@ -26,7 +26,7 @@ interface RouteParams {
   description: string;
   price: string;
   images: any[];
-  paymentMethods: string[];
+  paymentMethod: string[];
   isNew: boolean;
   acceptTrade: boolean;
   id: string;
@@ -52,7 +52,7 @@ export function EditAd() {
     description,
     price,
     images: previsImages,
-    paymentMethods: previsPaymentMethods,
+    paymentMethod: previsPaymentMethods,
     isNew: previsIsNew,
     acceptTrade: previsAcceptTrade,
     id,
@@ -62,7 +62,7 @@ export function EditAd() {
   const [images, setImages] = useState<any[]>(previsImages);
   const [isSwitchActive, setIsSwitchActive] = useState(false);
   const [isNew, setIsNew] = useState<boolean>(previsIsNew);
-  const [paymentMethods, setPaymentMethods] =
+  const [paymentMethod, setPaymentMethod] =
     useState<string[]>(previsPaymentMethods);
   const [acceptTrade, setAcceptTrade] = useState<boolean>(previsAcceptTrade);
 
@@ -81,6 +81,14 @@ export function EditAd() {
 
   function handleSaveChangesAndGoToPreview({ title, description, price }: FormDataProps) {
     console.log(title, description, price)
+  };
+
+  function toggleCheckbox (value: string) {
+    if (paymentMethod.includes(value)) {
+      setPaymentMethod(prev => prev.filter(item => item !== value));
+    } else {
+      setPaymentMethod(prev => [...prev, value]);
+    }
   };
 
   return (
@@ -259,39 +267,54 @@ export function EditAd() {
         <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
 
         <VStack space="2">
-          <Checkbox 
-            value="Boleto" 
+        <Checkbox 
+            value="boleto" 
+            isChecked={paymentMethod.includes('boleto')}
+            onChange={() => toggleCheckbox('boleto')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Boleto
+          >
+            Boleto
           </Checkbox>
           
           <Checkbox 
-            value="Pix" 
+            value="pix" 
+            isChecked={paymentMethod.includes('pix')}
+            onChange={() => toggleCheckbox('pix')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Pix
+          >
+            Pix
           </Checkbox>
 
           <Checkbox 
-            value="Dinheiro" 
+            value="cash" 
+            isChecked={paymentMethod.includes('cash')}
+            onChange={() => toggleCheckbox('cash')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Dinheiro
+          >
+            Dinheiro
           </Checkbox>
 
           <Checkbox 
-            value="Cartão de Crédito" 
+            value="card" 
+            isChecked={paymentMethod.includes('card')}
+            onChange={() => toggleCheckbox('card')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}}
-          >Cartão de Crédito
+          >
+            Cartão de Crédito
           </Checkbox>
           
           <Checkbox 
-            value="Depósito Bancário" 
+            value="deposit" 
+            isChecked={paymentMethod.includes('deposit')}
+            onChange={() => toggleCheckbox('deposit')}
             _checked={{ backgroundColor: 'blue.700', borderColor: 'blue.700' }}
             _text={{ color: 'gray.200'}} 
-          >Depósito Bancário
+          >
+            Depósito Bancário
           </Checkbox>
         </VStack>    
       </VStack>
