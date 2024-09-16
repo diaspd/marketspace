@@ -29,7 +29,6 @@ type RouteParams = {
 
 export function AdPreview() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isAdDisabled, setIsAdDisabled] = useState(false);
   
   const { colors } = useTheme();
   const toast = useToast();
@@ -113,13 +112,13 @@ export function AdPreview() {
         <Text mt="1" fontSize="sm" color="gray.700">É assim que seu produto vai aparecer!</Text>
       </VStack>
 
-      <CarouselComponent isAdDisabled={isAdDisabled} images={images} />
+      <CarouselComponent images={images} />
 
       <ScrollView>
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
           <HStack alignItems="center">
             <Avatar 
-              source={{ uri: 'https://github.com/diaspd.png'}} 
+              source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }} 
               size={8} 
               borderWidthsize={2} 
               alt=""

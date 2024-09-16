@@ -7,7 +7,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { api } from "@services/api";
 
 type Carousel = {
-  isAdDisabled: boolean;
+  isAdDisabled?: boolean;
   images: any[];
 };
 
