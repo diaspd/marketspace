@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox, useToast } from "native-base";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -60,7 +60,6 @@ export function EditAd() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [images, setImages] = useState<any[]>(previsImages);
-  const [isSwitchActive, setIsSwitchActive] = useState(false);
   const [isNew, setIsNew] = useState<boolean>(previsIsNew);
   const [paymentMethod, setPaymentMethod] =
     useState<string[]>(previsPaymentMethods);
@@ -68,6 +67,8 @@ export function EditAd() {
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const { colors } = useTheme();
+
+  const toast = useToast();
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     defaultValues: {
@@ -80,7 +81,31 @@ export function EditAd() {
   const { formatPrice } = usePriceFormatter();
 
   function handleSaveChangesAndGoToPreview({ title, description, price }: FormDataProps) {
-    console.log(title, description, price)
+    if (images.length === 0) {
+      return toast.show({
+        title: "Selecione ao menos uma imagem!",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+
+    if (paymentMethod.length === 0) {
+      return toast.show({
+        title: "Selecione ao menos um meio de pagamento!",
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
+
+    navigation.navigate("adpreview", {
+      title,
+      description,
+      price,
+      images,
+      paymentMethod,
+      isNew,
+      acceptTrade,
+    });
   };
 
   function toggleCheckbox (value: string) {
@@ -140,7 +165,7 @@ export function EditAd() {
         )}
       </HStack>
 
-      <Heading fontSize="md" color="gray.200">Sobre o produto</Heading>
+      <Heading fontSize="md" color="gray.200" mb="2">Sobre o produto</Heading>
 
       <Controller
         control={control}
