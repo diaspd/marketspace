@@ -9,6 +9,9 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as y from 'yup'
 
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+
 import { Plus } from "phosphor-react-native";
 import { AntDesign } from '@expo/vector-icons';
 
@@ -19,6 +22,7 @@ import { Button } from "@components/Button";
 
 import { usePriceFormatter } from '@hooks/usePriceFormatter'
 import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
 
 
 interface RouteParams {
@@ -108,6 +112,72 @@ export function EditAd() {
     });
   };
 
+  async function handleAddNewPhoto() {
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
+
+      if (photoSelected.canceled) {
+        return;
+      }
+
+      if (images.length > 2) {
+        throw new AppError("Só pode selecionar 3 fotos!");
+      }
+
+      if (photoSelected.assets[0].uri) {
+        const photoInfo = await FileSystem.getInfoAsync(
+          photoSelected.assets[0].uri
+        );
+
+        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+          return toast.show({
+            title: "Essa imagem é muito grande. Escolha uma de até 5MB.",
+            placement: "top",
+            bgColor: "red.500",
+          });
+        }
+
+        const fileExtension = photoSelected.assets[0].uri.split(".").pop();
+
+        const photoFile = {
+          name: `${fileExtension}`.toLowerCase(),
+          uri: photoSelected.assets[0].uri,
+          type: `${photoSelected.assets[0].type}/${fileExtension}`,
+        } as any;
+
+        setImages((images) => {
+          return [...images, photoFile];
+        });
+
+        toast.show({
+          title: "Foto selecionada!",
+          placement: "top",
+          bgColor: "green.500",
+        });
+      }
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível selecionar a imagem. Tente novamente!";
+
+      if (isAppError) {
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   function toggleCheckbox (value: string) {
     if (paymentMethod.includes(value)) {
       setPaymentMethod(prev => prev.filter(item => item !== value));
@@ -131,20 +201,20 @@ export function EditAd() {
 
       <HStack my={5}>
         {images.length > 0 &&
-          images.map((imageData) => (
+          images.map((imageData, index) => (
             <Image
               w={88}
               h={88}
               mr={2}
               source={{
-                uri: `${api.defaults.baseURL}/images/${imageData.path}`,
+                uri: imageData.uri ? imageData.uri : `${api.defaults.baseURL}/images/${imageData.path}`,
               }}
               alt="Imagem novo anúncio"
               resizeMode="cover"
               borderRadius={8}
-              key={imageData.path}
+              key={index}
             />
-          ))}
+        ))}
 
         {images.length < 3 && (
           <NativeBaseButton
@@ -158,7 +228,7 @@ export function EditAd() {
               bg: "gray.500",
               borderColor: "gray.400",
             }}
-            // onPress={handleAdNewPhoto}
+            onPress={handleAddNewPhoto}
           >
             <Plus color={colors.gray[400]} />
           </NativeBaseButton>

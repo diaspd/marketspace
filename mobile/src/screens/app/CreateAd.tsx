@@ -14,7 +14,6 @@ import * as FileSystem from "expo-file-system";
 import { AntDesign } from '@expo/vector-icons';
 import { Plus } from "phosphor-react-native";
 
-
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 import { AppError } from "@utils/AppError";
