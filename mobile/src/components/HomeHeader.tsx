@@ -29,7 +29,7 @@ export function HomeHeader() {
         source={{
           uri: `${api.defaults.baseURL}/images/${user.avatar}`,
         }}
-        alt="Foto de perfil" 
+        alt={`Foto de perfil de ${user.name}`} 
       />
 
       <VStack ml="2" mt="0.5">

@@ -121,7 +121,7 @@ export function AdPreview() {
               source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }} 
               size={8} 
               borderWidthsize={2} 
-              alt=""
+              alt={user.name}
               mr="2"
             />
 

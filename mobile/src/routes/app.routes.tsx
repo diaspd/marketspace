@@ -35,6 +35,7 @@ type AppRoutes = {
     id: string;
   };
   adpreview: {
+    id?: string;
     title: string;
     description: string;
     price: string;
