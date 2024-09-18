@@ -93,6 +93,14 @@ export function AdDetails() {
     id: product.id,
   });
 
+  async function handleGoBack() {
+    if (isProductMine) {
+      navigation.navigate('myads') 
+    } else {
+      navigation.navigate('home')
+    }
+  }
+
   async function handleSwitchAdAvailabilityToAvailable() {
     try {
       await api.patch(`/products/${id}`, { is_active: true });
@@ -156,7 +164,7 @@ export function AdDetails() {
       {isLoading ? <Loading /> : (
         <>
         <HStack mx="6" mt="16" mb="4" justifyContent="space-between">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={handleGoBack}>
           <ArrowLeft size={24} color={colors.gray[100]} />
         </TouchableOpacity>
 

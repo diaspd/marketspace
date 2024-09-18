@@ -131,7 +131,7 @@ export function MyAds() {
           </Box>
           ) : ( 
           <FlatList
-            data={myProduct}
+            data={productsFiltered}
             keyExtractor={(item) => item.id}
             columnWrapperStyle={{ flex: 1, justifyContent: 'space-between' }}
             renderItem={({ item }) => (
