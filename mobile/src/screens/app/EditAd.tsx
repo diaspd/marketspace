@@ -112,6 +112,10 @@ export function EditAd() {
     });
   };
 
+  function handleGoToAdDetails() {
+    navigation.navigate('addetails', { id })
+  }
+
   async function handleAddNewPhoto() {
     try {
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
@@ -189,7 +193,7 @@ export function EditAd() {
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={handleGoToAdDetails}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
 
