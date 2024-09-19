@@ -194,7 +194,7 @@ export function SignUp() {
       </Center> 
 
       <Center mt="12" mx="12" mb="12">
-        <Center mb="4">
+        <Center mb="5">
           <TouchableOpacity onPress={handleUserPhotoSelected}>
             <Avatar 
               source={
@@ -205,10 +205,11 @@ export function SignUp() {
               borderWidthsize={3} 
               alt="Foto do usuário"
               size={88}
+              position="relative"
             />    
+            
+            <Image source={avatarButtonImg} position="absolute" bottom="-5" right="0" alt="" />
           </TouchableOpacity>
-  
-          <Image source={avatarButtonImg} mt="-8" mr="-12" alt="" />
         </Center>
 
         <Controller 

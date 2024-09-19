@@ -258,8 +258,6 @@ export function AdPreview() {
               onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
             />
           )}
-
-
           </HStack>
       </VStack>
       </ScrollView>
