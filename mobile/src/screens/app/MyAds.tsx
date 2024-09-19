@@ -1,15 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { TouchableOpacity } from "react-native";
+
 import { Box, Heading, HStack, FlatList, Text, useTheme, Menu, VStack, useToast, Skeleton, Center } from "native-base";
+
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+
+import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
-import { Card } from "@components/Card";
 import type { ProductDTO } from "@dtos/ProductDTO";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+
+import { Card } from "@components/Card";
 import { EmptyList } from "@components/EmptyList";
 
 export function MyAds() {

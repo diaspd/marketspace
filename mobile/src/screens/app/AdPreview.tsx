@@ -3,19 +3,22 @@ import { useState } from "react";
 import { Box, Heading, HStack, ScrollView, Text, useTheme, VStack, useToast } from "native-base";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
+import { useForm } from "react-hook-form";
+
 import { ArrowLeft, Tag } from 'phosphor-react-native';
 
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 import { useAuth } from "@hooks/useAuth";
 
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+
+import { paymentMethodFormatter } from "@utils/paymentMethodFormatter";
+
 import { CarouselComponent }  from '@components/Carousel'
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
-import { paymentMethodFormatter } from "@utils/paymentMethodFormatter";
-import { api } from "@services/api";
-import { useForm } from "react-hook-form";
-import { AppError } from "@utils/AppError";
 
 type RouteParams = {
   title: string;
@@ -106,7 +109,58 @@ export function AdPreview() {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
-        : "Não publicar o anúncio. Tente novamente mais tarde!";
+        : "Não foi possível publicar o anúncio. Tente novamente mais tarde!";
+
+      if (isAppError) {
+        toast.show({
+          title,
+          placement: "top",
+          bgColor: "red.500",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  async function handleSaveChanges() {
+    setIsLoading(true);
+
+    try {
+      const product = await api.put(`/products/${id}`, {
+        name: title,
+        description,
+        price: parseInt(price.replace(/[^0-9]/g, "")),
+        payment_methods: paymentMethod,
+        is_new: isNew,
+        accept_trade: acceptTrade,
+      });
+
+      const imageData = new FormData();
+
+      images.forEach((item) => {
+        const imageFile = {
+          ...item,
+          name: user.name + "." + item.name,
+        } as any;
+
+        imageData.append("images", imageFile);
+      });
+
+      imageData.append("product_id", product.data.id);
+
+      navigation.navigate("myads");
+      
+      const imagesData = await api.post("/products/images", imageData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível editar o anúncio. Tente novamente mais tarde!";
 
       if (isAppError) {
         toast.show({
@@ -189,12 +243,23 @@ export function AdPreview() {
               leftIcon={<ArrowLeft size={16} color={colors.gray[100]} style={{ marginTop: 2 }} />} 
             />
 
+          {id ? (
+            <Button 
+              title="Salvar alterações" 
+              variant="primary" 
+              w="175" ml="3" 
+              onPress={handleSubmit(handleSaveChanges)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
+            />
+          ): (
             <Button 
               title="Publicar" 
               variant="primary" 
               w="175" ml="3" 
               onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
             />
+          )}
+
+
           </HStack>
       </VStack>
       </ScrollView>

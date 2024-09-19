@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Linking, TouchableOpacity } from "react-native";
 
 import { Box, Heading, HStack, ScrollView, Skeleton, Text, useTheme, useToast, VStack } from "native-base";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 
 import Feather from '@expo/vector-icons/Feather';
 import { ArrowLeft, PencilLine, WhatsappLogo } from 'phosphor-react-native';
@@ -45,40 +45,42 @@ export function AdDetails() {
   
   const formattedPrice = product.price !== undefined ? formatPrice(product.price) : "N/A";
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setIsLoading(true)
-        const productData = await api.get(`/products/${id}`);
-        const userProductData = await api.get('/users/products');
-        
-        setProduct(productData.data);
+  useFocusEffect(
+    useCallback(() => {
+      const loadData = async () => {
+        try {
+          setIsLoading(true)
+          const productData = await api.get(`/products/${id}`);
+          const userProductData = await api.get('/users/products');
+          
+          setProduct(productData.data);
 
-        if (userProductData.data[0].user_id === productData.data.user_id) {
-          setIsProductMine(true)
-        } else {
-          setIsProductMine(false)
+          if (userProductData.data[0].user_id === productData.data.user_id) {
+            setIsProductMine(true)
+          } else {
+            setIsProductMine(false)
+          }
+
+          setIsAdDisabled(!productData.data.is_active);
+        } catch (error) {
+          const isAppError = error instanceof AppError;
+          const title = isAppError
+            ? error.message
+            : "Não foi possível receber os dados do anúncio. Tente novamente!";
+
+          toast.show({
+            title,
+            placement: "top",
+            bgColor: "red.500",
+          });
+        } finally {
+          setIsLoading(false)
         }
+      };
 
-        setIsAdDisabled(!productData.data.is_active);
-      } catch (error) {
-        const isAppError = error instanceof AppError;
-        const title = isAppError
-          ? error.message
-          : "Não foi possível receber os dados do anúncio. Tente novamente!";
-
-        toast.show({
-          title,
-          placement: "top",
-          bgColor: "red.500",
-        });
-      } finally {
-        setIsLoading(false)
-      }
-    };
-
-    loadData();
-  }, [id]);
+      loadData();
+  }, [id])
+  )
 
   const handleGoToEditAd = () => navigation.navigate('editad', {
     title: product.name,
