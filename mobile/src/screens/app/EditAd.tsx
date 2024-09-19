@@ -109,6 +109,7 @@ export function EditAd() {
       paymentMethod,
       isNew,
       acceptTrade,
+      id
     });
   };
 

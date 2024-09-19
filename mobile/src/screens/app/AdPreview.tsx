@@ -25,6 +25,7 @@ type RouteParams = {
   paymentMethod: string[];
   isNew: boolean;
   acceptTrade: boolean;
+  id: string;
 };
 
 export function AdPreview() {
@@ -48,10 +49,24 @@ export function AdPreview() {
     paymentMethod,
     isNew,
     acceptTrade,
+    id
   } = route.params as RouteParams;
 
-  function handleGoToCreateAd() {
-    navigation.navigate('createad')
+  function handleGoBack() {
+    if (id) {
+      navigation.navigate('editad', {
+        title,
+        description,
+        price,
+        images,
+        paymentMethod,
+        isNew,
+        acceptTrade,
+        id
+      }) 
+    } else {
+      navigation.navigate('createad')
+    }
   }
 
   async function handlePublishAd() {
@@ -166,8 +181,20 @@ export function AdPreview() {
           </VStack>
 
           <HStack mt="10" mb="4">
-            <Button title="Voltar e editar" variant="secondary" w="175" onPress={handleGoToCreateAd} leftIcon={<ArrowLeft size={16} color={colors.gray[100]} />} />
-            <Button title="Publicar" variant="primary" w="175" ml="3" onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}/>
+            <Button 
+              title="Voltar e editar" 
+              variant="secondary" 
+              w="175" 
+              onPress={handleGoBack} 
+              leftIcon={<ArrowLeft size={16} color={colors.gray[100]} style={{ marginTop: 2 }} />} 
+            />
+
+            <Button 
+              title="Publicar" 
+              variant="primary" 
+              w="175" ml="3" 
+              onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
+            />
           </HStack>
       </VStack>
       </ScrollView>
