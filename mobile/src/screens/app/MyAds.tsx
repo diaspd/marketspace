@@ -76,7 +76,12 @@ export function MyAds() {
         </HStack>
 
         <Box mb="5" display="flex" alignItems="baseline" justifyContent="space-between" flexDirection="row">
-          <Text>{isLoading ? <Skeleton w="20" h="3" rounded="xs" startColor="gray.500" endColor="coolGray.300"/> : myProduct.length + ' anúncios'} </Text>
+          <Text>
+            {isLoading ? 
+              <Skeleton w="20" h="3" rounded="xs" startColor="gray.500" endColor="coolGray.300"/> 
+              : myProduct.length == 1 ? `${myProduct.length} anúncio` : `${myProduct.length} anúncios`
+            } 
+          </Text>
           
           <Menu
             w="32"
