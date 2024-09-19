@@ -24,7 +24,6 @@ import { usePriceFormatter } from '@hooks/usePriceFormatter'
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
 
-
 interface RouteParams {
   title: string;
   description: string;
@@ -78,6 +77,7 @@ export function EditAd() {
     defaultValues: {
       title,
       description,
+      price
     },
     resolver: yupResolver(editAdSchema),
   });
