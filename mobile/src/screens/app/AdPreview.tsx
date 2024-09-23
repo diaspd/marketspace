@@ -106,18 +106,17 @@ export function AdPreview() {
 
       navigation.navigate("myads");
     } catch (error) {
+      console.log("Error details:", error); // Log para mostrar o erro
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
         : "Não foi possível publicar o anúncio. Tente novamente mais tarde!";
-
-      if (isAppError) {
-        toast.show({
-          title,
-          placement: "top",
-          bgColor: "red.500",
-        });
-      }
+    
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -125,7 +124,7 @@ export function AdPreview() {
 
   async function handleSaveChanges() {
     setIsLoading(true);
-
+  
     try {
       const product = await api.put(`/products/${id}`, {
         name: title,
@@ -135,7 +134,7 @@ export function AdPreview() {
         is_new: isNew,
         accept_trade: acceptTrade,
       });
-
+  
       const imageData = new FormData();
 
       images.forEach((item) => {
@@ -146,33 +145,36 @@ export function AdPreview() {
 
         imageData.append("images", imageFile);
       });
+      
+      imageData.append("product_id", id);
 
-      imageData.append("product_id", product.data.id);
+      try {
+        const response = await api.post("/products/images", imageData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      } catch(err) {
+        console.log(err)
+      }
 
       navigation.navigate("myads");
-      
-      const imagesData = await api.post("/products/images", imageData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
         : "Não foi possível editar o anúncio. Tente novamente mais tarde!";
-
-      if (isAppError) {
-        toast.show({
-          title,
-          placement: "top",
-          bgColor: "red.500",
-        });
-      }
+  
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <VStack flex={1}>
