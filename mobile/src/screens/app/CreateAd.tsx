@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox, useToast } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox, useToast, Icon } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -13,7 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 
 import { AntDesign } from '@expo/vector-icons';
-import { Plus } from "phosphor-react-native";
+import { Plus, XCircle } from "phosphor-react-native";
 
 import type { AppNavigatorRoutesProps } from "@routes/app.routes";
 
@@ -166,6 +166,12 @@ export function CreateAd() {
     }
   }
 
+  const handleRemoveImage = (imageIndex: number) => {
+    const updatedImages = [...images];
+    updatedImages.splice(imageIndex, 1);
+    setImages(updatedImages);
+  };
+
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
@@ -182,21 +188,24 @@ export function CreateAd() {
       <HStack my={5}>
         {images.length > 0 &&
           images
-          .slice() 
-          .reverse()
-          .map((imageData) => (
-            <Image
-              w={88}
-              h={88}
-              mr={2}
-              source={{
-                uri: imageData.uri,
-              }}
-              alt="Imagem do anúncio"
-              resizeMode="cover"
-              borderRadius={8}
-              key={imageData.uri}
-            />
+          .map((imageData, index) => (
+            <>
+              <Image
+                w={88}
+                h={88}
+                mr={2}
+                source={{
+                  uri: imageData.uri,
+                }}
+                alt="Imagem do anúncio"
+                resizeMode="cover"
+                borderRadius={8}
+                key={imageData.uri}
+              />
+              <TouchableOpacity onPress={() => handleRemoveImage(index)} key={index}>
+                <XCircle size={22} color={colors.red[600]} weight="bold" style={{ position: "absolute", top: 5, right: 10 }} />
+              </TouchableOpacity>
+            </>
         ))}
 
         {images.length < 3 && (
