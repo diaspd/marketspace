@@ -166,8 +166,9 @@ export function CreateAd() {
     }
   }
 
-  const handleRemoveImage = (imageIndex: number) => {
+  function handleRemoveImage(imageIndex: number) {
     const updatedImages = [...images];
+
     updatedImages.splice(imageIndex, 1);
     setImages(updatedImages);
   };
@@ -200,7 +201,7 @@ export function CreateAd() {
                 alt="Imagem do anúncio"
                 resizeMode="cover"
                 borderRadius={8}
-                key={imageData.uri}
+                key={imageData.id}
               />
               <TouchableOpacity onPress={() => handleRemoveImage(index)} key={index}>
                 <XCircle size={22} color={colors.red[600]} weight="bold" style={{ position: "absolute", top: 5, right: 10 }} />

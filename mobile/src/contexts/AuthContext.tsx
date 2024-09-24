@@ -36,7 +36,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps)  {
      
       await storageSaveUser(userData);
       await storageSaveAuthToken({ token, refresh_token });
-
+      
     } catch (error) {
       throw error
     } finally {
