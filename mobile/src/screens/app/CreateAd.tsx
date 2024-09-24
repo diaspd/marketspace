@@ -15,7 +15,7 @@ import * as FileSystem from "expo-file-system";
 import { AntDesign } from '@expo/vector-icons';
 import { Plus, XCircle } from "phosphor-react-native";
 
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
 
 import { AppError } from "@utils/AppError";
 import { usePriceFormatter } from "@hooks/usePriceFormatter";
@@ -46,7 +46,7 @@ export function CreateAd() {
 
   const { formatPrice } = usePriceFormatter();
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
   const { colors } = useTheme();
   
   const toast = useToast();
@@ -176,7 +176,7 @@ export function CreateAd() {
   return (
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate('hometab')}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
 

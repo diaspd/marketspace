@@ -3,7 +3,7 @@ import { Text, Box, Heading, VStack, HStack } from "native-base";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
 
 import { useAuth } from "@hooks/useAuth";
 
@@ -12,7 +12,7 @@ import { Button } from "@components/Button";
 import { api } from "@services/api";
 
 export function HomeHeader() {
-  const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>()
 
   const { user } = useAuth()
 

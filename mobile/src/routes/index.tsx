@@ -2,7 +2,7 @@ import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { useTheme } from "native-base";
 
 import { AuthRoutes } from "./auth.routes";
-import { AppRoutes } from "./app.routes";
+import { StackRoutes } from "./stack.routes";
 
 import { useAuth } from '@hooks/useAuth';
 import { Loading } from "@components/Loading";
@@ -20,7 +20,7 @@ export function Routes() {
 
   return (
     <NavigationContainer theme={theme}>
-      {user.id ? <AppRoutes /> : <AuthRoutes />}
+      {user.id ? <StackRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 }
