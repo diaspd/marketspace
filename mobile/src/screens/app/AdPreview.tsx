@@ -208,7 +208,7 @@ export function AdPreview() {
             </Text> 
           </Box>
 
-          <HStack w="full" mt="3">
+          <HStack w="full" mt="3" mb="5">
             <Heading numberOfLines={1} maxW={240} fontSize="lg" color="gray.100">{title}</Heading>
 
             <Box ml="auto">
@@ -238,34 +238,35 @@ export function AdPreview() {
 
             {paymentMethodFormatter(paymentMethod)} 
           </VStack>
+        </VStack>
+        </ScrollView>
 
-          <HStack mt="10" mb="4">
-            <Button 
-              title="Voltar e editar" 
-              variant="secondary" 
-              w="175" 
-              onPress={handleGoBack} 
-              leftIcon={<ArrowLeft size={16} color={colors.gray[100]} style={{ marginTop: 2 }} />} 
-            />
+        <HStack bg={colors.gray[700]} py="5" px="6">
+          <Button 
+            title="Voltar e editar" 
+            variant="secondary" 
+            w="175" 
+            onPress={handleGoBack} 
+            leftIcon={<ArrowLeft size={16} color={colors.gray[100]} style={{ marginTop: 2 }} />} 
+          />
 
-          {id ? (
-            <Button 
-              title="Salvar alterações" 
-              variant="primary" 
-              w="175" ml="3" 
-              onPress={handleSubmit(handleSaveChanges)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
-            />
-          ): (
-            <Button 
-              title="Publicar" 
-              variant="primary" 
-              w="175" ml="3" 
-              onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
-            />
-          )}
-          </HStack>
-      </VStack>
-      </ScrollView>
+        {id ? (
+          <Button 
+            title="Salvar alterações" 
+            variant="primary" 
+            w="175" ml="3" 
+            onPress={handleSubmit(handleSaveChanges)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
+          />
+        ): (
+          <Button 
+            title="Publicar" 
+            variant="primary" 
+            w="175" ml="3" 
+            onPress={handleSubmit(handlePublishAd)} leftIcon={<Tag size={16} color={colors.gray[600]} />}
+          />
+        )}
+      </HStack>
     </VStack>
   )
 }
+

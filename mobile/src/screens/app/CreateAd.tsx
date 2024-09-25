@@ -174,6 +174,7 @@ export function CreateAd() {
   };
 
   return (
+    <>
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
         <TouchableOpacity onPress={() => navigation.navigate('hometab')}>
@@ -359,7 +360,7 @@ export function CreateAd() {
       <VStack alignItems="start" w="full" mt="4">
         <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
 
-        <VStack space={4}>
+        <VStack space={4} mb="5">
           <Checkbox 
             value="boleto" 
             isChecked={paymentMethod.includes('boleto')}
@@ -411,8 +412,9 @@ export function CreateAd() {
           </Checkbox>
         </VStack>
       </VStack>
+      </ScrollView> 
 
-      <HStack flex={1} mb="8" mt="12">
+      <HStack pt="5" bg={colors.gray[700]} px="6" py="5">
         <Button title="Cancelar" variant="secondary" w="175" onPress={() => navigation.goBack()}/>
 
         <Button 
@@ -422,6 +424,6 @@ export function CreateAd() {
           isLoading={isLoading} 
         />
       </HStack>
-    </ScrollView> 
+    </>
   )
 }

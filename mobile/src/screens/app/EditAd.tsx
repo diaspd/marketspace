@@ -192,6 +192,7 @@ export function EditAd() {
   };
 
   return (
+  <>
     <ScrollView flex={1} mx="6" mt="16" showsVerticalScrollIndicator={false}>
       <HStack alignItems="center" mb="10">
         <TouchableOpacity onPress={handleGoToAdDetails}>
@@ -363,7 +364,7 @@ export function EditAd() {
         </Box>
       </VStack>
 
-      <VStack alignItems="start" w="full" mt="4">
+      <VStack alignItems="start" w="full" mt="4" mb="5">
         <Text fontWeight="bold" color="gray.200" mb="3">Meios de pagamento aceitos</Text>
 
         <VStack space="2">
@@ -418,16 +419,17 @@ export function EditAd() {
           </Checkbox>
         </VStack>    
       </VStack>
-
-      <HStack flex={1} mb="8" mt="12">
-        <Button title="Cancelar" variant="secondary" w="175" onPress={() => navigation.goBack()}/>
-        <Button 
-          title="Avançar" 
-          variant="terciary" 
-          w="175" ml="3" 
-          onPress={handleSubmit(handleSaveChangesAndGoToPreview)}
-        />
-      </HStack>
     </ScrollView> 
+    
+    <HStack bg={colors.gray[700]} py="5" px="6">
+      <Button title="Cancelar" variant="secondary" w="175" onPress={() => navigation.goBack()}/>
+      <Button 
+        title="Avançar" 
+        variant="terciary" 
+        w="175" ml="3" 
+        onPress={handleSubmit(handleSaveChangesAndGoToPreview)}
+      />
+    </HStack>
+  </>
   )
 }
