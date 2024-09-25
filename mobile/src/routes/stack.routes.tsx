@@ -55,11 +55,13 @@ export function StackRoutes() {
       <Screen 
         name='editad'
         component={EditAd}
+        options={{ headerShown: false }}
       />
 
       <Screen 
         name='adpreview'
         component={AdPreview}
+        options={{ headerShown: false }}
       />
     </Navigator>
   );
