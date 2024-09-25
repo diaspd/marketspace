@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 
 import { ArrowLeft, Tag } from 'phosphor-react-native';
 
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
+import type { AppTabNavigatorRoutesProps } from "@routes/tab.routes";
 
 import { useAuth } from "@hooks/useAuth";
 
@@ -37,7 +38,9 @@ export function AdPreview() {
   const { colors } = useTheme();
   const toast = useToast();
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigationStack = useNavigation<AppStackNavigatorRoutesProps>();
+  const navigationTab = useNavigation<AppTabNavigatorRoutesProps>();
+  
   const route = useRoute();
 
   const { handleSubmit } = useForm<RouteParams>();
@@ -57,7 +60,7 @@ export function AdPreview() {
 
   function handleGoBack() {
     if (id) {
-      navigation.navigate('editad', {
+      navigationStack.navigate('editad', {
         title,
         description,
         price,
@@ -68,7 +71,7 @@ export function AdPreview() {
         id
       }) 
     } else {
-      navigation.navigate('createad')
+      navigationStack.navigate('createad')
     }
   }
 
@@ -104,7 +107,7 @@ export function AdPreview() {
         },
       });
 
-      navigation.navigate("myads");
+      navigationTab.navigate("myads");
     } catch (error) {
       console.log("Error details:", error); // Log para mostrar o erro
       const isAppError = error instanceof AppError;
@@ -159,7 +162,7 @@ export function AdPreview() {
         console.log(err)
       }
 
-      navigation.navigate("myads");
+      navigationTab.navigate("myads");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError

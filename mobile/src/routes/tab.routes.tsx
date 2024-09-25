@@ -20,7 +20,7 @@ type TabRoutes = {
 
 const { Navigator, Screen } = createBottomTabNavigator<TabRoutes>();
 
-export type AppNavigatorRoutesProps = BottomTabNavigationProp<TabRoutes>;
+export type AppTabNavigatorRoutesProps = BottomTabNavigationProp<TabRoutes>;
 
 export function TabRoute() {
   const { sizes, colors } = useTheme();
