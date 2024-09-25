@@ -8,7 +8,7 @@ import { Entypo } from '@expo/vector-icons';
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
 
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
@@ -26,7 +26,7 @@ export function MyAds() {
 
   const { colors } = useTheme();
   const toast = useToast();
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
 
   const filter = adType === "active" ? true : false;
 
