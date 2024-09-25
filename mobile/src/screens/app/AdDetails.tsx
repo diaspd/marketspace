@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Linking, TouchableOpacity } from "react-native";
 
 import { Box, Heading, HStack, ScrollView, Skeleton, Text, useTheme, useToast, VStack } from "native-base";
@@ -7,7 +7,8 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import Feather from '@expo/vector-icons/Feather';
 import { ArrowLeft, PencilLine, WhatsappLogo } from 'phosphor-react-native';
 
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppTabNavigatorRoutesProps } from "@routes/tab.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
 
 import type { ProductDTO } from "@dtos/ProductDTO";
 import { api } from "@services/api";
@@ -39,7 +40,8 @@ export function AdDetails() {
   const toast = useToast();
   
   const { id } = route.params as RouteParams;
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigationStack = useNavigation<AppStackNavigatorRoutesProps>();
+  const navigationTab = useNavigation<AppTabNavigatorRoutesProps>();
   
   const { formatPrice } = usePriceFormatter()
   
@@ -82,7 +84,7 @@ export function AdDetails() {
   }, [id])
   )
 
-  const handleGoToEditAd = () => navigation.navigate('editad', {
+  const handleGoToEditAd = () => navigationStack.navigate('editad', {
     title: product.name,
     description: product.description,
     price: product.price.toString(),
@@ -97,9 +99,9 @@ export function AdDetails() {
 
   async function handleGoBack() {
     if (isProductMine) {
-      navigation.navigate('myads') 
+      navigationTab.navigate('myads') 
     } else {
-      navigation.navigate('home')
+      navigationTab.navigate('home')
     }
   }
 
@@ -134,7 +136,7 @@ export function AdDetails() {
       setIsLoading(true);
       await api.delete(`products/${id}`);
 
-      navigation.navigate("myads");
+      navigationTab.navigate("myads");
     } catch (error) {
       const isAppError = error instanceof AppError;
       const title = isAppError
