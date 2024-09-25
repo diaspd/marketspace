@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Box, HStack, Image, Text, Heading, Pressable, IStackProps } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
 
 import { api } from "@services/api";
 
@@ -35,7 +35,7 @@ export function Card({
   const { formatPrice } = usePriceFormatter();
   const formattedPrice = formatPrice(price);
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
 
   function handleGoToAdDetails() {
     navigation.navigate("addetails", { id });

@@ -1,12 +1,14 @@
-import { useAuth } from '@hooks/useAuth';
-import { SignIn } from '@screens/auth/SignIn';
-import { useTheme } from 'native-base';
-import { MyAds } from '@screens/app/MyAds';
 import { Platform } from 'react-native';
 
-import { Home } from '@screens/app/Home';
+import { useTheme } from 'native-base';
 
 import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import { useAuth } from '@hooks/useAuth';
+
+import { SignIn } from '@screens/auth/SignIn';
+import { MyAds } from '@screens/app/MyAds';
+import { Home } from '@screens/app/Home';
 
 import HomeSvg from '@assets/icons/home.svg';
 import TagSvg from '@assets/icons/tag.svg';
@@ -24,8 +26,9 @@ export type AppTabNavigatorRoutesProps = BottomTabNavigationProp<TabRoutes>;
 
 export function TabRoute() {
   const { sizes, colors } = useTheme();
+  const { signOut } = useAuth();
+  
   const iconSize = sizes[6] 
-  const { signOut } = useAuth()
   
   return (
     <Navigator screenOptions={{ 

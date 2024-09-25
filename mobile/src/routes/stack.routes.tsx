@@ -3,6 +3,8 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import { CreateAd } from '@screens/app/CreateAd';
 import { EditAd } from '@screens/app/EditAd';
 import { AdPreview } from '@screens/app/AdPreview';
+import { AdDetails } from '@screens/app/AdDetails';
+
 import { TabRoute } from './tab.routes';
 
 type StackRoutes = {
@@ -51,6 +53,13 @@ export function StackRoutes() {
         component={CreateAd}
         options={{ headerShown: false}}
       />
+
+      <Screen 
+        name='addetails'
+        component={AdDetails}
+        options={{ headerShown: false}}
+      />
+
 
       <Screen 
         name='editad'
