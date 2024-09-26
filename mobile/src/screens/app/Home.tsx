@@ -131,6 +131,13 @@ export function Home() {
     }
   }
 
+  
+  function handleResetFilters() {
+    setIsNew(true);
+    setAcceptTrade(false);
+    setPaymentMethods(["pix", "boleto", "cash", "deposit", "card"]);
+  };
+
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
@@ -330,7 +337,7 @@ export function Home() {
                   </VStack>
 
                   <HStack justifyContent="space-between" w="full" mt="16" space={3}>
-                    <Button title="Resetar filtros" variant="secondary" size="176" />
+                    <Button title="Resetar filtros" variant="secondary" size="176" onPress={handleResetFilters}/>
                     <Button 
                       title="Aplicar filtros" 
                       variant="terciary" 
@@ -388,8 +395,6 @@ export function Home() {
               }
             />
           )}
-
-         
         </Box>
     </VStack>
   )
