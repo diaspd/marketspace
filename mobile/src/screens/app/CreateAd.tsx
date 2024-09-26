@@ -204,7 +204,7 @@ export function CreateAd() {
                 borderRadius={8}
                 key={imageData.uri}
               />
-              <TouchableOpacity onPress={() => handleRemoveImage(index)} key={index}>
+              <TouchableOpacity onPress={() => handleRemoveImage(index)}>
                 <XCircle size={22} color={colors.red[600]} weight="bold" style={{ position: "absolute", top: 5, right: 10 }} />
               </TouchableOpacity>
             </>

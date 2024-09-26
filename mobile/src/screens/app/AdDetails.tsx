@@ -193,7 +193,7 @@ export function AdDetails() {
       )}
 
       <ScrollView>
-        <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
+        <VStack flex={1} mx="6" alignItems="flex-start">
           <HStack alignItems="center">
             <Avatar 
               source={{ uri: isProductMine ? `${api.defaults.baseURL}/images/${user.avatar}` : profileImage}}
@@ -245,57 +245,57 @@ export function AdDetails() {
               : []
             )} 
           </VStack>
-
-          {isProductMine ? (
-            <>
-              {isAdDisabled ? (
-                <Button 
-                  title="Reativar anúncio" 
-                  variant="primary" 
-                  leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
-                  onPress={handleSwitchAdAvailabilityToAvailable} 
-                />
-              ) : (
-                <Button 
-                  title="Desativar anúncio" 
-                  variant="terciary" 
-                  leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
-                  onPress={handleSwitchAdAvailabilityToDisabled}  
-                />
-              )}
-    
-              <Button 
-                title="Excluir anúncio" 
-                variant="secondary" 
-                mt="2" 
-                leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}
-                onPress={handleDeleteAd}
-                isLoading={isLoading}  
-              />
-            </>
-          ): (
-              <HStack alignItems="center" justifyContent="space-between" w="full">
-                <Box>
-                  <Heading fontSize="lg" color="blue.700">
-                    <Text fontSize="sm">
-                      R${' '}
-                    </Text>
-                    {formattedPrice}
-                  </Heading>
-                </Box>
-
-                <Box>
-                  <Button 
-                    title="Entrar em contato" 
-                    variant="primary" w="170" 
-                    leftIcon={<WhatsappLogo size={16} color={colors.gray[700]} weight="fill"/>}
-                    onPress={handleSendMessageOnWhatsapp}  
-                  />
-                </Box>
-              </HStack>
-          )}
       </VStack>
       </ScrollView>
+
+      {isProductMine ? (
+        <VStack pt="5" bg={colors.gray[600]} px="6" py="4">
+          {isAdDisabled ? (
+            <Button 
+              title="Reativar anúncio" 
+              variant="primary" 
+              leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
+              onPress={handleSwitchAdAvailabilityToAvailable} 
+            />
+          ) : (
+            <Button 
+              title="Desativar anúncio" 
+              variant="terciary" 
+              leftIcon={<Feather name="power" size={16} color={colors.gray[600]} />}
+              onPress={handleSwitchAdAvailabilityToDisabled}  
+            />
+          )}
+
+          <Button 
+            title="Excluir anúncio" 
+            variant="secondary" 
+            mt="2" 
+            leftIcon={<Feather name="trash" size={16} color={colors.gray[300]} />}
+            onPress={handleDeleteAd}
+            isLoading={isLoading}  
+          />
+        </VStack>
+        ): (
+        <HStack pt="5" bg={colors.gray[700]} px="6" py="4" alignItems="center" justifyContent="space-between" w="full">
+          <Box>
+            <Heading fontSize="lg" color={colors.blue[500]}>
+              <Text fontSize="sm">
+                R${' '}
+              </Text>
+              {formattedPrice}
+            </Heading>
+          </Box>
+
+          <Box>
+            <Button 
+              title="Entrar em contato" 
+              variant="primary" w="170" 
+              leftIcon={<WhatsappLogo size={16} color={colors.gray[700]} weight="fill"/>}
+              onPress={handleSendMessageOnWhatsapp}  
+            />
+          </Box>
+        </HStack>
+        )}
       </>
       )}
     </VStack>
