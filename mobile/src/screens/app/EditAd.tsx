@@ -69,20 +69,22 @@ export function EditAd() {
   const [acceptTrade, setAcceptTrade] = useState<boolean>(previsAcceptTrade);
 
   const navigation = useNavigation<AppStackNavigatorRoutesProps>();
+  
   const { colors } = useTheme();
-
   const toast = useToast();
+  
+  const { formatPrice } = usePriceFormatter();
+
+  const priceFormatted = formatPrice(price)
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     defaultValues: {
       title,
       description,
-      price
+      price: priceFormatted
     },
     resolver: yupResolver(editAdSchema),
   });
-
-  const { formatPrice } = usePriceFormatter();
 
   function handleSaveChangesAndGoToPreview({ title, description, price }: FormDataProps) {
     if (images.length === 0) {
