@@ -202,7 +202,7 @@ export function CreateAd() {
                 alt="Imagem do anúncio"
                 resizeMode="cover"
                 borderRadius={8}
-                key={imageData.path}
+                key={imageData.uri}
               />
               <TouchableOpacity onPress={() => handleRemoveImage(index)} key={index}>
                 <XCircle size={22} color={colors.red[600]} weight="bold" style={{ position: "absolute", top: 5, right: 10 }} />

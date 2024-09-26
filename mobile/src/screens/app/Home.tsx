@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native";
 import { Box, Heading, HStack, Text, useTheme, VStack, Actionsheet, useDisclose, Checkbox, Switch, FlatList, useToast, Skeleton, ScrollView, Pressable, Radio } from "native-base";
 
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/tab.routes";
+import type { AppTabNavigatorRoutesProps } from "@routes/tab.routes";
 
 import { Controller, useForm } from "react-hook-form";
 
@@ -52,7 +52,7 @@ export function Home() {
   const { colors } = useTheme();
   const toast = useToast();
   
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppTabNavigatorRoutesProps>();
 
   function handleGoToMyAds() {
     navigation.navigate('myads')

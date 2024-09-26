@@ -15,7 +15,7 @@ import * as FileSystem from "expo-file-system";
 import { Plus } from "phosphor-react-native";
 import { AntDesign } from '@expo/vector-icons';
 
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
 
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
@@ -68,7 +68,7 @@ export function EditAd() {
     useState<string[]>(previsPaymentMethods);
   const [acceptTrade, setAcceptTrade] = useState<boolean>(previsAcceptTrade);
 
-  const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const navigation = useNavigation<AppStackNavigatorRoutesProps>();
   const { colors } = useTheme();
 
   const toast = useToast();

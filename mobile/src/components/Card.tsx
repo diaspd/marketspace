@@ -38,7 +38,7 @@ export function Card({
   const navigation = useNavigation<AppStackNavigatorRoutesProps>();
 
   function handleGoToAdDetails() {
-    navigation.navigate("addetails", { id });
+    navigation.navigate("addetails", { id, profileImage });
   };
 
   useEffect(() => {

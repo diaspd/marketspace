@@ -11,6 +11,8 @@ type StackRoutes = {
   hometab: undefined;
   addetails: {
     id: string;
+    profileImage?: string;
+    ownerName?: string;
   };
   createad: undefined;
   editad: {

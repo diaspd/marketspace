@@ -25,6 +25,7 @@ import { Loading } from "@components/Loading";
 
 type RouteParams = {
   id: string;
+  profileImage: string;
 };
 
 export function AdDetails() {
@@ -39,7 +40,7 @@ export function AdDetails() {
   const route = useRoute();
   const toast = useToast();
   
-  const { id } = route.params as RouteParams;
+  const { id, profileImage } = route.params as RouteParams;
   const navigationStack = useNavigation<AppStackNavigatorRoutesProps>();
   const navigationTab = useNavigation<AppTabNavigatorRoutesProps>();
   
@@ -195,14 +196,14 @@ export function AdDetails() {
         <VStack flex={1} mx="6" alignItems="flex-start" mb="5">
           <HStack alignItems="center">
             <Avatar 
-              source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
+              source={{ uri: isProductMine ? `${api.defaults.baseURL}/images/${user.avatar}` : profileImage}}
               size={8} 
               borderWidthsize={2} 
               alt={user.name}
               mr="2"
             />
 
-            <Text fontSize="md" color="gray.100">{user.name}</Text>
+            <Text fontSize="md" color="gray.100">{isProductMine ? user.name : product.user?.name}</Text>
           </HStack>
 
           <Box bg="gray.500" rounded="full" px="2.5" alignItems="center" mt="6">
