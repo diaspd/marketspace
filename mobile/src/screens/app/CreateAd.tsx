@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 
-import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox, useToast, Icon } from "native-base";
+import { Image, Heading, HStack, Text, VStack, Button as NativeBaseButton, useTheme, TextArea, Radio, ScrollView, Box, Switch, Checkbox, useToast, Icon, View } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -191,7 +191,7 @@ export function CreateAd() {
         {images.length > 0 &&
           images
           .map((imageData, index) => (
-            <>
+            <View key={imageData.uri}>
               <Image
                 w={88}
                 h={88}
@@ -202,12 +202,11 @@ export function CreateAd() {
                 alt="Imagem do anúncio"
                 resizeMode="cover"
                 borderRadius={8}
-                key={imageData.uri}
               />
               <TouchableOpacity onPress={() => handleRemoveImage(index)}>
-                <XCircle size={22} color={colors.red[600]} weight="bold" style={{ position: "absolute", top: 5, right: 10 }} />
+                <XCircle size={22} color={colors.red[600]} weight="bold" style={{ position: "absolute", top: -84, right: 10 }} />
               </TouchableOpacity>
-            </>
+            </View>
         ))}
 
         {images.length < 3 && (

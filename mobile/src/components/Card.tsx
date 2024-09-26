@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, HStack, Image, Text, Heading, Pressable, IStackProps } from "native-base";
+import { Box, HStack, Image, Text, Heading, Pressable, IStackProps, useTheme } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
 import type { AppStackNavigatorRoutesProps } from "@routes/stack.routes";
@@ -9,6 +9,7 @@ import { api } from "@services/api";
 import type { ProductDTO } from "@dtos/ProductDTO";
 import { AppError } from "@utils/AppError";
 import { usePriceFormatter } from "@hooks/usePriceFormatter";
+import { Avatar } from "./Avatar";
 
 type Props = IStackProps & {
   title: string;
@@ -34,6 +35,8 @@ export function Card({
 
   const { formatPrice } = usePriceFormatter();
   const formattedPrice = formatPrice(price);
+ 
+  const { colors } = useTheme();
 
   const navigation = useNavigation<AppStackNavigatorRoutesProps>();
 
@@ -68,9 +71,9 @@ export function Card({
 
       <HStack alignItems="flex-start" justifyContent="space-between" mt="1">
         {profileImage && (
-            <Image
-              h={8}
-              w={8}
+            <Avatar
+              borderWidthsize={1}
+              size={8}
               source={{
                 uri: profileImage,
               }}
@@ -80,8 +83,7 @@ export function Card({
               zIndex={100}
               left={1}
               top={1}
-              borderWidth={1}
-              borderColor="gray.300"
+              borderColor={colors.gray[600]}
             />
           )}
           <Image
