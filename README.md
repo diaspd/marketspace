@@ -13,7 +13,7 @@
 ---
 
 <div align="center">
- <img alt="project img" title="project img" src="./mobile/assets/templates/img.svg" width="72%" />
+ <img alt="project img" title="project img" src="./mobile/src/assets/template.svg" width="72%" />
  <img alt="project gif" title="project gif" src="./mobile/assets/templates/gif.gif" width="24%" />  
 </div> 
 
