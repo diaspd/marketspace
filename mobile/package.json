@@ -1,6 +1,7 @@
 {
   "name": "marketspace",
   "version": "1.0.0",
+  "author": "pedro_dias",
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
