@@ -30,13 +30,13 @@ $ git clone https://github.com/diaspd/marketspace.git
 
 ### Api
 
-## Setting the app
+## Setting the api
 
 ```bash
 $ cd ./api
 ```
 
-## Installation & Running the app
+## Installation & Running the api
 
 ```bash
 $ npm install
