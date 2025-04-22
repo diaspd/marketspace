@@ -43,6 +43,8 @@ $ npm install
 $ npm run dev
 ```
 
+The api Will be available on `http://localhost:3333`
+
 </br>
 
 ### Mobile
